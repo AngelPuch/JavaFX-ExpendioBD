@@ -1,0 +1,21 @@
+# Ignorar archivos binarios y de construcción
+/build/
+/dist/
+/lib/
+/nbproject/private/
+/out/
+
+# Configuración del IDE
+.idea/
+.vscode/
+*.iml
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Clases compiladas
+*.class
+
+# Archivo con credenciales de conexión
+src/javafxexpendio/modelo/ConexionBD.java
