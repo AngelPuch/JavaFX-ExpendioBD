@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Dell
  */
-public interface InterfaceDAO <T>{
+public interface DAO <T>{
     
     boolean crear(T t) throws SQLException;
     T leer(Integer id) throws SQLException;
