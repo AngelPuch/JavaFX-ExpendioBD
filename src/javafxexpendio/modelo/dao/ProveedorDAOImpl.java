@@ -17,7 +17,7 @@ import javafxexpendio.modelo.pojo.Proveedor;
  *
  * @author Dell
  */
-public class ProveedorDAO implements InterfaceDAO<Proveedor>{
+public class ProveedorDAOImpl implements DAO<Proveedor>{
     
     @Override
     public boolean crear(Proveedor proveedor) throws SQLException {

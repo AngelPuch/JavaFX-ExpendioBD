@@ -11,22 +11,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javafxexpendio.modelo.ConexionBD;
-import javafxexpendio.modelo.pojo.Bebida;
+import javafxexpendio.modelo.pojo.Cliente;
 
 /**
  *
  * @author Dell
  */
-public class BebidaDAO implements InterfaceDAO<Bebida> {
-    
+public class ClienteDAOImpl implements DAO<Cliente>{
+
     @Override
-    public boolean crear(Bebida bebida) throws SQLException {
-        String sentencia = "INSERT INTO bebida (bebida, stock, stock_minimo, precio) "
+    public boolean crear(Cliente cliente) throws SQLException {
+        String sentencia = "INSERT INTO cliente (nombre, telefono, correo, direccion) "
                 + "VALUES(?, ?, ?, ?)";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
-            asignarParametrosBebida(ps, bebida);
+            asignarParametrosCliente(ps, cliente);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos");
@@ -34,35 +34,35 @@ public class BebidaDAO implements InterfaceDAO<Bebida> {
     }
 
     @Override
-    public Bebida leer(Integer id) throws SQLException {
-        Bebida bebida = null;
-        String consulta = "SELECT idBebida, bebida, stock, stock_minimo, precio "
-                + "FROM bebida WHERE idBebida = ?";
+    public Cliente leer(Integer id) throws SQLException {
+        Cliente cliente = null;
+        String consulta = "SELECT idCliente, nombre, telefono, correo, direccion "
+                + "FROM cliente WHERE idCliente = ?";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    bebida = convertirRegistroBebida(rs);                    
+                    cliente = convertirRegistroCliente(rs);                    
                 }
             }
         } catch (SQLException ex ){
             throw new SQLException("Error: Sin conexión a la base de datos"); 
         }
         
-        return bebida;
+        return cliente;
     }
 
     @Override
-    public boolean actualizar(Bebida bebida) throws SQLException {
-        String sentencia = "UPDATE bebida SET bebida = ?, stock = ?, stock_minimo = ?, precio = ? "
-                + "WHERE idBebida = ?";
+    public boolean actualizar(Cliente cliente) throws SQLException {
+        String sentencia = "UPDATE cliente SET nombre = ?, telefono = ?, correo = ?, direccion = ? "
+                + "WHERE idCliente = ?";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
-            asignarParametrosBebida(ps, bebida);
-            ps.setInt(5, bebida.getIdBebida());
+            asignarParametrosCliente(ps, cliente);
+            ps.setInt(5, cliente.getIdCliente());
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos"); 
@@ -71,7 +71,7 @@ public class BebidaDAO implements InterfaceDAO<Bebida> {
 
     @Override
     public boolean eliminar(Integer id) throws SQLException {
-        String sentencia = "DELETE FROM bebida WHERE idBebida = ?";
+        String sentencia = "DELETE FROM cliente WHERE idCliente = ?";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
@@ -83,38 +83,39 @@ public class BebidaDAO implements InterfaceDAO<Bebida> {
     }
 
     @Override
-    public List<Bebida> leerTodo() throws SQLException {
-        List<Bebida> listaBebidas = new ArrayList<>();
-        String consulta = "SELECT idBebida, bebida, stock, stock_minimo, precio FROM bebida";
+    public List<Cliente> leerTodo() throws SQLException {
+        List<Cliente> listaClientes = new ArrayList<>();
+        String consulta = "SELECT idCliente, nombre, telefono, correo, direccion FROM cliente";
         
         try(Connection conexionBD = ConexionBD.abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta);
                 ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {                
-                listaBebidas.add(convertirRegistroBebida(rs));
+                listaClientes.add(convertirRegistroCliente(rs));
                 
             }
-            return listaBebidas;
+            return listaClientes;
         } catch(SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos"); 
         }
     }
     
-    private void asignarParametrosBebida(PreparedStatement ps, Bebida bebida) throws SQLException {
-        ps.setString(1, bebida.getBebida());
-        ps.setInt(2, bebida.getStock());
-        ps.setInt(3, bebida.getStockMinimo());
-        ps.setDouble(4, bebida.getPrecio());
+    private void asignarParametrosCliente(PreparedStatement ps, Cliente cliente) throws SQLException {
+        ps.setString(1, cliente.getNombre());
+        ps.setString(2, cliente.getTelefono());
+        ps.setString(3, cliente.getCorreo());
+        ps.setString(4, cliente.getDireccion());
     }
     
-    private Bebida convertirRegistroBebida(ResultSet rs) throws SQLException {
-        Bebida bebida = new Bebida();
-        bebida.setIdBebida(rs.getInt("idBebida"));
-        bebida.setBebida(rs.getString("bebida"));
-        bebida.setStock(rs.getInt("stock"));
-        bebida.setStockMinimo(rs.getInt("stock_minimo"));
-        bebida.setPrecio(rs.getDouble("precio"));
+    private Cliente convertirRegistroCliente(ResultSet rs) throws SQLException{
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(rs.getInt("idCliente"));
+        cliente.setNombre(rs.getString("nombre"));
+        cliente.setTelefono(rs.getString("telefono"));
+        cliente.setCorreo(rs.getString("correo"));
+        cliente.setDireccion(rs.getString("direccion"));
         
-        return bebida;
+        return cliente;
     }
+    
 }
