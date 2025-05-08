@@ -13,19 +13,21 @@ import java.util.Date;
 public class PedidoCliente {
     private int idPedidoCliente;
     private double total;
-    private Date fecha;
-    private String estado;
+    private Date fechaCreacion;
+    private Date fechaLimite;
     private Cliente cliente;
+    private Venta venta;
 
     public PedidoCliente() {
     }
 
-    public PedidoCliente(int idPedidoCliente, double total, Date fecha, String estado, Cliente cliente) {
+    public PedidoCliente(int idPedidoCliente, double total, Date fechaCreacion, Date fechaLimite, Cliente cliente, Venta venta) {
         this.idPedidoCliente = idPedidoCliente;
         this.total = total;
-        this.fecha = fecha;
-        this.estado = estado;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaLimite = fechaLimite;
         this.cliente = cliente;
+        this.venta = venta;
     }
 
     public int getIdPedidoCliente() {
@@ -44,20 +46,20 @@ public class PedidoCliente {
         this.total = total;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
-    public String getEstado() {
-        return estado;
+    public Date getFechaLimite() {
+        return fechaLimite;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setFechaLimite(Date fechaLimite) {
+        this.fechaLimite = fechaLimite;
     }
 
     public Cliente getCliente() {
@@ -67,6 +69,14 @@ public class PedidoCliente {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
-    
+
+    public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
+    }
+
     
 }

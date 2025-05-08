@@ -12,18 +12,18 @@ public class DetalleCompra {
     private Compra compra;
     private Bebida bebida;
     private int cantidad;
-    private double subtotal;
     private int total;
+    private double precioBebida;
 
     public DetalleCompra() {
     }
 
-    public DetalleCompra(Compra compra, Bebida bebida, int cantidad, double subtotal, int total) {
+    public DetalleCompra(Compra compra, Bebida bebida, int cantidad, int total, double precioBebida) {
         this.compra = compra;
         this.bebida = bebida;
         this.cantidad = cantidad;
-        this.subtotal = subtotal;
         this.total = total;
+        this.precioBebida = precioBebida;
     }
 
     public Compra getCompra() {
@@ -50,14 +50,6 @@ public class DetalleCompra {
         this.cantidad = cantidad;
     }
 
-    public double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
-    }
-
     public int getTotal() {
         return total;
     }
@@ -65,6 +57,13 @@ public class DetalleCompra {
     public void setTotal(int total) {
         this.total = total;
     }
-    
+
+    public double getPrecioBebida() {
+        return precioBebida;
+    }
+
+    public void setPrecioBebida(double precioBebida) {
+        this.precioBebida = precioBebida;
+    }
     
 }
