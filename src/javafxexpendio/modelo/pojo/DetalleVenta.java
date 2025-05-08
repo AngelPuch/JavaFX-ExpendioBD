@@ -6,40 +6,32 @@ package javafxexpendio.modelo.pojo;
 
 /**
  *
- * @author zenbook i5
+ * @author rodrigoluna
  */
-public class DetalleCompra {
-    private Compra compra;
-    private Bebida bebida;
+public class DetalleVenta {
+    private int idVenta;
     private int cantidad;
-    private int total;
+    private Bebida bebida;
+    private double total;
     private double precioBebida;
 
-    public DetalleCompra() {
+    public DetalleVenta() {
     }
 
-    public DetalleCompra(Compra compra, Bebida bebida, int cantidad, int total, double precioBebida) {
-        this.compra = compra;
-        this.bebida = bebida;
+    public DetalleVenta(int idVenta, int cantidad, Bebida bebida, double total, double precioBebida) {
+        this.idVenta = idVenta;
         this.cantidad = cantidad;
+        this.bebida = bebida;
         this.total = total;
         this.precioBebida = precioBebida;
     }
 
-    public Compra getCompra() {
-        return compra;
+    public int getIdVenta() {
+        return idVenta;
     }
 
-    public void setCompra(Compra compra) {
-        this.compra = compra;
-    }
-
-    public Bebida getBebida() {
-        return bebida;
-    }
-
-    public void setBebida(Bebida bebida) {
-        this.bebida = bebida;
+    public void setIdVenta(int idVenta) {
+        this.idVenta = idVenta;
     }
 
     public int getCantidad() {
@@ -50,11 +42,19 @@ public class DetalleCompra {
         this.cantidad = cantidad;
     }
 
-    public int getTotal() {
+    public Bebida getBebida() {
+        return bebida;
+    }
+
+    public void setBebida(Bebida bebida) {
+        this.bebida = bebida;
+    }
+
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
@@ -65,5 +65,6 @@ public class DetalleCompra {
     public void setPrecioBebida(double precioBebida) {
         this.precioBebida = precioBebida;
     }
+    
     
 }

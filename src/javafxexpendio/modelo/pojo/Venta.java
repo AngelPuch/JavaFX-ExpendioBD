@@ -14,14 +14,16 @@ public class Venta {
     private int idVenta;
     private Date fecha;
     private Cliente cliente;
+    private String folioFactura;
 
     public Venta() {
     }
 
-    public Venta(int idVenta, Date fecha, Cliente cliente) {
+    public Venta(int idVenta, Date fecha, Cliente cliente, String folioFactura) {
         this.idVenta = idVenta;
         this.fecha = fecha;
         this.cliente = cliente;
+        this.folioFactura = folioFactura;
     }
 
     public int getIdVenta() {
@@ -46,6 +48,14 @@ public class Venta {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public String getFolioFactura() {
+        return folioFactura;
+    }
+
+    public void setFolioFactura(String folioFactura) {
+        this.folioFactura = folioFactura;
     }
     
     

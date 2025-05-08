@@ -12,16 +12,16 @@ public class DetallePedido {
     private PedidoCliente pedidoCliente;
     private Bebida bebida;
     private int cantidad;
-    private double subtotal;
+    private double precioBebida;
 
     public DetallePedido() {
     }
 
-    public DetallePedido(PedidoCliente pedidoCliente, Bebida bebida, int cantidad, double subtotal) {
+    public DetallePedido(PedidoCliente pedidoCliente, Bebida bebida, int cantidad, double precioBebida) {
         this.pedidoCliente = pedidoCliente;
         this.bebida = bebida;
         this.cantidad = cantidad;
-        this.subtotal = subtotal;
+        this.precioBebida = precioBebida;
     }
 
     public PedidoCliente getPedidoCliente() {
@@ -48,13 +48,12 @@ public class DetallePedido {
         this.cantidad = cantidad;
     }
 
-    public double getSubtotal() {
-        return subtotal;
+    public double getPrecioBebida() {
+        return precioBebida;
     }
 
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
+    public void setPrecioBebida(double precioBebida) {
+        this.precioBebida = precioBebida;
     }
-    
     
 }
