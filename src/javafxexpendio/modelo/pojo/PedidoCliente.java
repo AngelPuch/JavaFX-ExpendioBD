@@ -12,7 +12,6 @@ import java.util.Date;
  */
 public class PedidoCliente {
     private int idPedidoCliente;
-    private double total;
     private Date fechaCreacion;
     private Date fechaLimite;
     private Cliente cliente;
@@ -21,9 +20,8 @@ public class PedidoCliente {
     public PedidoCliente() {
     }
 
-    public PedidoCliente(int idPedidoCliente, double total, Date fechaCreacion, Date fechaLimite, Cliente cliente, Venta venta) {
+    public PedidoCliente(int idPedidoCliente, Date fechaCreacion, Date fechaLimite, Cliente cliente, Venta venta) {
         this.idPedidoCliente = idPedidoCliente;
-        this.total = total;
         this.fechaCreacion = fechaCreacion;
         this.fechaLimite = fechaLimite;
         this.cliente = cliente;
@@ -36,14 +34,6 @@ public class PedidoCliente {
 
     public void setIdPedidoCliente(int idPedidoCliente) {
         this.idPedidoCliente = idPedidoCliente;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
     }
 
     public Date getFechaCreacion() {
