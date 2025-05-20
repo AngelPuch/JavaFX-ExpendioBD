@@ -3,29 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/dao/ProveedorDAOImpl.java</file>
-            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/dao/VentanaDAO.java</file>
-            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/pojo/Venta.java</file>
-            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/dao/DAO.java</file>
-            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/pojo/Proveedor.java</file>
-=======
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/ConexionBD.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/Venta.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/DetallePedido.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/Proveedor.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/dao/ClienteDAOImpl.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/PedidoCliente.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/DetalleCompra.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/DetalleVenta.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/Promocion.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/Compra.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/Bebida.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/dao/DAO.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/dao/ProveedorDAOImpl.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/dao/BebidaDAOImpl.java</file>
-            <file>file:/C:/Users/zenbook%20i5/Bases_de_datos_para_el_desarrollo/JavaFX-ExpendioBD/src/javafxexpendio/modelo/pojo/Cliente.java</file>
->>>>>>> 13c139cfc606a934105a9514893904d27907ca69
+            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/vista/FXMLInicioSesion.fxml</file>
+            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/controlador/FXMLInicioSesionController.java</file>
+            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/controlador/FXMLPrincipalController.java</file>
+            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/ConexionBD.java</file>
         </group>
     </open-files>
 </project-private>
