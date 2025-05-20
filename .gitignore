@@ -19,3 +19,5 @@ Thumbs.db
 
 # Archivo con credenciales de conexión
 src/javafxexpendio/modelo/ConexionBD.java
+nbproject/private/
+
