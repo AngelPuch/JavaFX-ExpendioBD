@@ -4,7 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/dao/ProveedorDAOImpl.java</file>
+            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/dao/VentanaDAO.java</file>
             <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/pojo/Venta.java</file>
+            <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/dao/DAO.java</file>
             <file>file:/C:/Users/Dell/Documents/Materias%20Universidad/4to%20Semestre/Base%20de%20datos/Proyecto/expendio/src/javafxexpendio/modelo/pojo/Proveedor.java</file>
         </group>
     </open-files>
