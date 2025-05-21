@@ -15,18 +15,22 @@ public class Usuario {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String tipoUsuario;
+    private String password;
 
     public Usuario() {
     }
 
-    public Usuario(int idUsuario, String username, String nombre, String apellidoPaterno, String apellidoMaterno, String tipoUsuario) {
+    public Usuario(int idUsuario, String username, String nombre, String apellidoPaterno, String apellidoMaterno, String tipoUsuario, String password) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
         this.tipoUsuario = tipoUsuario;
+        this.password = password;
     }
+
+    
 
     public int getIdUsuario() {
         return idUsuario;
@@ -75,6 +79,15 @@ public class Usuario {
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
 
     @Override
     public String toString() {
