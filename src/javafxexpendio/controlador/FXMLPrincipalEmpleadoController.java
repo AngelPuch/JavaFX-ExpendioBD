@@ -6,29 +6,14 @@ package javafxexpendio.controlador;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
  *
  * @author zenbook i5
  */
-public class FXMLInicioSesionController implements Initializable {
-
-    @FXML
-    private TextField tfUser;
-    @FXML
-    private TextField tfPassword;
-    @FXML
-    private Button btnLogin;
-    @FXML
-    private Label lbUserError;
-    @FXML
-    private Label lbPasswordError;
+public class FXMLPrincipalEmpleadoController implements Initializable {
 
     /**
      * Initializes the controller class.
