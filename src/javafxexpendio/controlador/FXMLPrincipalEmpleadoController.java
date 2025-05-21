@@ -6,7 +6,11 @@ package javafxexpendio.controlador;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * FXML Controller class
@@ -15,6 +19,11 @@ import javafx.fxml.Initializable;
  */
 public class FXMLPrincipalEmpleadoController implements Initializable {
 
+    @FXML
+    private AnchorPane apCentral;
+    @FXML
+    private Label lbNombreUsuario;
+
     /**
      * Initializes the controller class.
      */
@@ -22,5 +31,17 @@ public class FXMLPrincipalEmpleadoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @FXML
+    private void btnClicProductos(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnClicClientes(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnClicRegistrarVenta(ActionEvent event) {
+    }
     
 }
