@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="320.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLAdminProveedorController">
+   <children>
+      <TableView fx:id="tblProveedor" layoutX="10.0" layoutY="53.0" prefHeight="260.0" prefWidth="450.0">
+        <columns>
+          <TableColumn fx:id="colNombre" prefWidth="75.0" text="Nombre" />
+          <TableColumn fx:id="colTelefono" prefWidth="75.0" text="Telefono" />
+            <TableColumn fx:id="colCorreo" prefWidth="75.0" text="Correo" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <TextField layoutX="14.0" layoutY="14.0" promptText="Buscar proveedor" />
+      <ToolBar layoutX="176.0" layoutY="12.0" prefHeight="30.0" prefWidth="280.0">
+         <items>
+            <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="83.0">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../recurso/add_img.png" />
+                     </image>
+                  </ImageView>
+                  <Button mnemonicParsing="false" onAction="#btnClicAgregar" text="Añadir" />
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="90.0">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../recurso/update_img.png" />
+                     </image>
+                  </ImageView>
+                  <Button mnemonicParsing="false" onAction="#btnClicActualizar" text="Actualizar" />
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="83.0">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../recurso/delete_img.png" />
+                     </image>
+                  </ImageView>
+                  <Button mnemonicParsing="false" onAction="#btnClicEliminar" text="Eliminar" />
+               </children>
+            </HBox>
+         </items>
+         <padding>
+            <Insets left="10.0" top="2.0" />
+         </padding>
+      </ToolBar>
+   </children>
+</AnchorPane>
