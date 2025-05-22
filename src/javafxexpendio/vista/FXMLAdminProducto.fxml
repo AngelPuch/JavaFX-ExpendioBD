@@ -21,7 +21,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <ToolBar layoutX="180.0" layoutY="14.0" prefHeight="30.0" prefWidth="280.0">
+      <ToolBar layoutX="180.0" layoutY="14.0" prefHeight="30.0" prefWidth="280.0" style="-fx-background-color: #ecf0f1;">
          <items>
             <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="83.0">
                <children>
@@ -30,7 +30,10 @@
                         <Image url="@../recurso/add_img.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" onAction="#btnClicAgregar" text="Añadir" />
+                  <Button mnemonicParsing="false" onAction="#btnClicAgregar" style="-fx-background-color: #ecf0f1;" text="Añadir">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
                </children>
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="90.0">
@@ -40,7 +43,10 @@
                         <Image url="@../recurso/update_img.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" onAction="#btnClicActualizar" text="Actualizar" />
+                  <Button mnemonicParsing="false" onAction="#btnClicActualizar" style="-fx-background-color: #ecf0f1;" text="Actualizar">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
                </children>
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="83.0">
@@ -50,7 +56,10 @@
                         <Image url="@../recurso/delete_img.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" onAction="#btnClicEliminar" text="Eliminar" />
+                  <Button mnemonicParsing="false" onAction="#btnClicEliminar" style="-fx-background-color: #ecf0f1;" text="Eliminar">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
                </children>
             </HBox>
          </items>

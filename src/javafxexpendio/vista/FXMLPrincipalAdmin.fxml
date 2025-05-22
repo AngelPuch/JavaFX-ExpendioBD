@@ -22,7 +22,10 @@
                         <Image url="@../recurso/home_img.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" onAction="#btnClicInicio" text="Inicio" />
+                  <Button mnemonicParsing="false" onAction="#btnClicInicio" style="-fx-background-color: #fff;" text="Inicio">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
                </children>
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
@@ -38,7 +41,10 @@
                         <Image url="@../recurso/proveedor_img.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" onAction="#btnClicProveedor" text="Proveedor" />
+                  <Button mnemonicParsing="false" onAction="#btnClicProveedor" style="-fx-background-color: #fff;" text="Proveedor">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
                </children>
             </HBox>
             <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="130.0">
@@ -51,7 +57,10 @@
                         <Image url="@../recurso/wine_img.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" onAction="#btnClicProducto" text="Productos" />
+                  <Button mnemonicParsing="false" onAction="#btnClicProducto" style="-fx-background-color: #fff;" text="Productos">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
                </children>
             </HBox>
          </children>
