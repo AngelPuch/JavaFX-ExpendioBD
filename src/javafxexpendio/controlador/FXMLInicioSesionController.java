@@ -98,7 +98,7 @@ public class FXMLInicioSesionController implements Initializable {
         if (usuarioSesion.getTipoUsuario().equalsIgnoreCase("administrador")) {
             cargarPantallaAdministrador();
         } else if (usuarioSesion.getTipoUsuario().equalsIgnoreCase("empleado")) {
-            cargarPantallaEmpleado();
+            cargarPantallaEmpleado(usuarioSesion);
         }
     }
     
@@ -115,10 +115,15 @@ public class FXMLInicioSesionController implements Initializable {
         }
     }
     
-    private void cargarPantallaEmpleado() {
+    private void cargarPantallaEmpleado(Usuario usuarioSesion) {
         try {
             Stage escenarioBase = (Stage) pfPassword.getScene().getWindow();
-            Parent vista = FXMLLoader.load(JavaFXAppExpendio.class.getResource("vista/FXMLPrincipalEmpleado.fxml"));
+            FXMLLoader cargador = new FXMLLoader(JavaFXAppExpendio.class.getResource("vista/FXMLPrincipalEmpleado.fxml"));
+            Parent vista = cargador.load();
+            
+            FXMLPrincipalEmpleadoController controlador = cargador.getController();
+            controlador.inicializarInformacion(usuarioSesion);
+            
             Scene escenaPrincipal = new Scene(vista);
             escenarioBase.setScene(escenaPrincipal);
             escenarioBase.setTitle("Home");
