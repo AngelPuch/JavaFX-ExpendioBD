@@ -21,5 +21,43 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
+      <ToolBar layoutX="180.0" layoutY="14.0" prefHeight="30.0" prefWidth="280.0">
+         <items>
+            <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="83.0">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../recurso/add_img.png" />
+                     </image>
+                  </ImageView>
+                  <Button mnemonicParsing="false" onAction="#btnClicAgregar" text="Añadir" />
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="90.0">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../recurso/update_img.png" />
+                     </image>
+                  </ImageView>
+                  <Button mnemonicParsing="false" onAction="#btnClicActualizar" text="Actualizar" />
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="83.0">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../recurso/delete_img.png" />
+                     </image>
+                  </ImageView>
+                  <Button mnemonicParsing="false" onAction="#btnClicEliminar" text="Eliminar" />
+               </children>
+            </HBox>
+         </items>
+         <padding>
+            <Insets left="10.0" top="2.0" />
+         </padding>
+      </ToolBar>
+      <TextField layoutX="10.0" layoutY="17.0" promptText="Buscar bebida" />
    </children>
 </AnchorPane>

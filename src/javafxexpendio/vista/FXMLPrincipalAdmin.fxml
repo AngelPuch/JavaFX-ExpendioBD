@@ -57,5 +57,10 @@
          </children>
       </VBox>
       <AnchorPane fx:id="apCentral" layoutX="130.0" layoutY="80.0" prefHeight="320.0" prefWidth="470.0" />
+      <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="25.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../recurso/recurso_img.jpg" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
