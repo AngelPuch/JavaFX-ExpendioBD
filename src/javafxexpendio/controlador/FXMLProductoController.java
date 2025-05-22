@@ -9,13 +9,15 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
 /**
  * FXML Controller class
  *
- * @author zenbook i5
+ * @author Dell
  */
-public class FXMLPrincipalAdminController implements Initializable {
+public class FXMLProductoController implements Initializable {
+
 
     /**
      * Initializes the controller class.
@@ -25,14 +27,5 @@ public class FXMLPrincipalAdminController implements Initializable {
         // TODO
     }    
 
-    @FXML
-    private void btnClicProveedor(ActionEvent event) {
-    }
-
-    @FXML
-    private void btnClicProducto(ActionEvent event) {
-    }
-    
-    
     
 }
