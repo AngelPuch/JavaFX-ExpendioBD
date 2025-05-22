@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
@@ -35,11 +34,11 @@ public class FXMLInicioSesionController implements Initializable {
     @FXML
     private TextField tfUser;
     @FXML
-    private TextField tfPassword;
-    @FXML
     private Label lbUserError;
     @FXML
     private Label lbPasswordError;
+    @FXML
+    private PasswordField pfPassword;
 
     /**
      * Initializes the controller class.
@@ -52,7 +51,7 @@ public class FXMLInicioSesionController implements Initializable {
     @FXML
     private void btnClicIniciarSesion(ActionEvent event) {
         String username = tfUser.getText();
-        String password = tfPassword.getText();
+        String password = pfPassword.getText();
         
         if (validarCampos(username, password)) {
             validarCredenciales(username, password);
@@ -105,7 +104,7 @@ public class FXMLInicioSesionController implements Initializable {
     
     private void cargarPantallaAdministrador() {
         try {
-            Stage escenarioBase = (Stage) tfPassword.getScene().getWindow();
+            Stage escenarioBase = (Stage) pfPassword.getScene().getWindow();
             Parent vista = FXMLLoader.load(JavaFXAppExpendio.class.getResource("vista/FXMLPrincipalAdmin.fxml"));
             Scene escenaPrincipal = new Scene(vista);
             escenarioBase.setScene(escenaPrincipal);
@@ -118,7 +117,7 @@ public class FXMLInicioSesionController implements Initializable {
     
     private void cargarPantallaEmpleado() {
         try {
-            Stage escenarioBase = (Stage) tfPassword.getScene().getWindow();
+            Stage escenarioBase = (Stage) pfPassword.getScene().getWindow();
             Parent vista = FXMLLoader.load(JavaFXAppExpendio.class.getResource("vista/FXMLPrincipalEmpleado.fxml"));
             Scene escenaPrincipal = new Scene(vista);
             escenarioBase.setScene(escenaPrincipal);
