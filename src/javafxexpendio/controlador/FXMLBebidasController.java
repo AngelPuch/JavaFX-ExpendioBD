@@ -19,8 +19,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafxexpendio.modelo.dao.BebidaDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
+import javafxexpendio.utilidades.BebidaSeleccionListener;
 import javafxexpendio.utilidades.Utilidad;
 
 /**
@@ -41,6 +44,11 @@ public class FXMLBebidasController implements Initializable {
     @FXML
     private TextField tfBuscar;
     private ObservableList<Bebida> bebidas;
+    private BebidaSeleccionListener listener;
+    
+    public void setBebidaSeleccionListener(BebidaSeleccionListener listener) {
+        this.listener = listener;
+    }
 
     /**
      * Initializes the controller class.
@@ -70,5 +78,18 @@ public class FXMLBebidasController implements Initializable {
                             + "Por favor intentelo más tarde.");
         }
     }
+
+    @FXML
+    private void clicTablaBebidas(MouseEvent event) {
+        if (event.getClickCount() == 2 && !tvBebidas.getSelectionModel().isEmpty()) {
+            Bebida bebidaSeleccionada = tvBebidas.getSelectionModel().getSelectedItem();
+            if (listener != null) {
+                listener.onBebidaSeleccionada(bebidaSeleccionada);
+            }
+            ((Stage) tvBebidas.getScene().getWindow()).close();
+        }
+    }
+    
+    
     
 }

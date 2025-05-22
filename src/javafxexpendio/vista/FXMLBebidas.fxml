@@ -6,10 +6,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="javafxexpendio.controlador.FXMLBebidasController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLBebidasController">
    <children>
-      <TableView fx:id="tvBebidas" layoutX="25.0" layoutY="86.0" prefHeight="500.0" prefWidth="850.0">
+      <TableView fx:id="tvBebidas" layoutX="25.0" layoutY="86.0" onMouseClicked="#clicTablaBebidas" prefHeight="500.0" prefWidth="850.0">
         <columns>
           <TableColumn fx:id="colBebida" prefWidth="535.0" text="Bebida" />
           <TableColumn fx:id="colPrecio" minWidth="0.0" prefWidth="158.0" text="Precio" />
