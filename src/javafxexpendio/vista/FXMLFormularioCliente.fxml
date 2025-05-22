@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" minHeight="600.0" minWidth="500.0" prefHeight="750.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLFormularioClienteController">
+   <children>
+      <Label layoutX="35.0" layoutY="130.0" text="Registrar un nuevo cliente" textFill="#0852d3" textOverrun="CLIP">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="35.0" layoutY="188.0" text="Registro de un nuevo cliente " />
+      <Label layoutX="35.0" layoutY="250.0" text="Nombre">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <TextField fx:id="tfNombre" layoutX="29.0" layoutY="286.0" prefHeight="39.0" prefWidth="414.0" promptText="Juan" />
+      <Label layoutX="35.0" layoutY="349.0" text="Teléfono">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <TextField fx:id="tfTelefono" layoutX="29.0" layoutY="386.0" prefHeight="39.0" prefWidth="414.0" promptText="12-34-56-78-90" />
+      <Label layoutX="35.0" layoutY="452.0" text="Correo">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <TextField fx:id="tfCorreo" layoutX="29.0" layoutY="488.0" prefHeight="39.0" prefWidth="414.0" promptText="juan01@gmail.com" />
+      <Label layoutX="29.0" layoutY="560.0" text="Dirección">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="tfDireccion" layoutX="27.0" layoutY="596.0" prefHeight="63.0" prefWidth="414.0" promptText="Av. Central, CDMX" />
+      <Button layoutX="264.0" layoutY="690.0" mnemonicParsing="false" onAction="#btnClicAgregar" prefHeight="39.0" prefWidth="97.0" text="Agregar" />
+      <Button layoutX="377.0" layoutY="690.0" mnemonicParsing="false" onAction="#btnClicCancelar" prefHeight="39.0" prefWidth="97.0" text="Cancelar" />
+      <ImageView fitHeight="228.0" fitWidth="506.0" layoutX="-3.0" layoutY="-35.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../recurso/header_formulario.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

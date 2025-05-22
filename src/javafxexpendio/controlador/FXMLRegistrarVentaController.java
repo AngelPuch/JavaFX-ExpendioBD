@@ -103,6 +103,7 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
             detalle.setCantidad(event.getNewValue());
             detalle.setTotal(detalle.getCantidad() * detalle.getPrecioBebida());
             tvBebidasVenta.refresh();
+            mostrarTotalCompra();
         });
     }
 
@@ -124,6 +125,7 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
             stage.setTitle("Seleccionar Bebida");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+            mostrarTotalCompra();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -131,6 +133,17 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
 
     @FXML
     private void btnClicEliminarBebida(ActionEvent event) {
+        listaDetalleVenta.remove(tvBebidasVenta.getSelectionModel().getSelectedIndex());
+        tvBebidasVenta.refresh();
+        mostrarTotalCompra();
+    }
+    
+    private void mostrarTotalCompra() {
+        double totalCompra = 0;
+        for (DetalleVenta dv : listaDetalleVenta) { 
+            totalCompra = totalCompra + dv.getTotal();
+        }
+        lbTotalCompra.setText(String.valueOf(totalCompra));
     }
 
     @Override
