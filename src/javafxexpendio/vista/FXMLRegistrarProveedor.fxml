@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="350.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="javafxexpendio.controlador.FXMLRegistrarProveedorController">
+   <children>
+      <Label layoutX="184.0" layoutY="14.0" text="Registrar proveedor">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="133.0" layoutY="69.0" text="Razón social:" />
+      <Label layoutX="143.0" layoutY="122.0" text="Telefono:" />
+      <Label layoutX="148.0" layoutY="174.0" text="Correo:" />
+      <Label fx:id="lbRazonSocialError" layoutX="219.0" layoutY="90.0" prefHeight="17.0" prefWidth="149.0" textFill="#e71e1e" />
+      <Label fx:id="lbTelefonoError" layoutX="219.0" layoutY="143.0" prefHeight="17.0" prefWidth="149.0" textFill="#e71e1e" />
+      <Label fx:id="lbCorreoError" layoutX="219.0" layoutY="195.0" prefHeight="17.0" prefWidth="149.0" textFill="#e71e1e" />
+      <TextField fx:id="tfRazonSocial" layoutX="219.0" layoutY="65.0" />
+      <TextField fx:id="tfTelefono" layoutX="219.0" layoutY="118.0" />
+      <TextField fx:id="tfCorreo" layoutX="219.0" layoutY="170.0" />
+      <Button layoutX="169.0" layoutY="248.0" mnemonicParsing="false" onAction="#btnClicGuardar" text="Guardar" />
+      <Button layoutX="269.0" layoutY="248.0" mnemonicParsing="false" onAction="#btnClicCancelar" text="Cancelar" />
+   </children>
+</AnchorPane>

@@ -117,7 +117,7 @@ public class FXMLAdminProductoController implements Initializable {
         }
         
         boolean confirmado = Utilidad.mostrarAlertaConfirmacion( "Confirmar eliminación", 
-        "¿Seguro que desea eliminar la bebida?");
+        "¿Seguro que desea eliminar la bebida: " + bebidaSeleccionada.getBebida() + "?");
         
         if (confirmado) {
             try {
