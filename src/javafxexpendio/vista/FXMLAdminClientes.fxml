@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLAdminClientesController">
+   <children>
+      <TableView fx:id="tvClientes" layoutX="25.0" layoutY="86.0" prefHeight="500.0" prefWidth="850.0">
+        <columns>
+          <TableColumn fx:id="colNombre" prefWidth="247.0" text="Nombre" />
+          <TableColumn fx:id="colCorreo" prefWidth="205.0" text="E-mail" />
+            <TableColumn fx:id="colTelefono" prefWidth="141.0" text="Telefono" />
+            <TableColumn fx:id="colDireccion" prefWidth="256.0" text="Direccion" />
+        </columns>
+      </TableView>
+      <TextField fx:id="tfBuscar" layoutX="25.0" layoutY="14.0" promptText="Buscar cliente" />
+      <Button layoutX="347.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnClicRegistrarCliente" text="Registrar ">
+         <graphic>
+            <ImageView fitHeight="34.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recurso/add.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button layoutX="720.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnClicEliminar" text="Eliminar">
+         <graphic>
+            <ImageView fitHeight="34.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recurso/delete.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Button layoutX="532.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnClicActualizar" text="Actualizar">
+         <graphic>
+            <ImageView fitHeight="34.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recurso/update.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+   </children>
+</AnchorPane>

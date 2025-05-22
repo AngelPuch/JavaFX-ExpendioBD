@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLRegistrarVentaController">
+   <children>
+      <TableView fx:id="tvBebidasVenta" layoutX="25.0" layoutY="100.0" prefHeight="400.0" prefWidth="850.0">
+        <columns>
+          <TableColumn fx:id="colBebidas" prefWidth="351.0" text="Bebida" />
+          <TableColumn fx:id="colCantidad" prefWidth="151.0" text="Cantidad" />
+            <TableColumn fx:id="colPrecioUnitario" prefWidth="191.0" text="Precio unitario" />
+            <TableColumn fx:id="colTotal" prefWidth="156.0" text="Total" />
+        </columns>
+      </TableView>
+      <DatePicker layoutX="25.0" layoutY="523.0" prefHeight="51.0" prefWidth="249.0" />
+      <ComboBox fx:id="cbCliente" layoutX="25.0" layoutY="24.0" prefHeight="51.0" prefWidth="227.0" promptText="Cliente" />
+      <Label layoutX="577.0" layoutY="531.0" text="Total compra:" />
+      <Label fx:id="lbTotalCompra" alignment="CENTER_RIGHT" layoutX="755.0" layoutY="531.0" prefHeight="35.0" prefWidth="120.0" />
+      <Button layoutX="450.0" layoutY="512.0" mnemonicParsing="false" onAction="#btnClicConfirmarCompra">
+         <graphic>
+            <ImageView fitHeight="57.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recurso/completebag.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button layoutX="634.0" layoutY="13.0" mnemonicParsing="false" onAction="#btnClicAgregarBebida">
+         <graphic>
+            <ImageView fitHeight="57.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recurso/addbag.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button layoutX="786.0" layoutY="13.0" mnemonicParsing="false" onAction="#btnClicEliminarBebida">
+         <graphic>
+            <ImageView fitHeight="57.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recurso/deletebag.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</AnchorPane>

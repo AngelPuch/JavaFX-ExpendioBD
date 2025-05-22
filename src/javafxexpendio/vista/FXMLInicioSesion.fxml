@@ -26,13 +26,13 @@
                </font>
             </Label>
             <TextField fx:id="tfUser" layoutX="65.0" layoutY="159.0" promptText="Usuario" />
-            <TextField fx:id="tfPassword" layoutX="65.0" layoutY="253.0" promptText="Contraseña" />
             <Button layoutX="107.0" layoutY="336.0" mnemonicParsing="false" onAction="#btnClicIniciarSesion" text="Iniciar sesion" />
             <Label fx:id="lbUserError" layoutX="65.0" layoutY="184.0" prefHeight="17.0" prefWidth="149.0" textFill="#e10303" />
             <Label layoutX="108.0" layoutY="70.0" text="Inicio de sesion" />
             <Label layoutX="65.0" layoutY="133.0" text="Ingresa tu usuario:" />
             <Label layoutX="64.0" layoutY="230.0" text="Ingresa tu contraseña" />
             <Label fx:id="lbPasswordError" layoutX="65.0" layoutY="278.0" prefHeight="17.0" prefWidth="149.0" textFill="#e10303" />
+            <PasswordField fx:id="pfPassword" layoutX="65.0" layoutY="256.0" promptText="Contraseña" />
          </children>
       </AnchorPane>
    </children>
