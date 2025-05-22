@@ -4,13 +4,16 @@
  */
 package javafxexpendio.controlador;
 
+import javafxexpendio.modelo.ConexionBD;
+import javafxexpendio.modelo.dao.InicioSesionDAOImpl;
+import javafxexpendio.modelo.pojo.Usuario;
+import javafxexpendio.utilidades.Utilidad;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,16 +26,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
-import javafxexpendio.modelo.ConexionBD;
-import javafxexpendio.modelo.dao.InicioSesionDAOImpl;
-import javafxexpendio.modelo.pojo.Usuario;
-import javafxexpendio.utilidades.Utilidad;
 
-/**
- * FXML Controller class
- *
- * @author zenbook i5
- */
 public class FXMLInicioSesionController implements Initializable {
 
     @FXML
@@ -44,14 +38,9 @@ public class FXMLInicioSesionController implements Initializable {
     @FXML
     private PasswordField pfPassword;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
         Connection conexionBD = ConexionBD.abrirConexion();
-        
         if (conexionBD != null) {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setTitle("Conexión Base de datos");
@@ -65,18 +54,18 @@ public class FXMLInicioSesionController implements Initializable {
     private void btnClicIniciarSesion(ActionEvent event) {
         String username = tfUser.getText();
         String password = pfPassword.getText();
-        
+
         if (validarCampos(username, password)) {
             validarCredenciales(username, password);
         }
     }
-    
+
     private boolean validarCampos(String username, String password) {
         boolean camposValidos = true;
-        
+
         lbUserError.setText("");
         lbPasswordError.setText("");
-        
+
         if (username.isEmpty()) {
             lbUserError.setText("Usuario obligatorio.");
             camposValidos = false;
@@ -85,10 +74,10 @@ public class FXMLInicioSesionController implements Initializable {
             lbPasswordError.setText("Contraseña obligatoria");
             camposValidos = false;
         }
-        
+
         return camposValidos;
     }
-    
+
     private void validarCredenciales(String username, String password) {
         try {
             InicioSesionDAOImpl inicioSesionDAO = new InicioSesionDAOImpl();
@@ -104,27 +93,40 @@ public class FXMLInicioSesionController implements Initializable {
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Problemas de conexión", ex.getMessage());
         }  
-    
     }
-    
+
     private void irPantallaPrincipal(Usuario usuarioSesion) {
-        if ("empleado".equals(usuarioSesion.getTipoUsuario())) {
-            try {
-                Stage escenarioBase = (Stage) tfUser.getScene().getWindow();
-                FXMLLoader cargador = new FXMLLoader(JavaFXAppExpendio.class.getResource("vista/FXMLPrincipalEmpleado.fxml"));
-                Parent vista = cargador.load();
-                
-                FXMLPrincipalEmpleadoController controlador = cargador.getController();
-                controlador.inicializarInformacion(usuarioSesion);
-                
-                Scene escenaPrincipal = new Scene(vista);
-                escenarioBase.setScene(escenaPrincipal);
-                escenarioBase.setTitle("Home");
-                escenarioBase.showAndWait();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        if (usuarioSesion.getTipoUsuario().equalsIgnoreCase("administrador")) {
+            cargarPantallaAdministrador();
+        } else if (usuarioSesion.getTipoUsuario().equalsIgnoreCase("empleado")) {
+            cargarPantallaEmpleado();
         }
     }
-    
+
+    private void cargarPantallaAdministrador() {
+        try {
+            Stage escenarioBase = (Stage) pfPassword.getScene().getWindow();
+            Parent vista = FXMLLoader.load(JavaFXAppExpendio.class.getResource("vista/FXMLPrincipalAdmin.fxml"));
+            Scene escenaPrincipal = new Scene(vista);
+            escenarioBase.setScene(escenaPrincipal);
+            escenarioBase.setTitle("Home");
+            escenarioBase.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void cargarPantallaEmpleado() {
+        try {
+            Stage escenarioBase = (Stage) pfPassword.getScene().getWindow();
+            Parent vista = FXMLLoader.load(JavaFXAppExpendio.class.getResource("vista/FXMLPrincipalEmpleado.fxml"));
+            Scene escenaPrincipal = new Scene(vista);
+            escenarioBase.setScene(escenaPrincipal);
+            escenarioBase.setTitle("Home");
+            escenarioBase.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
