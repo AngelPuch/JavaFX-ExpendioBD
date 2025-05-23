@@ -9,8 +9,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,9 +18,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -48,8 +46,10 @@ public class FXMLAdminProductoController implements Initializable {
     private TableColumn colStockMinimo;
     @FXML
     private TableColumn colPrecio;
+    @FXML
+    private TextField tfBuscarBebida;
     private ObservableList<Bebida> bebidas;
-
+    
     /**
      * Initializes the controller class.
      */
@@ -60,32 +60,6 @@ public class FXMLAdminProductoController implements Initializable {
         
     }    
     
-    private void configurarTabla() {
-        colNombre.setCellValueFactory(new PropertyValueFactory("bebida"));
-        colStock.setCellValueFactory(new PropertyValueFactory("stock"));
-        colStockMinimo.setCellValueFactory(new PropertyValueFactory("stockMinimo"));
-        colPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
-    }
-    
-    private void cargarInformacionTabla() {
-        try {
-            BebidaDAOImpl bebidaDao = new BebidaDAOImpl();
-            bebidas = FXCollections.observableArrayList();
-            List<Bebida> bebidasDAO = bebidaDao.leerTodo();
-            bebidas.addAll(bebidasDAO);
-            tblProducto.setItems(bebidas);
-        } catch (SQLException ex) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar", 
-                    "Lo sentimos, por el momento no se puede mostrar la información de los alumnos. Por favor intentelo más tarde");
-            cerrarVentana();
-        }
-
-    }
-    
-    private void cerrarVentana() {
-        ((Stage)tblProducto.getScene().getWindow()).close();
-    }
-
     @FXML
     private void btnClicAgregar(ActionEvent event) {
         try{
@@ -102,9 +76,6 @@ public class FXMLAdminProductoController implements Initializable {
         }
     }
 
-    @FXML
-    private void btnClicActualizar(ActionEvent event) {
-    }
 
     @FXML
     private void btnClicEliminar(ActionEvent event) {
@@ -135,7 +106,42 @@ public class FXMLAdminProductoController implements Initializable {
             }
         }
     }
-    
 
+    @FXML
+    private void btnClicEditar(ActionEvent event) {
+    }
+    
+    private void configurarTabla() {
+        colNombre.setCellValueFactory(new PropertyValueFactory("bebida"));
+        colStock.setCellValueFactory(new PropertyValueFactory("stock"));
+        colStockMinimo.setCellValueFactory(new PropertyValueFactory("stockMinimo"));
+        colPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
+    }
+    
+    private void cargarInformacionTabla() {
+        try {
+            BebidaDAOImpl bebidaDao = new BebidaDAOImpl();
+            bebidas = FXCollections.observableArrayList();
+            List<Bebida> bebidasDAO = bebidaDao.leerTodo();
+            bebidas.addAll(bebidasDAO);
+            tblProducto.setItems(bebidas);
+            configurarFiltroBusqueda();
+        } catch (SQLException ex) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar", 
+                    "Lo sentimos, por el momento no se puede mostrar la información de los alumnos. Por favor intentelo más tarde");
+            cerrarVentana();
+        }
+
+    }
+    
+    private void configurarFiltroBusqueda() {
+        Utilidad.activarFiltroBusqueda(tfBuscarBebida, tblProducto, bebidas, bebida ->
+            bebida.getBebida() + " " + bebida.getPrecio() + " " + bebida.getStock()
+        );
+    }
+    
+    private void cerrarVentana() {
+        ((Stage)tblProducto.getScene().getWindow()).close();
+    }
     
 }

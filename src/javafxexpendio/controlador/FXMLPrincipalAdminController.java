@@ -12,8 +12,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
+import javafxexpendio.utilidades.Utilidad;
 
 /**
  * FXML Controller class
@@ -24,6 +28,8 @@ public class FXMLPrincipalAdminController implements Initializable {
 
     @FXML
     private AnchorPane apCentral;
+    @FXML
+    private Label lbNombreVentana;
 
     /**
      * Initializes the controller class.
@@ -36,15 +42,47 @@ public class FXMLPrincipalAdminController implements Initializable {
     @FXML
     private void btnClicProveedor(ActionEvent event) {
         cargarEscenas("vista/FXMLAdminProveedor.fxml");
+        lbNombreVentana.setText("Proveedores | Gestión de proveedores");
     }
 
     @FXML
     private void btnClicProducto(ActionEvent event) {
         cargarEscenas("vista/FXMLAdminProducto.fxml");
+        lbNombreVentana.setText("Productos | Gestión de inventario");
     }
-    
+
     @FXML
-    private void btnClicInicio(ActionEvent event) {
+    private void btnClicVentas(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnClicPromociones(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnClicPedidos(ActionEvent event) {
+    }
+
+    @FXML
+    private void btnClicUsuarios(ActionEvent event) {
+        cargarEscenas("vista/FXMLAdminUsuario.fxml");
+        lbNombreVentana.setText("Usuarios | Gestión de usuarios");
+    }
+
+    @FXML
+    private void btnClicCerrarSesion(ActionEvent event) {
+        try {
+            FXMLLoader cargador = new FXMLLoader(JavaFXAppExpendio.class.getResource("vista/FXMLInicioSesion.fxml"));
+            Parent vistaInicioSesion = cargador.load();
+            Scene escenaInicio = new Scene(vistaInicioSesion);
+            Stage escenarioActual = Utilidad.getEscenarioComponente(lbNombreVentana);
+            escenarioActual.setScene(escenaInicio);
+            escenarioActual.setTitle("Inicio de sesión");
+            escenarioActual.show();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
     private void cargarEscenas(String ruta) {

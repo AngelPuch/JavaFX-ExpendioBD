@@ -20,13 +20,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
-import javafxexpendio.modelo.dao.BebidaDAOImpl;
 import javafxexpendio.modelo.dao.ProveedorDAOImpl;
-import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.Proveedor;
 import javafxexpendio.utilidades.Utilidad;
 
@@ -45,8 +44,10 @@ public class FXMLAdminProveedorController implements Initializable {
     private TableColumn colTelefono;
     @FXML
     private TableColumn colCorreo;
+    @FXML
+    private TextField tfBuscarProveedor;
     private ObservableList<Proveedor> proveedores;
-
+    
     /**
      * Initializes the controller class.
      */
@@ -55,31 +56,6 @@ public class FXMLAdminProveedorController implements Initializable {
         configurarTabla();
         cargarInformacionTabla();
     }    
-    
-    private void configurarTabla() {
-        colNombre.setCellValueFactory(new PropertyValueFactory("razonSocial"));
-        colTelefono.setCellValueFactory(new PropertyValueFactory("telefono"));
-        colCorreo.setCellValueFactory(new PropertyValueFactory("correo"));
-    }
-    
-    private void cargarInformacionTabla() {
-        try {
-            ProveedorDAOImpl proveedorDAOImpl = new ProveedorDAOImpl();
-            proveedores = FXCollections.observableArrayList();
-            List<Proveedor> proveedoresDAO = proveedorDAOImpl.leerTodo();
-            proveedores.addAll(proveedoresDAO);
-            tblProveedor.setItems(proveedores);
-        } catch (SQLException ex) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar", 
-                    "Lo sentimos, por el momento no se puede mostrar la información de los alumnos. Por favor intentelo más tarde");
-            cerrarVentana();
-        }
-
-    }
-    
-    private void cerrarVentana() {
-        ((Stage)tblProveedor.getScene().getWindow()).close();
-    }
 
     @FXML
     private void btnClicAgregar(ActionEvent event) {
@@ -97,9 +73,6 @@ public class FXMLAdminProveedorController implements Initializable {
         }
     }
 
-    @FXML
-    private void btnClicActualizar(ActionEvent event) {
-    }
 
     @FXML
     private void btnClicEliminar(ActionEvent event) {
@@ -131,6 +104,42 @@ public class FXMLAdminProveedorController implements Initializable {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
             }
         }
+    }
+
+    @FXML
+    private void btnClicEditar(ActionEvent event) {
+    }
+    
+    private void configurarTabla() {
+        colNombre.setCellValueFactory(new PropertyValueFactory("razonSocial"));
+        colTelefono.setCellValueFactory(new PropertyValueFactory("telefono"));
+        colCorreo.setCellValueFactory(new PropertyValueFactory("correo"));
+    }
+    
+    private void cargarInformacionTabla() {
+        try {
+            ProveedorDAOImpl proveedorDAOImpl = new ProveedorDAOImpl();
+            proveedores = FXCollections.observableArrayList();
+            List<Proveedor> proveedoresDAO = proveedorDAOImpl.leerTodo();
+            proveedores.addAll(proveedoresDAO);
+            tblProveedor.setItems(proveedores);
+            configurarFiltroBusqueda();
+        } catch (SQLException ex) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar", 
+                    "Lo sentimos, por el momento no se puede mostrar la información de los alumnos. Por favor intentelo más tarde");
+            cerrarVentana();
+        }
+
+    }
+    
+    private void configurarFiltroBusqueda() {
+        Utilidad.activarFiltroBusqueda(tfBuscarProveedor, tblProveedor, proveedores, proveedor ->
+            proveedor.getRazonSocial()+ " " + proveedor.getCorreo() + " " + proveedor.getTelefono()
+        );
+    }
+    
+    private void cerrarVentana() {
+        ((Stage)tblProveedor.getScene().getWindow()).close();
     }
     
 }

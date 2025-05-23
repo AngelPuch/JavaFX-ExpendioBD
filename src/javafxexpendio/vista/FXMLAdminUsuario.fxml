@@ -8,14 +8,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="874.0" style="-fx-background-color: #F5F6FA;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLAdminProveedorController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="874.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLAdminUsuarioController">
    <children>
-
-      <!-- Campo de búsqueda -->
-      <TextField fx:id="tfBuscarProveedor" layoutX="250.0" layoutY="15.0" promptText="🔍 Buscar proveedor" style="-fx-background-radius: 8; -fx-border-color: #ccc; -fx-border-radius: 8; -fx-padding: 4 8;" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="15.0" />
-
-      <!-- Barra de herramientas -->
-      <ToolBar layoutX="594.0" layoutY="10.0" prefHeight="40.0" prefWidth="280.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+      <TableView fx:id="tblUsuario" layoutX="20.0" layoutY="66.0" prefHeight="420.0" prefWidth="834.0">
+        <columns>
+          <TableColumn fx:id="colNombre" prefWidth="75.0" text="Nombre" />
+          <TableColumn fx:id="colApePaterno" prefWidth="75.0" text="Apellido paterno" />
+            <TableColumn fx:id="colApeMaterno" prefWidth="75.0" text="Apellido Materno" />
+            <TableColumn fx:id="colUsername" prefWidth="75.0" text="Username" />
+            <TableColumn fx:id="colPassword" prefWidth="75.0" text="Contraseña" />
+            <TableColumn fx:id="colTipoUsuario" prefWidth="75.0" text="Tipo de usuario" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+      <ToolBar layoutX="604.0" layoutY="20.0" prefHeight="40.0" prefWidth="280.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
          <items>
             <HBox alignment="CENTER_LEFT" spacing="5">
                <children>
@@ -64,18 +72,6 @@
             <Insets left="10.0" top="2.0" />
          </padding>
       </ToolBar>
-
-      <!-- Tabla de proveedores -->
-      <TableView fx:id="tblProveedor" layoutX="20.0" layoutY="66.0" prefHeight="420.0" prefWidth="834.0" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 6;                         -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);">
-         <columns>
-            <TableColumn fx:id="colNombre" prefWidth="75.0" text="Nombre" />
-            <TableColumn fx:id="colTelefono" prefWidth="75.0" text="Teléfono" />
-            <TableColumn fx:id="colCorreo" prefWidth="75.0" text="Correo" />
-         </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-
+      <TextField fx:id="tfBuscarUsuario" layoutX="260.0" layoutY="25.0" promptText="🔍 Buscar usuario" style="-fx-background-radius: 8; -fx-border-color: #ccc; -fx-border-radius: 8; -fx-padding: 4 8;" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="15.0" />
    </children>
 </AnchorPane>
