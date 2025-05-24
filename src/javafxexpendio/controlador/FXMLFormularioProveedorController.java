@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafxexpendio.interfaz.Notificacion;
 import javafxexpendio.modelo.dao.ProveedorDAOImpl;
 import javafxexpendio.modelo.pojo.Proveedor;
 import javafxexpendio.utilidades.Utilidad;
@@ -22,7 +23,7 @@ import javafxexpendio.utilidades.Utilidad;
  *
  * @author Dell
  */
-public class FXMLRegistrarProveedorController implements Initializable {
+public class FXMLFormularioProveedorController implements Initializable {
 
     @FXML
     private Label lbRazonSocialError;
@@ -36,7 +37,10 @@ public class FXMLRegistrarProveedorController implements Initializable {
     private TextField tfTelefono;
     @FXML
     private TextField tfCorreo;
-
+    // Variables para el patrón Observer
+    private Notificacion observador;
+    private Proveedor proveedorEdicion;
+    private boolean isEdicion;
     /**
      * Initializes the controller class.
      */
@@ -44,12 +48,20 @@ public class FXMLRegistrarProveedorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+    
+    public void inicializarInformacion(boolean isEdicion, Proveedor proveedorEdicion, Notificacion observador) {
+        this.proveedorEdicion = proveedorEdicion;
+        this.isEdicion = isEdicion;
+        this.observador = observador;
+        if (isEdicion) {
+            cargarInformacionEdicion();
+        }
+    }
 
     @FXML
     private void btnClicGuardar(ActionEvent event) {
         if (validarCampos()) {
-            Proveedor proveedor = obtenerProveedorNuevo();
-            guardarProveedor(proveedor);
+            asignarTipoOperacion();
             Utilidad.getEscenarioComponente(tfRazonSocial).close();
             limpiarCampos();
         }
@@ -103,10 +115,24 @@ public class FXMLRegistrarProveedorController implements Initializable {
      
     private Proveedor obtenerProveedorNuevo() {
         Proveedor proveedor = new Proveedor();
+        if (isEdicion && proveedorEdicion != null) {
+            proveedor.setIdProveedor(proveedorEdicion.getIdProveedor());
+        }
         proveedor.setRazonSocial(tfRazonSocial.getText().trim());
         proveedor.setTelefono(tfTelefono.getText().trim().isEmpty() ? null : tfTelefono.getText().trim());
         proveedor.setCorreo(tfCorreo.getText().trim().isEmpty() ? null : tfCorreo.getText().trim());
         return proveedor;
+    }
+    
+    private void asignarTipoOperacion() {
+        if (!isEdicion) {
+            Proveedor proveedor = obtenerProveedorNuevo();
+            guardarProveedor(proveedor);
+        } else {
+            proveedorEdicion = obtenerProveedorNuevo();
+            actualizarProveedor(proveedorEdicion);
+        }
+        
     }
     
     private void guardarProveedor(Proveedor proveedor) {
@@ -115,12 +141,37 @@ public class FXMLRegistrarProveedorController implements Initializable {
             if (proveedorDAOImpl.crear(proveedor)) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Proveedor registrado", 
                         "El proveedor fue registrado con éxito.");
+                observador.operacionExitosa();
             } else {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al registrar", 
                         "No se pudo registrar el proveedor, intenta más tarde.");
             }
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
+        }
+    }
+    
+    private void actualizarProveedor(Proveedor proveedor) {
+        try {
+            ProveedorDAOImpl proveedorDAOImpl = new ProveedorDAOImpl();
+            if (proveedorDAOImpl.actualizar(proveedor)) {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Proveedor actualizado", 
+                        "El proveedor fue actualizado con éxito.");
+                observador.operacionExitosa();
+            } else {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al actualizar", 
+                        "No se pudo actualizar el proveedor, intenta más tarde.");
+            }
+        } catch (SQLException ex) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
+        }
+    }
+    
+    private void cargarInformacionEdicion() {
+        if (proveedorEdicion != null) {
+            tfRazonSocial.setText(proveedorEdicion.getRazonSocial());
+            tfTelefono.setText(proveedorEdicion.getTelefono() != null ? proveedorEdicion.getTelefono() : "");
+            tfCorreo.setText(proveedorEdicion.getCorreo() != null ? proveedorEdicion.getCorreo() : "");
         }
     }
     

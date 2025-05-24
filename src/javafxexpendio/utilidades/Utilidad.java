@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
 /**
@@ -41,6 +42,15 @@ public class Utilidad {
 
         Optional<ButtonType> resultado = alerta.showAndWait();
         return resultado.isPresent() && resultado.get() == botonAceptar;
+    }
+    
+    public static Optional<String> mostrarDialogoEntrada(String titulo, String contenido) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(titulo);
+        dialog.setHeaderText(null);
+        dialog.setContentText(contenido);
+
+        return dialog.showAndWait();
     }
     
     public static Stage getEscenarioComponente(Control componente) {

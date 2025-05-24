@@ -25,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
+import javafxexpendio.interfaz.Notificacion;
 import javafxexpendio.modelo.dao.ProveedorDAOImpl;
 import javafxexpendio.modelo.pojo.Proveedor;
 import javafxexpendio.utilidades.Utilidad;
@@ -34,7 +35,7 @@ import javafxexpendio.utilidades.Utilidad;
  *
  * @author Dell
  */
-public class FXMLAdminProveedorController implements Initializable {
+public class FXMLAdminProveedorController implements Initializable, Notificacion {
 
     @FXML
     private TableView<Proveedor> tblProveedor;
@@ -59,55 +60,45 @@ public class FXMLAdminProveedorController implements Initializable {
 
     @FXML
     private void btnClicAgregar(ActionEvent event) {
-        try{
-            Stage escenarioAddProducto = new Stage();
-            Parent vista = FXMLLoader.load(JavaFXAppExpendio.class.getResource("vista/FXMLRegistrarProveedor.fxml"));
-            Scene escena = new Scene(vista);
-            escenarioAddProducto.setScene(escena);
-            escenarioAddProducto.setTitle("Agregar proveedor");
-            escenarioAddProducto.initModality(Modality.APPLICATION_MODAL);
-            escenarioAddProducto.showAndWait();
-            cargarInformacionTabla();
-        } catch(IOException ex) {
-            ex.printStackTrace();
-        }
+        irFormularioProveedor(false, null);
     }
 
 
     @FXML
     private void btnClicEliminar(ActionEvent event) {
-        Proveedor proveedorSeleccionado = tblProveedor.getSelectionModel().getSelectedItem();
+        Proveedor proveedorSeleccionado = getProveedorSeleccionado();
 
-        if (proveedorSeleccionado == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Sin selección",
-                "Por favor, selecciona un proveedor para eliminar.");
-            return;
-        }
-
-        boolean confirmado = Utilidad.mostrarAlertaConfirmacion(
+        if (proveedorSeleccionado != null) {
+            boolean confirmado = Utilidad.mostrarAlertaConfirmacion(
             "Confirmar eliminación",
-            "¿Seguro que desea eliminar al proveedor: " + proveedorSeleccionado.getRazonSocial() + "?"
-        );
+            "¿Seguro que desea eliminar al proveedor: " + proveedorSeleccionado.getRazonSocial() + "?");
 
-        if (confirmado) {
-            try {
-                ProveedorDAOImpl proveedorDAO = new ProveedorDAOImpl();
-                if (proveedorDAO.eliminar(proveedorSeleccionado.getIdProveedor())) {
-                    Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Eliminación exitosa",
-                        "El proveedor ha sido eliminado correctamente.");
-                    cargarInformacionTabla();
-                } else {
-                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error",
-                        "No se pudo eliminar el proveedor. Intenta de nuevo.");
+            if (confirmado) {
+                try {
+                    ProveedorDAOImpl proveedorDAO = new ProveedorDAOImpl();
+                    if (proveedorDAO.eliminar(proveedorSeleccionado.getIdProveedor())) {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Eliminación exitosa",
+                            "El proveedor ha sido eliminado correctamente.");
+                        operacionExitosa();
+
+                    } else {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error",
+                            "No se pudo eliminar el proveedor. Intenta de nuevo.");
+                    }
+                } catch (SQLException ex) {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
                 }
-            } catch (SQLException ex) {
-                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
             }
         }
+        
     }
 
     @FXML
     private void btnClicEditar(ActionEvent event) {
+        Proveedor proveedorSeleccionado = getProveedorSeleccionado();
+        if (proveedorSeleccionado != null) {
+            irFormularioProveedor(true, proveedorSeleccionado);
+        }
     }
     
     private void configurarTabla() {
@@ -132,6 +123,35 @@ public class FXMLAdminProveedorController implements Initializable {
 
     }
     
+    private void irFormularioProveedor(boolean isEdicion, Proveedor proveedorEdicion) {
+        try {
+            Stage escenarioAddProveedor = new Stage();
+            FXMLLoader loader = new FXMLLoader(JavaFXAppExpendio.class.getResource("vista/FXMLFormularioProveedor.fxml"));
+            Parent vista = loader.load();
+            FXMLFormularioProveedorController controlador = loader.getController();
+            controlador.inicializarInformacion(isEdicion, proveedorEdicion, this);
+            Scene escena = new Scene(vista);
+            escenarioAddProveedor.setScene(escena);
+            escenarioAddProveedor.setTitle("Formulario proveedor");
+            escenarioAddProveedor.initModality(Modality.APPLICATION_MODAL);
+            escenarioAddProveedor.showAndWait();
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    private Proveedor getProveedorSeleccionado() {
+        Proveedor proveedorSeleccionado = tblProveedor.getSelectionModel().getSelectedItem();
+
+        if (proveedorSeleccionado != null) {
+            return proveedorSeleccionado;
+        } else {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Sin selección",
+                "Por favor, selecciona un proveedor para eliminar.");
+            return null;
+        }
+    }
+    
     private void configurarFiltroBusqueda() {
         Utilidad.activarFiltroBusqueda(tfBuscarProveedor, tblProveedor, proveedores, proveedor ->
             proveedor.getRazonSocial()+ " " + proveedor.getCorreo() + " " + proveedor.getTelefono()
@@ -140,6 +160,11 @@ public class FXMLAdminProveedorController implements Initializable {
     
     private void cerrarVentana() {
         ((Stage)tblProveedor.getScene().getWindow()).close();
+    }
+
+    @Override
+    public void operacionExitosa() {
+        cargarInformacionTabla();
     }
     
 }

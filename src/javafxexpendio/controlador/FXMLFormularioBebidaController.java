@@ -6,25 +6,27 @@ package javafxexpendio.controlador;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafxexpendio.interfaz.Notificacion;
 import javafxexpendio.modelo.dao.BebidaDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.utilidades.Utilidad;
+import static javafxexpendio.utilidades.Utilidad.mostrarDialogoEntrada;
 
 /**
  * FXML Controller class
  *
  * @author Dell
  */
-public class FXMLRegistrarBebidaController implements Initializable {
+public class FXMLFormularioBebidaController implements Initializable {
 
     @FXML
     private TextField tfNombre;
@@ -42,20 +44,38 @@ public class FXMLRegistrarBebidaController implements Initializable {
     private Label lbStockMinimoError;
     @FXML
     private Label lbPrecioError;
-
+    //Variables necesarias para implementar el patron observable
+    Notificacion observador;
+    Bebida bebidaEdicion;
+    boolean isEdicion;
+    @FXML
+    private Button btnActualizarStock;
+    
+    
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    } 
+    
+    //Función integrada para el observador
+    public void inicializarInformacion(boolean isEdicion, Bebida bebidaEdicion, Notificacion observador) {
+        this.bebidaEdicion = bebidaEdicion;
+        this.isEdicion = isEdicion;
+        this.observador = observador;
+        if (isEdicion) {
+            cargarInformacionEdicion();
+            actualizarDisponibilidadComponentes();
+        }
+    }
 
     @FXML
     private void btnClicGuardar(ActionEvent event) {
         if (validarCampos()) {
-            Bebida bebida = obtenerBebidaNueva();
-            guardarBebida(bebida);
+            asigarTipoOperacion();
             Utilidad.getEscenarioComponente(tfNombre).close();
             limpiarCampos();
         }
@@ -66,7 +86,18 @@ public class FXMLRegistrarBebidaController implements Initializable {
         Utilidad.getEscenarioComponente(tfNombre).close();
         limpiarCampos();
     }
-    
+
+    @FXML
+    private void btnClicActualizarStock(ActionEvent event) {
+        Optional<String> resultado = mostrarDialogoEntrada("Campo seguro", "Ingrese su contraseña:");
+        if (validarPassword(resultado)) {
+            tfStock.setEditable(true);
+        } else {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Contraseña incorrecta", 
+                    "La contraseña ingresada es incorrecta, no puede actualizar el stock.");
+        }
+        
+    }
     
     private boolean validarCampos() {
         boolean esValido = true;
@@ -144,11 +175,24 @@ public class FXMLRegistrarBebidaController implements Initializable {
     
     private Bebida obtenerBebidaNueva() {
         Bebida bebida = new Bebida();
+        if (isEdicion && bebidaEdicion != null) {
+            bebida.setIdBebida(bebidaEdicion.getIdBebida());
+        }
         bebida.setBebida(tfNombre.getText());
         bebida.setStock(Integer.parseInt(tfStock.getText()));
         bebida.setStockMinimo(Integer.parseInt(tfStockMinimo.getText()));
         bebida.setPrecio(Double.parseDouble(tfPrecio.getText()));
         return bebida;
+    }
+    
+    private void asigarTipoOperacion() {
+        if (!isEdicion) {
+            Bebida bebida = obtenerBebidaNueva();
+            guardarBebida(bebida);
+        } else {
+            bebidaEdicion = obtenerBebidaNueva();
+            actualizarBebida(bebidaEdicion);
+        }
     }
     
     private void guardarBebida(Bebida bebida){
@@ -157,6 +201,8 @@ public class FXMLRegistrarBebidaController implements Initializable {
             if (bebidaDAOImpl.crear(bebida)) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Bebida registrada", 
                         "La bebida fue registrada con exito");
+                //Llamada al método de la interfaz para actualizar tabla
+                observador.operacionExitosa();
             } else {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al registrar", 
                         "No se pudo registrar la bebida, intentalo más tarde.");
@@ -164,6 +210,42 @@ public class FXMLRegistrarBebidaController implements Initializable {
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
         }
+    }
+    
+    private void actualizarBebida(Bebida bebida){
+        try {
+            BebidaDAOImpl bebidaDAOImpl = new BebidaDAOImpl();
+            if (bebidaDAOImpl.actualizar(bebida)) {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Bebida actualizada", 
+                        "La bebida fue actualizada con exito");
+                //Llamada al método de la interfaz para actualizar tabla
+                observador.operacionExitosa();
+            } else {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al actualizar", 
+                        "No se pudo actualizar la bebida, intentalo más tarde.");
+            }
+        } catch (SQLException ex) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
+        }
+    }
+        
+    private void cargarInformacionEdicion() {
+        if (bebidaEdicion != null) {
+            tfNombre.setText(bebidaEdicion.getBebida());
+            tfStock.setText(String.valueOf(bebidaEdicion.getStock()));
+            tfStockMinimo.setText(String.valueOf(bebidaEdicion.getStockMinimo()));
+            tfPrecio.setText(String.valueOf(bebidaEdicion.getPrecio()));
+        }
+    }
+    
+    private boolean validarPassword(Optional<String> password) {
+        return password.map(valor -> valor.equals("contraseña admin")).orElse(false);
+    }
+    
+    private void actualizarDisponibilidadComponentes() {
+        tfStock.setEditable(false);
+        btnActualizarStock.setDisable(false);
+        btnActualizarStock.setVisible(true);
     }
     
     private void limpiarCampos() {

@@ -25,6 +25,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
+import javafxexpendio.interfaz.Notificacion;
 import javafxexpendio.modelo.dao.BebidaDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.utilidades.Utilidad;
@@ -34,7 +35,7 @@ import javafxexpendio.utilidades.Utilidad;
  *
  * @author Dell
  */
-public class FXMLAdminProductoController implements Initializable {
+public class FXMLAdminProductoController implements Initializable, Notificacion {
 
     @FXML
     private TableView<Bebida> tblProducto;
@@ -62,53 +63,43 @@ public class FXMLAdminProductoController implements Initializable {
     
     @FXML
     private void btnClicAgregar(ActionEvent event) {
-        try{
-            Stage escenarioAddProducto = new Stage();
-            Parent vista = FXMLLoader.load(JavaFXAppExpendio.class.getResource("vista/FXMLRegistrarBebida.fxml"));
-            Scene escena = new Scene(vista);
-            escenarioAddProducto.setScene(escena);
-            escenarioAddProducto.setTitle("Agregar producto");
-            escenarioAddProducto.initModality(Modality.APPLICATION_MODAL);
-            escenarioAddProducto.showAndWait();
-            cargarInformacionTabla();
-        } catch(IOException ex) {
-            ex.printStackTrace();
-        }
+        irFormularioBebida(false, null);
     }
 
 
     @FXML
     private void btnClicEliminar(ActionEvent event) {
-        Bebida bebidaSeleccionada = tblProducto.getSelectionModel().getSelectedItem();
-    
-        if (bebidaSeleccionada == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Sin selección",
-                "Por favor, selecciona una bebida para eliminar.");
-            return;
-        }
+        Bebida bebidaSeleccionada = getBebidaSeleccionado();
         
-        boolean confirmado = Utilidad.mostrarAlertaConfirmacion( "Confirmar eliminación", 
-        "¿Seguro que desea eliminar la bebida: " + bebidaSeleccionada.getBebida() + "?");
-        
-        if (confirmado) {
-            try {
-                BebidaDAOImpl bebidaDAOImpl = new BebidaDAOImpl();
-                if (bebidaDAOImpl.eliminar(bebidaSeleccionada.getIdBebida())) {
-                    Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Eliminación exitosa",
-                    "La bebida ha sido eliminada correctamente.");
-                    cargarInformacionTabla();
-                } else {
-                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error",
-                    "No se pudo eliminar la bebida. Intenta de nuevo.");
+        if (bebidaSeleccionada != null) {
+            boolean confirmado = Utilidad.mostrarAlertaConfirmacion( "Confirmar eliminación", 
+            "¿Seguro que desea eliminar la bebida: " + bebidaSeleccionada.getBebida() + "?");
+
+            if (confirmado) {
+                try {
+                    BebidaDAOImpl bebidaDAOImpl = new BebidaDAOImpl();
+                    if (bebidaDAOImpl.eliminar(bebidaSeleccionada.getIdBebida())) {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Eliminación exitosa",
+                        "La bebida ha sido eliminada correctamente.");
+                        operacionExitosa();
+                    } else {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error",
+                        "No se pudo eliminar la bebida. Intenta de nuevo.");
+                    }
+                } catch (SQLException ex) {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
                 }
-            } catch (SQLException ex) {
-                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
             }
         }
+        
     }
 
     @FXML
     private void btnClicEditar(ActionEvent event) {
+        Bebida bebidaSeleccionada = getBebidaSeleccionado();
+        if (bebidaSeleccionada != null) {
+            irFormularioBebida(true, bebidaSeleccionada);
+        }
     }
     
     private void configurarTabla() {
@@ -131,7 +122,35 @@ public class FXMLAdminProductoController implements Initializable {
                     "Lo sentimos, por el momento no se puede mostrar la información de los alumnos. Por favor intentelo más tarde");
             cerrarVentana();
         }
-
+    }
+    
+    private void irFormularioBebida(boolean isEdicion, Bebida bebidaEdicion) {
+        try{
+            Stage escenarioAddProducto = new Stage();
+            FXMLLoader loader = new FXMLLoader(javafxexpendio.JavaFXAppExpendio.class.getResource("vista/FXMLFormularioBebida.fxml"));
+            Parent vista = loader.load();
+            FXMLFormularioBebidaController controlador = loader.getController();
+            controlador.inicializarInformacion(isEdicion, bebidaEdicion, this);
+            Scene escena = new Scene(vista);
+            escenarioAddProducto.setScene(escena);
+            escenarioAddProducto.setTitle("Formulario producto");
+            escenarioAddProducto.initModality(Modality.APPLICATION_MODAL);
+            escenarioAddProducto.showAndWait();
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    private Bebida getBebidaSeleccionado() {
+        Bebida bebidaSeleccionada = tblProducto.getSelectionModel().getSelectedItem();
+    
+        if (bebidaSeleccionada != null) {
+            return bebidaSeleccionada;
+        } else {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Sin selección",
+                "Por favor, selecciona una bebida para eliminar.");
+            return null;
+        }
     }
     
     private void configurarFiltroBusqueda() {
@@ -142,6 +161,11 @@ public class FXMLAdminProductoController implements Initializable {
     
     private void cerrarVentana() {
         ((Stage)tblProducto.getScene().getWindow()).close();
+    }
+
+    @Override
+    public void operacionExitosa() {
+        cargarInformacionTabla();
     }
     
 }
