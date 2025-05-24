@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafxexpendio.interfaz.Notificacion;
 import javafxexpendio.modelo.dao.BebidaDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
+import javafxexpendio.modelo.pojo.Usuario;
 import javafxexpendio.utilidades.Utilidad;
 import static javafxexpendio.utilidades.Utilidad.mostrarDialogoEntrada;
 
@@ -44,13 +45,13 @@ public class FXMLFormularioBebidaController implements Initializable {
     private Label lbStockMinimoError;
     @FXML
     private Label lbPrecioError;
-    //Variables necesarias para implementar el patron observable
-    Notificacion observador;
-    Bebida bebidaEdicion;
-    boolean isEdicion;
     @FXML
     private Button btnActualizarStock;
-    
+    private  Usuario usuarioSesion;
+    //Variables necesarias para implementar el patron observable
+    private Notificacion observador;
+    private Bebida bebidaEdicion;
+    private boolean isEdicion;
     
     
     /**
@@ -62,10 +63,11 @@ public class FXMLFormularioBebidaController implements Initializable {
     } 
     
     //Función integrada para el observador
-    public void inicializarInformacion(boolean isEdicion, Bebida bebidaEdicion, Notificacion observador) {
+    public void inicializarInformacion(boolean isEdicion, Bebida bebidaEdicion, Notificacion observador, Usuario usuarioSesion) {
         this.bebidaEdicion = bebidaEdicion;
         this.isEdicion = isEdicion;
         this.observador = observador;
+        this.usuarioSesion = usuarioSesion;
         if (isEdicion) {
             cargarInformacionEdicion();
             actualizarDisponibilidadComponentes();
@@ -239,7 +241,9 @@ public class FXMLFormularioBebidaController implements Initializable {
     }
     
     private boolean validarPassword(Optional<String> password) {
-        return password.map(valor -> valor.equals("contraseña admin")).orElse(false);
+        return password
+        .map(valor -> Utilidad.verificarPassword(valor, usuarioSesion.getPassword()))
+        .orElse(false);
     }
     
     private void actualizarDisponibilidadComponentes() {

@@ -69,10 +69,37 @@ public class FXMLAdminUsuarioController implements Initializable, Notificacion {
 
     @FXML
     private void btnClicEditar(ActionEvent event) {
+        Usuario usuarioSeleccionado = getUsuarioSeleccionado();
+        if (usuarioSeleccionado != null) {
+            irFormularioUsuario(true, usuarioSeleccionado);
+        }
     }
 
     @FXML
     private void btnClicEliminar(ActionEvent event) {
+        Usuario usuarioSeleccionado = getUsuarioSeleccionado();
+        
+        if (usuarioSeleccionado != null) {
+            boolean confirmado = Utilidad.mostrarAlertaConfirmacion("Confirmar eliminación",
+                    "¿Seguro que desea eliminar al usuario: " + usuarioSeleccionado.getNombre()+ "?"); 
+            if (confirmado) {
+                try {
+                    UsuarioDAOImpl usuarioDAOImpl = new UsuarioDAOImpl();
+                    if (usuarioDAOImpl.eliminar(usuarioSeleccionado.getIdUsuario())) {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Eliminación exitosa",
+                            "El usuario ha sido eliminado correctamente.");
+                        operacionExitosa();
+                    } else {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error",
+                            "No se pudo eliminar el usuario. Intenta de nuevo.");
+                    }
+                } catch (Exception ex) {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
+                }
+            }
+        }
+        
+        
     }
 
     @Override
@@ -118,7 +145,17 @@ public class FXMLAdminUsuarioController implements Initializable, Notificacion {
         } catch(IOException ex) {
             ex.printStackTrace();
         }
-        
+    }
+    
+    private Usuario getUsuarioSeleccionado() {
+        Usuario usuarioSeleccionado = tblUsuario.getSelectionModel().getSelectedItem();
+        if (usuarioSeleccionado != null) {
+            return usuarioSeleccionado;
+        } else {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Sin selección",
+                "Por favor, selecciona un usuario para eliminar.");
+            return null;
+        }
     }
     
     

@@ -28,6 +28,7 @@ import javafxexpendio.JavaFXAppExpendio;
 import javafxexpendio.interfaz.Notificacion;
 import javafxexpendio.modelo.dao.BebidaDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
+import javafxexpendio.modelo.pojo.Usuario;
 import javafxexpendio.utilidades.Utilidad;
 
 /**
@@ -50,6 +51,7 @@ public class FXMLAdminProductoController implements Initializable, Notificacion 
     @FXML
     private TextField tfBuscarBebida;
     private ObservableList<Bebida> bebidas;
+    Usuario usuarioSesion;
     
     /**
      * Initializes the controller class.
@@ -60,6 +62,10 @@ public class FXMLAdminProductoController implements Initializable, Notificacion 
         cargarInformacionTabla();
         
     }    
+    
+    public void inicializarInformacion(Usuario usuarioSesion) {
+        this.usuarioSesion = usuarioSesion;
+    }
     
     @FXML
     private void btnClicAgregar(ActionEvent event) {
@@ -130,7 +136,7 @@ public class FXMLAdminProductoController implements Initializable, Notificacion 
             FXMLLoader loader = new FXMLLoader(javafxexpendio.JavaFXAppExpendio.class.getResource("vista/FXMLFormularioBebida.fxml"));
             Parent vista = loader.load();
             FXMLFormularioBebidaController controlador = loader.getController();
-            controlador.inicializarInformacion(isEdicion, bebidaEdicion, this);
+            controlador.inicializarInformacion(isEdicion, bebidaEdicion, this, usuarioSesion);
             Scene escena = new Scene(vista);
             escenarioAddProducto.setScene(escena);
             escenarioAddProducto.setTitle("Formulario producto");

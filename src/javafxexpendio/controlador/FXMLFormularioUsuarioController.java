@@ -1,14 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxexpendio.controlador;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,11 +19,6 @@ import javafxexpendio.modelo.pojo.TipoUsuario;
 import javafxexpendio.modelo.pojo.Usuario;
 import javafxexpendio.utilidades.Utilidad;
 
-/**
- * FXML Controller class
- *
- * @author Dell
- */
 public class FXMLFormularioUsuarioController implements Initializable {
 
     @FXML
@@ -59,9 +48,6 @@ public class FXMLFormularioUsuarioController implements Initializable {
     @FXML
     private Label lbUsernameError;
     
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cargarTipoUsuarios();
@@ -73,6 +59,7 @@ public class FXMLFormularioUsuarioController implements Initializable {
         this.observador = observador;
         if (isEdicion) {
             cargarInformacionEdicion();
+            pfPassword.setDisable(false);
         }
     }
     
@@ -128,24 +115,28 @@ public class FXMLFormularioUsuarioController implements Initializable {
             lbUsernameError.setText("");
         }
 
-        // Validar contraseña
-        String password = pfPassword.getText().trim();
-        if (password.isEmpty()) {
-            lbPasswordError.setText("*Campo obligatorio");
-            esValido = false;
-        } else if (!esPasswordSeguro(password)) {
-            lbPasswordError.setText("8c, A-Z, a-z, 0-9, símbolo");
-            esValido = false;
-        } else {
-            lbPasswordError.setText("");
-        }
-
         // Validar tipo de usuario
         if (cbTipoUsuario.getValue() == null) {
             lbTipoUsuarioError.setText("*Campo obligatorio");
             esValido = false;
         } else {
             lbTipoUsuarioError.setText("");
+        }
+        
+        // Validar password solo si es nuevo usuario o si se ha ingresado algo en el campo
+        if (!isEdicion) {
+            // Para nuevo usuario, siempre validar password
+            if (!validarPassword()) {
+                esValido = false;
+            }
+        } else {
+            // Para edición, validar password solo si se ha ingresado algo
+            String password = pfPassword.getText().trim();
+            if (!password.isEmpty() && !validarPassword()) {
+                esValido = false;
+            } else {
+                lbPasswordError.setText("");
+            }
         }
 
         return esValido;
@@ -155,7 +146,9 @@ public class FXMLFormularioUsuarioController implements Initializable {
         if (!isEdicion) {
             Usuario usuario = obtenerUsuarioNuevo();
             guardarUsuario(usuario);
-            
+        } else {
+            Usuario usuario = obtenerUsuarioEdicion();
+            actualizarUsuario(usuario);
         }
     }
     
@@ -175,25 +168,87 @@ public class FXMLFormularioUsuarioController implements Initializable {
         }
     }
     
+    private void actualizarUsuario(Usuario usuario) {
+        try {
+            UsuarioDAOImpl usuarioDAOImpl = new UsuarioDAOImpl();
+            if (usuarioDAOImpl.actualizar(usuario)) {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Usuario actualizado", 
+                        "El usuario fue actualizado con éxito.");
+                observador.operacionExitosa();
+            } else {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al actualizar", 
+                        "No se pudo actualizar el usuario, intentalo más tarde.");
+            }
+        } catch (SQLException ex) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
+        }
+    }
+    
     private Usuario obtenerUsuarioNuevo() {
         Usuario usuario = new Usuario();
-        if (isEdicion && usuarioEdicion != null) {
-            usuario.setIdUsuario(usuarioEdicion.getIdUsuario());
-        }
         usuario.setNombre(tfNombre.getText().trim());
         usuario.setApellidoPaterno(tfApellidoPaterno.getText().trim());
         usuario.setApellidoMaterno(tfApellidoMaterno.getText().trim());
         usuario.setUsername(tfUsername.getText().trim());
-        usuario.setPassword(Utilidad.hashearContraseña(pfPassword.getText().trim()));
+        usuario.setPassword(Utilidad.hashearPassword(pfPassword.getText().trim()));
         usuario.setIdTipoUsuario(cbTipoUsuario.getValue().getIdTipoUsuario());
         usuario.setTipoUsuario(cbTipoUsuario.getValue().getTipo());
 
         return usuario;
     }
+    
+    private Usuario obtenerUsuarioEdicion() {
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(usuarioEdicion.getIdUsuario());
+        usuario.setNombre(tfNombre.getText().trim());
+        usuario.setApellidoPaterno(tfApellidoPaterno.getText().trim());
+        usuario.setApellidoMaterno(tfApellidoMaterno.getText().trim());
+        usuario.setUsername(tfUsername.getText().trim());
+        
+        // Si el campo de contraseña está vacío, mantener la contraseña actual
+        String password = pfPassword.getText().trim();
+        if (password.isEmpty()) {
+            usuario.setPassword(usuarioEdicion.getPassword());
+        } else {
+            usuario.setPassword(Utilidad.hashearPassword(password));
+        }
+        
+        usuario.setIdTipoUsuario(cbTipoUsuario.getValue().getIdTipoUsuario());
+        usuario.setTipoUsuario(cbTipoUsuario.getValue().getTipo());
 
+        return usuario;
+    }
     
     private void cargarInformacionEdicion() {
-        //TODO
+        if (usuarioEdicion != null) {
+            tfNombre.setText(usuarioEdicion.getNombre());
+            tfApellidoPaterno.setText(usuarioEdicion.getApellidoPaterno());
+            tfApellidoMaterno.setText(usuarioEdicion.getApellidoMaterno() != null ? usuarioEdicion.getApellidoMaterno() : "");
+            tfUsername.setText(usuarioEdicion.getUsername());
+            for (TipoUsuario tipo : tiposUsuarios) {
+                if (tipo.getIdTipoUsuario() == usuarioEdicion.getIdTipoUsuario()) {
+                    cbTipoUsuario.setValue(tipo);
+                    break;
+                }
+            }
+        }
+    }
+    
+    private boolean validarPassword() {
+        boolean esValido = true;
+        String password = pfPassword.getText().trim();
+        
+        if (password.isEmpty()) {
+            lbPasswordError.setText("*Campo obligatorio");
+            esValido = false;
+        } else if (!esPasswordSeguro(password)) {
+            lbPasswordError.setText("8c, A-Z, a-z, 0-9, símbolo");
+            esValido = false;
+        } else {
+            lbPasswordError.setText("");
+        }
+        
+        return esValido;
     }
     
     private boolean esPasswordSeguro(String password) {
@@ -217,5 +272,4 @@ public class FXMLFormularioUsuarioController implements Initializable {
         lbPasswordError.setText("");
         lbTipoUsuarioError.setText("");
     }
-    
 }

@@ -70,11 +70,11 @@ public class Utilidad {
         });
     }
     
-    public static String hashearContraseña(String password) {
+    public static String hashearPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-    public static boolean verificarContraseña(String password, String hashGuardado) {
+    public static boolean verificarPassword(String password, String hashGuardado) {
         return BCrypt.checkpw(password, hashGuardado);
     }
     

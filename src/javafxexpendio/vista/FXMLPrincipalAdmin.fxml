@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
@@ -162,6 +163,21 @@
 
       <!-- Panel central -->
       <AnchorPane fx:id="apCentral" layoutX="150.0" layoutY="100.0" prefHeight="500.0" prefWidth="874.0" style="-fx-background-color: #F5F6FA;" />
-      <Label fx:id="lbNombreVentana" layoutX="200.0" layoutY="40.0" prefHeight="27.0" prefWidth="393.0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #5A4FCF;" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="36.0" />
+      <AnchorPane layoutX="150.0" prefHeight="100.0" prefWidth="874.0">
+         <children>
+            <ImageView fitHeight="52.0" fitWidth="58.0" layoutX="14.0" layoutY="24.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recurso/homeIcon.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="lbNombreVentana" prefHeight="27.0" prefWidth="400.0" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #5A4FCF;" AnchorPane.leftAnchor="212.0" AnchorPane.topAnchor="10.0" />
+            <Label layoutX="79.0" layoutY="40.0" text="Bienvenido (a):">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbNombreUsuario" layoutX="185.0" layoutY="42.0" prefHeight="17.0" prefWidth="306.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

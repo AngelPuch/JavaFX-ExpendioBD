@@ -32,6 +32,8 @@ public class FXMLPrincipalAdminController implements Initializable {
     @FXML
     private Label lbNombreVentana;
     private Usuario usuarioSesion;
+    @FXML
+    private Label lbNombreUsuario;
 
     /**
      * Initializes the controller class.
@@ -43,17 +45,18 @@ public class FXMLPrincipalAdminController implements Initializable {
     
     public void inicializarInformacion(Usuario usuarioSesion) {
         this.usuarioSesion = usuarioSesion;
+        cargarInformacion();
     }
 
     @FXML
     private void btnClicProveedor(ActionEvent event) {
-        cargarEscenas("vista/FXMLAdminProveedor.fxml");
+        cargarEscenas("vista/FXMLAdminProveedor.fxml", false);
         lbNombreVentana.setText("Proveedores | Gestión de proveedores");
     }
 
     @FXML
     private void btnClicProducto(ActionEvent event) {
-        cargarEscenas("vista/FXMLAdminProducto.fxml");
+        cargarEscenas("vista/FXMLAdminProducto.fxml", true);
         lbNombreVentana.setText("Productos | Gestión de inventario");
     }
 
@@ -71,7 +74,7 @@ public class FXMLPrincipalAdminController implements Initializable {
 
     @FXML
     private void btnClicUsuarios(ActionEvent event) {
-        cargarEscenas("vista/FXMLAdminUsuario.fxml");
+        cargarEscenas("vista/FXMLAdminUsuario.fxml", false);
         lbNombreVentana.setText("Usuarios | Gestión de usuarios");
     }
 
@@ -91,10 +94,20 @@ public class FXMLPrincipalAdminController implements Initializable {
         }
     }
     
-    private void cargarEscenas(String ruta) {
+    private void cargarInformacion() {
+        if (usuarioSesion != null) {
+            lbNombreUsuario.setText(usuarioSesion.toString());
+        }
+    }
+    
+    private void cargarEscenas(String ruta,  boolean isClicProducto) {
         try {
             FXMLLoader loader = new FXMLLoader(JavaFXAppExpendio.class.getResource(ruta));
             Parent root = loader.load();
+            if (isClicProducto) {
+                FXMLAdminProductoController controlador = loader.getController();
+                controlador.inicializarInformacion(usuarioSesion);
+            }
             apCentral.getChildren().setAll(root);
             AnchorPane.setTopAnchor(root, 0.0);
             AnchorPane.setBottomAnchor(root, 0.0);

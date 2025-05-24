@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafxexpendio.modelo.ConexionBD;
 import javafxexpendio.modelo.pojo.Usuario;
+import javafxexpendio.utilidades.Utilidad;
 
 /**
  *
@@ -20,21 +21,24 @@ public class InicioSesionDAOImpl implements InicioSesionDAO{
     @Override
     public Usuario verificarCredenciales(String username, String password) throws SQLException {
         Usuario usuarioSesion = null;
-        String consulta = "SELECT idUsuario, username, nombre, apellidoPaterno, apellidoMaterno, t.tipo ,password "
+        String consulta = "SELECT idUsuario, username, nombre, apellidoPaterno, apellidoMaterno, t.tipo, password "
                 + "FROM usuario u "
                 + "JOIN tipoUsuario t ON u.idTipoUsuario = t.idTipoUsuario "
-                + "WHERE username = ? AND password = ?";
-        
-        try(Connection conexionBD = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
+                + "WHERE username = ?";
+
+        try (Connection conexionBD = ConexionBD.abrirConexion();
+             PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setString(1, username);
-            ps.setString(2, password);
-            try(ResultSet rs = ps.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    usuarioSesion = convertirRegistroUsuario(rs);
+                    String hashGuardado = rs.getString("password");
+                    // Aquí verifica la contraseña
+                    if (Utilidad.verificarPassword(password, hashGuardado)) {
+                        usuarioSesion = convertirRegistroUsuario(rs);
+                    }
                 }
             }
-        } catch(SQLException ex) {
+        } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos");
         }
         return usuarioSesion;
