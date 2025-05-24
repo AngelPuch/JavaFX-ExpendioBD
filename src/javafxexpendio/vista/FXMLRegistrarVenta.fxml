@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -18,17 +19,10 @@
         </columns>
       </TableView>
       <DatePicker layoutX="25.0" layoutY="523.0" prefHeight="51.0" prefWidth="249.0" />
-      <ComboBox fx:id="cbCliente" layoutX="25.0" layoutY="24.0" prefHeight="51.0" prefWidth="227.0" promptText="Cliente" />
+      <ComboBox fx:id="cbCliente" layoutX="350.0" layoutY="24.0" prefHeight="51.0" prefWidth="227.0" promptText="Cliente" />
       <Label layoutX="577.0" layoutY="531.0" text="Total compra:" />
       <Label fx:id="lbTotalCompra" alignment="CENTER_RIGHT" layoutX="755.0" layoutY="531.0" prefHeight="35.0" prefWidth="120.0" />
-      <Button layoutX="450.0" layoutY="512.0" mnemonicParsing="false" onAction="#btnClicConfirmarCompra">
-         <graphic>
-            <ImageView fitHeight="57.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../recurso/completebag.png" />
-               </image>
-            </ImageView>
-         </graphic>
+      <Button layoutX="337.0" layoutY="519.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#btnClicConfirmarCompra" prefHeight="60.0" prefWidth="227.0" text="Confirmar compra">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -57,5 +51,10 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
+      <Label layoutX="25.0" layoutY="15.0" text="Venta" textFill="#005cd1">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
