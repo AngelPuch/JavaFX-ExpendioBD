@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,69 +9,155 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLPrincipalEmpleadoController">
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLPrincipalEmpleadoController">
    <children>
-      <AnchorPane layoutY="100.0" prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #0069d1;">
+      <AnchorPane fx:id="apCentral" layoutX="150.0" layoutY="80.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="874.0" />
+      <AnchorPane layoutX="150.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="874.0" style="-fx-background-color: #f6f3fe;">
          <children>
-            <Separator layoutY="-5.0" prefHeight="12.0" prefWidth="200.0" />
-            <Separator layoutY="134.0" prefHeight="12.0" prefWidth="200.0" />
-            <Button layoutY="146.0" mnemonicParsing="false" onAction="#btnClicClientes" prefHeight="120.0" prefWidth="200.0" style="-fx-background-color: #0069d1;" text="Clientes" textFill="WHITE">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <graphic>
-                  <ImageView fitHeight="90.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../recurso/person.png" />
-                     </image>
-                  </ImageView>
-               </graphic></Button>
-            <Separator layoutY="266.0" prefHeight="12.0" prefWidth="200.0" />
-            <Button layoutY="278.0" mnemonicParsing="false" onAction="#btnClicRegistrarVenta" prefHeight="120.0" prefWidth="200.0" style="-fx-background-color: #0069d1;" text="Venta" textFill="WHITE">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <graphic>
-                  <ImageView fitHeight="90.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../recurso/sale.png" />
-                     </image>
-                  </ImageView>
-               </graphic></Button>
-            <Separator layoutY="398.0" prefHeight="12.0" prefWidth="200.0" />
-            <Button layoutY="14.0" mnemonicParsing="false" onAction="#btnClicBebidas" prefHeight="120.0" prefWidth="200.0" style="-fx-background-color: #0069d1;" text="Bebidas" textFill="WHITE">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <graphic>
-                  <ImageView fitHeight="90.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../recurso/bottle.png" />
-                     </image>
-                  </ImageView>
-               </graphic></Button>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="apCentral" layoutX="200.0" layoutY="100.0" prefHeight="600.0" prefWidth="900.0" />
-      <AnchorPane prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #ffffff;">
-         <children>
-            <ImageView fitHeight="94.0" fitWidth="200.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../recurso/logoImg.jpg" />
-               </image></ImageView>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="200.0" prefHeight="100.0" prefWidth="900.0" style="-fx-background-color: #0069d1;">
-         <children>
-            <ImageView fitHeight="75.0" fitWidth="75.0" layoutX="14.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="52.0" fitWidth="58.0" layoutX="14.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../recurso/homeIcon.png" />
                </image>
             </ImageView>
-            <Label layoutX="99.0" layoutY="14.0" text="Bienvenido (a):" textFill="WHITE" />
-            <Label fx:id="lbNombreUsuario" layoutX="270.0" layoutY="14.0" prefWidth="300.0" textFill="WHITE" />
-            <Label fx:id="lbUsername" layoutX="270.0" layoutY="51.0" prefWidth="300.0" textFill="WHITE" />
+            <Label layoutX="99.0" layoutY="14.0" text="Bienvenido (a):">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="lbNombreUsuario" layoutX="203.0" layoutY="14.0" prefWidth="300.0">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="lbUsername" layoutX="203.0" layoutY="40.0" prefWidth="300.0">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
          </children>
       </AnchorPane>
+      <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="150.0" spacing="12.0" style="-fx-background-color: #f6f3fe;">
+         <children>
+            <ImageView fitHeight="100.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../recurso/logoImg.jpg" />
+               </image>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></ImageView>
+            <VBox prefHeight="378.0" prefWidth="150.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="150.0" spacing="8.0">
+                     <children>
+                        <ImageView fitHeight="40.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../recurso/bottle.png" />
+                           </image>
+                        </ImageView>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnClicBebidas" prefHeight="45.0" prefWidth="90.0" style="-fx-background-color: #f6f3fe;" text="Bebidas">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="150.0" spacing="8.0">
+                     <children>
+                        <ImageView fitHeight="40.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../recurso/person.png" />
+                           </image>
+                        </ImageView>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnClicClientes" prefHeight="45.0" prefWidth="90.0" style="-fx-background-color: #f6f3fe;" text="Clientes">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="150.0" spacing="8.0">
+                     <children>
+                        <ImageView fitHeight="40.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../recurso/sale.png" />
+                           </image>
+                        </ImageView>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnClicRegistrarVenta" prefHeight="45.0" prefWidth="90.0" style="-fx-background-color: #f6f3fe;" text="Venta">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="150.0" spacing="8.0">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <children>
+                        <ImageView fitHeight="40.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../recurso/order_img.png" />
+                           </image>
+                        </ImageView>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnClicRegistrarPedido" prefHeight="45.0" prefWidth="90.0" style="-fx-background-color: #f6f3fe;" text="Pedidos">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="44.0" prefWidth="150.0" />
+            <VBox prefHeight="50.0" prefWidth="150.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="150.0" spacing="8.0">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <children>
+                        <ImageView fitHeight="40.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../recurso/logOut.png" />
+                           </image>
+                        </ImageView>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#btnClicCerrarSesion" prefHeight="45.0" prefWidth="90.0" style="-fx-background-color: #f6f3fe;" text="Cerrar sesion" textFill="RED">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" top="10.0" />
+         </padding>
+      </VBox>
    </children>
+   <padding>
+      <Insets bottom="20.0" right="10.0" top="12.0" />
+   </padding>
 </AnchorPane>

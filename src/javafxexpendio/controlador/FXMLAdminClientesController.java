@@ -4,6 +4,7 @@
  */
 package javafxexpendio.controlador;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,12 +15,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafxexpendio.JavaFXAppExpendio;
 import javafxexpendio.modelo.dao.ClienteDAOImpl;
 import javafxexpendio.modelo.pojo.Cliente;
 import javafxexpendio.utilidades.Utilidad;
@@ -77,6 +84,7 @@ public class FXMLAdminClientesController implements Initializable {
 
     @FXML
     private void btnClicRegistrarCliente(ActionEvent event) {
+        irFormularioCliente();
     }
 
     @FXML
@@ -85,6 +93,22 @@ public class FXMLAdminClientesController implements Initializable {
 
     @FXML
     private void btnClicActualizar(ActionEvent event) {
+    }
+    
+    private void irFormularioCliente(){
+        try {
+            Stage escenarioFormulario = new Stage();
+            FXMLLoader loader = new FXMLLoader();
+            Parent vista = loader.load(JavaFXAppExpendio.class.getResource(
+                    "vista/FXMLFormularioCliente.fxml"));
+            Scene escena = new Scene(vista);
+            escenarioFormulario.setScene(escena);
+            escenarioFormulario.setTitle("Formulario Alumno");
+            escenarioFormulario.initModality(Modality.APPLICATION_MODAL);
+            escenarioFormulario.showAndWait();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
 }
