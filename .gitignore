@@ -1,7 +1,6 @@
 # Ignorar archivos binarios y de construcción
 /build/
 /dist/
-/lib/
 /nbproject/private/
 /out/
 
