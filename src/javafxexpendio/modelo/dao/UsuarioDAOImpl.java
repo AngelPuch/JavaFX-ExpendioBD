@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javafxexpendio.modelo.ConexionBD;
+import javafxexpendio.modelo.pojo.TipoUsuario;
 import javafxexpendio.modelo.pojo.Usuario;
 
 public class UsuarioDAOImpl implements DAO<Usuario> {
@@ -94,6 +95,22 @@ public class UsuarioDAOImpl implements DAO<Usuario> {
             return listaUsuarios;
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos");
+        }
+    }
+    
+    public List<TipoUsuario> leerTipoUsuario() throws SQLException {
+        List<TipoUsuario> listaTipoUsuarios = new ArrayList<>();
+        String consulta = "SELECT idTipoUsuario, tipo FROM tipoUsuario";
+        
+        try(Connection conexionBD = ConexionBD.abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()){
+                listaTipoUsuarios.add(new TipoUsuario(rs.getInt("idTipoUsuario"), rs.getString("tipo")));
+            }
+            return listaTipoUsuarios;
+        } catch (SQLException ex) {
+            throw new SQLException("Error: Sin conexión a la base de datos"); 
         }
     }
 

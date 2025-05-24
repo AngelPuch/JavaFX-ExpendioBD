@@ -144,7 +144,7 @@ public class FXMLFormularioProveedorController implements Initializable {
                 observador.operacionExitosa();
             } else {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al registrar", 
-                        "No se pudo registrar el proveedor, intenta más tarde.");
+                        "No se pudo registrar el proveedor, intentalo más tarde.");
             }
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());

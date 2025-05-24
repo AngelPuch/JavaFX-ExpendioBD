@@ -16,7 +16,6 @@
           <TableColumn fx:id="colApePaterno" prefWidth="75.0" text="Apellido paterno" />
             <TableColumn fx:id="colApeMaterno" prefWidth="75.0" text="Apellido Materno" />
             <TableColumn fx:id="colUsername" prefWidth="75.0" text="Username" />
-            <TableColumn fx:id="colPassword" prefWidth="75.0" text="Contraseña" />
             <TableColumn fx:id="colTipoUsuario" prefWidth="75.0" text="Tipo de usuario" />
         </columns>
          <columnResizePolicy>

@@ -15,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -67,6 +68,14 @@ public class Utilidad {
             String filtro = (newVal == null) ? "" : newVal.toLowerCase().trim();
             filtrada.setPredicate(item -> extractor.apply(item).toLowerCase().contains(filtro));
         });
+    }
+    
+    public static String hashearContraseña(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    public static boolean verificarContraseña(String password, String hashGuardado) {
+        return BCrypt.checkpw(password, hashGuardado);
     }
     
 }
