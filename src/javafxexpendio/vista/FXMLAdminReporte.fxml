@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="874.0" style="-fx-background-color: #F5F6FA;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLAdminReporteController">
+   <children>
+      
+      <!-- Panel de selección de reportes -->
+      <VBox layoutX="21.0" prefHeight="490.0" prefWidth="200.0" spacing="8.0" style="-fx-background-color: white; -fx-background-radius: 5;">
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <Label style="-fx-font-weight: bold;" text="Seleccione un reporte:" />
+            
+            <RadioButton fx:id="rbVentasPeriodo" mnemonicParsing="false" text="Ventas por periodo">
+               <toggleGroup>
+                  <ToggleGroup fx:id="tgReportes" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbVentasProducto" mnemonicParsing="false" text="Ventas por producto" toggleGroup="$tgReportes" />
+            <RadioButton fx:id="rbStockMinimo" mnemonicParsing="false" text="Productos con stock mínimo" toggleGroup="$tgReportes" />
+            <RadioButton fx:id="rbProductoMasVendido" mnemonicParsing="false" text="Producto más vendido" toggleGroup="$tgReportes" />
+            <RadioButton fx:id="rbProductoMenosVendido" mnemonicParsing="false" text="Producto menos vendido" toggleGroup="$tgReportes" />
+            <RadioButton fx:id="rbProductoNoVendido" mnemonicParsing="false" text="Producto no vendido a cliente" toggleGroup="$tgReportes" />
+            <RadioButton fx:id="rbProductoMasVendidoCliente" mnemonicParsing="false" text="Producto más vendido a cliente" toggleGroup="$tgReportes" />
+            
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </Separator>
+            
+            <!-- Opciones para filtros -->
+            <VBox fx:id="vbFiltros" spacing="8.0">
+               <children>
+                  <!-- Filtros para ventas por periodo -->
+                  <VBox fx:id="vbFiltroPeriodo" spacing="4.0" visible="false">
+                     <children>
+                        <Label text="Seleccione periodo:" />
+                        <ComboBox fx:id="cbPeriodo" prefWidth="170.0" promptText="Seleccionar...">
+                           <items>
+                              <FXCollections fx:factory="observableArrayList">
+                                 <String fx:value="Semana" />
+                                 <String fx:value="Mes" />
+                                 <String fx:value="Año" />
+                              </FXCollections>
+                           </items>
+                        </ComboBox>
+                        <DatePicker fx:id="dpFechaInicio" prefWidth="170.0" promptText="Fecha inicio" />
+                        <DatePicker fx:id="dpFechaFin" prefWidth="170.0" promptText="Fecha fin" />
+                     </children>
+                  </VBox>
+                  
+                  <!-- Filtro para cliente -->
+                  <VBox fx:id="vbFiltroCliente" spacing="4.0" visible="false">
+                     <children>
+                        <Label text="Seleccione cliente:" />
+                        <ComboBox fx:id="cbCliente" prefWidth="170.0" promptText="Seleccionar..." />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            
+            <Button fx:id="btnGenerar" defaultButton="true" onAction="#btnGenerarReporte" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #5A4FCF; -fx-text-fill: white;" text="Generar reporte">
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            
+            <Button fx:id="btnExportar" onAction="#btnExportarReporte" prefHeight="30.0" prefWidth="170.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Exportar a PDF">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </VBox>
+      
+      <!-- Panel de visualización de reportes -->
+      <AnchorPane layoutX="236.0" layoutY="10.0" prefHeight="480.0" prefWidth="624.0" style="-fx-background-color: white; -fx-background-radius: 5;">
+         <children>
+            <TabPane fx:id="tpVisualizacion" prefHeight="480.0" prefWidth="624.0" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab text="Tabla">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="tvReporte" layoutX="15.0" layoutY="15.0" prefHeight="370.0" prefWidth="584.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Gráfico">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <StackPane fx:id="spGrafico" layoutX="15.0" layoutY="15.0" prefHeight="370.0" prefWidth="584.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

@@ -35,7 +35,7 @@
                      <children>
                         <ImageView fitHeight="20.0" fitWidth="20.0">
                            <image>
-                              <Image url="@../recurso/home_img.png" />
+                              <Image url="@../recurso/sale_img.png" />
                            </image>
                         </ImageView>
                         <Button onAction="#btnClicVentas" prefWidth="100.0" style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-weight: bold;" text="Ventas">
@@ -117,6 +117,45 @@
                         </Button>
          </children>
                   </HBox>
+                  
+                  <HBox alignment="CENTER_LEFT" prefWidth="130.0" spacing="8">
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                     <children>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../recurso/buy_img.png" />
+                           </image>
+                        </ImageView>
+                        <Button onAction="#btnClicCompras" prefWidth="100.0" style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-weight: bold;" text="Compras">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </HBox>
+                  
+                  <HBox alignment="CENTER_LEFT" prefWidth="130.0" spacing="8">
+                    <padding>
+                       <Insets left="10.0" />
+                    </padding>
+                    <children>
+                       <ImageView fitHeight="20.0" fitWidth="20.0" preserveRatio="true">
+                          <image>
+                             <Image url="@../recurso/report_img.png" />
+                          </image>
+                       </ImageView>
+                       <Button onAction="#btnClicReportes" prefWidth="100.0"
+                               style="-fx-background-color: transparent; -fx-text-fill: #333; -fx-font-weight: bold;" 
+                               text="Reportes">
+                          <cursor>
+                             <Cursor fx:constant="HAND" />
+                          </cursor>
+                       </Button>
+                    </children>
+                 </HBox>
+
       
                   <HBox alignment="CENTER_LEFT" prefWidth="130.0" spacing="8">
                      <padding>

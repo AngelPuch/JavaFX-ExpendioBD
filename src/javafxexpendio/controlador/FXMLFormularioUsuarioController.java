@@ -59,7 +59,6 @@ public class FXMLFormularioUsuarioController implements Initializable {
         this.observador = observador;
         if (isEdicion) {
             cargarInformacionEdicion();
-            pfPassword.setDisable(false);
         }
     }
     

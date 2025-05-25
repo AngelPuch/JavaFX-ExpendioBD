@@ -15,19 +15,21 @@ public class Promocion {
     private double descuento;
     private Date fechaInicio;
     private Date fechaFin;
+    private String descripcion;
     private Bebida bebida;
-    private Venta venta;
+    private double esAcumulable;
 
     public Promocion() {
     }
 
-    public Promocion(int idPromocion, double descuento, Date fechaInicio, Date fechaFin, Bebida bebida, Venta venta) {
+    public Promocion(int idPromocion, double descuento, Date fechaInicio, Date fechaFin, String descripcion, Bebida bebida, double esAcumulable) {
         this.idPromocion = idPromocion;
         this.descuento = descuento;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.descripcion = descripcion;
         this.bebida = bebida;
-        this.venta = venta;
+        this.esAcumulable = esAcumulable;
     }
 
     public int getIdPromocion() {
@@ -62,6 +64,14 @@ public class Promocion {
         this.fechaFin = fechaFin;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     public Bebida getBebida() {
         return bebida;
     }
@@ -70,13 +80,15 @@ public class Promocion {
         this.bebida = bebida;
     }
 
-    public Venta getVenta() {
-        return venta;
+    public double getEsAcumulable() {
+        return esAcumulable;
     }
 
-    public void setVenta(Venta venta) {
-        this.venta = venta;
+    public void setEsAcumulable(double esAcumulable) {
+        this.esAcumulable = esAcumulable;
     }
+    
+    
     
     
 }

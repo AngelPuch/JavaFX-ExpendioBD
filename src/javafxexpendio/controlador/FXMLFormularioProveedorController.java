@@ -73,7 +73,7 @@ public class FXMLFormularioProveedorController implements Initializable {
         limpiarCampos();
     }
     
-     private boolean validarCampos() {
+    private boolean validarCampos() {
         boolean esValido = true;
 
         // Validar razon_social

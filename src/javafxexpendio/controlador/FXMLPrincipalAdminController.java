@@ -66,10 +66,16 @@ public class FXMLPrincipalAdminController implements Initializable {
 
     @FXML
     private void btnClicPromociones(ActionEvent event) {
+        cargarEscenas("vista/FXMLAdminPromocion.fxml", false);
+        lbNombreVentana.setText("Promociones | Gestión de promociones");
     }
 
     @FXML
     private void btnClicPedidos(ActionEvent event) {
+    }
+    
+    @FXML
+    private void btnClicCompras(ActionEvent event) {
     }
 
     @FXML
@@ -78,6 +84,12 @@ public class FXMLPrincipalAdminController implements Initializable {
         lbNombreVentana.setText("Usuarios | Gestión de usuarios");
     }
 
+    @FXML
+    private void btnClicReportes(ActionEvent event) {
+        cargarEscenas("vista/FXMLAdminReporte.fxml", false);
+        lbNombreVentana.setText("Reportes");
+    }
+    
     @FXML
     private void btnClicCerrarSesion(ActionEvent event) {
         try {
