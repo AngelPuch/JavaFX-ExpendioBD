@@ -45,9 +45,14 @@ public class FXMLBebidasController implements Initializable {
     private TextField tfBuscar;
     private ObservableList<Bebida> bebidas;
     private BebidaSeleccionListener listener;
+    private boolean clicAgregarBebida;
     
     public void setBebidaSeleccionListener(BebidaSeleccionListener listener) {
         this.listener = listener;
+    }
+    
+    public void setClicAgregarBebida(boolean clicAgregarBebida) {
+        this.clicAgregarBebida = clicAgregarBebida;
     }
 
     /**
@@ -72,6 +77,7 @@ public class FXMLBebidasController implements Initializable {
             ArrayList<Bebida> bebidasDAO = (ArrayList<Bebida>) bebidaDAOImpl.leerTodo();
             bebidas.addAll(bebidasDAO);
             tvBebidas.setItems(bebidas);
+            configurarFiltroBusqueda();
         } catch (SQLException ex) {
              Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar", 
                     "Lo sentimos, por el momento no se puede mostrar la información de las bebidas. "
@@ -81,15 +87,21 @@ public class FXMLBebidasController implements Initializable {
 
     @FXML
     private void clicTablaBebidas(MouseEvent event) {
-        if (event.getClickCount() == 2 && !tvBebidas.getSelectionModel().isEmpty()) {
-            Bebida bebidaSeleccionada = tvBebidas.getSelectionModel().getSelectedItem();
-            if (listener != null) {
-                listener.onBebidaSeleccionada(bebidaSeleccionada);
+        if (clicAgregarBebida) {
+            if (event.getClickCount() == 2 && !tvBebidas.getSelectionModel().isEmpty()) {
+                Bebida bebidaSeleccionada = tvBebidas.getSelectionModel().getSelectedItem();
+                if (listener != null) {
+                    listener.onBebidaSeleccionada(bebidaSeleccionada);
+                }
+                ((Stage) tvBebidas.getScene().getWindow()).close();
             }
-            ((Stage) tvBebidas.getScene().getWindow()).close();
         }
     }
     
-    
-    
+    private void configurarFiltroBusqueda() {
+        Utilidad.activarFiltroBusqueda(tfBuscar, tvBebidas, bebidas, bebida ->
+            bebida.getBebida() + " " + bebida.getPrecio() + " " + bebida.getStock()
+        );
+    }
+      
 }

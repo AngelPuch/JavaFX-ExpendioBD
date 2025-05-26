@@ -27,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
+import javafxexpendio.interfaz.Notificacion;
 import javafxexpendio.modelo.dao.ClienteDAOImpl;
 import javafxexpendio.modelo.pojo.Cliente;
 import javafxexpendio.utilidades.Utilidad;
@@ -36,7 +37,7 @@ import javafxexpendio.utilidades.Utilidad;
  *
  * @author zenbook i5
  */
-public class FXMLAdminClientesController implements Initializable {
+public class FXMLAdminClientesController implements Initializable, Notificacion {
 
     @FXML
     private TableView<Cliente> tvClientes;
@@ -75,39 +76,95 @@ public class FXMLAdminClientesController implements Initializable {
             ArrayList<Cliente> clientesDAO = (ArrayList<Cliente>) clienteDAOImpl.leerTodo();
             clientes.addAll(clientesDAO);
             tvClientes.setItems(clientes);
+            configurarFiltroBusqueda();
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar", 
                     "Lo sentimos, por el momento no se puede mostrar la información de los clientes. "
                             + "Por favor intentelo más tarde.");
+            cerrarVentana();
         }
     }
 
     @FXML
     private void btnClicRegistrarCliente(ActionEvent event) {
-        irFormularioCliente();
+        irFormularioCliente(false, null);
+    }
+    
+    @FXML
+    private void btnClicEditar(ActionEvent event) {
+        Cliente clienteSeleccionado = getClienteSeleccionado("Por favor, selecciona un cliente para editar.");
+        if (clienteSeleccionado != null) {
+            irFormularioCliente(true, clienteSeleccionado);
+        }
     }
 
     @FXML
     private void btnClicEliminar(ActionEvent event) {
+        Cliente clienteSeleccionado = getClienteSeleccionado("Por favor, selecciona un cliente para eliminar.");
+        if (clienteSeleccionado != null) {
+            boolean confirmado = Utilidad.mostrarAlertaConfirmacion( "Confirmar eliminación", 
+            "¿Seguro que desea eliminar a " + clienteSeleccionado.getNombre()+ " de la lista de clientes?");
+            if (confirmado) {
+                try {
+                    ClienteDAOImpl clienteDAOImpl = new ClienteDAOImpl();
+                    if (clienteDAOImpl.eliminar(clienteSeleccionado.getIdCliente())) {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Eliminación exitosa",
+                                "El cliente ha sido eliminado correctamente.");
+                        operacionExitosa();
+                    } else {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error",
+                                "No se pudo eliminar el cliente. Intenta de nuevo.");
+                    }
+                } catch (SQLException ex) {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error en la base de datos", ex.getMessage());
+                }
+            }
+        }
     }
 
-    @FXML
-    private void btnClicActualizar(ActionEvent event) {
-    }
     
-    private void irFormularioCliente(){
+    private void irFormularioCliente(boolean isEdicion, Cliente clienteEdicion){
         try {
             Stage escenarioFormulario = new Stage();
-            FXMLLoader loader = new FXMLLoader();
-            Parent vista = loader.load(JavaFXAppExpendio.class.getResource(
+            FXMLLoader loader = new FXMLLoader(JavaFXAppExpendio.class.getResource(
                     "vista/FXMLFormularioCliente.fxml"));
+            Parent vista = loader.load();
+            FXMLFormularioClienteController controlador = loader.getController();
+            controlador.inicializarInformacion(isEdicion, clienteEdicion, this);
             Scene escena = new Scene(vista);
             escenarioFormulario.setScene(escena);
-            escenarioFormulario.setTitle("Formulario Alumno");
+            escenarioFormulario.setTitle("Formulario cliente");
             escenarioFormulario.initModality(Modality.APPLICATION_MODAL);
             escenarioFormulario.showAndWait();
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+    
+    private void configurarFiltroBusqueda() {
+        Utilidad.activarFiltroBusqueda(tfBuscar, tvClientes, clientes, cliente ->
+            cliente.getNombre()+ " " + cliente.getCorreo()+ " " + cliente.getTelefono()+ " " + cliente.getDireccion()
+        );
+    }
+    
+    private void cerrarVentana() {
+        ((Stage)tvClientes.getScene().getWindow()).close();
+    }
+
+    @Override
+    public void operacionExitosa() {
+        cargarInformacionTabla();
+    }
+
+    private Cliente getClienteSeleccionado(String contenido) {
+        Cliente clienteSeleccionado = tvClientes.getSelectionModel().getSelectedItem();
+    
+        if (clienteSeleccionado != null) {
+            return clienteSeleccionado;
+        } else {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Sin selección",
+                contenido);
+            return null;
         }
     }
     

@@ -7,16 +7,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLBebidasController">
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="874.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLBebidasController">
    <children>
-      <TableView fx:id="tvBebidas" layoutX="25.0" layoutY="86.0" onMouseClicked="#clicTablaBebidas" prefHeight="500.0" prefWidth="850.0">
+      <TableView fx:id="tvBebidas" layoutX="12.0" layoutY="106.0" onMouseClicked="#clicTablaBebidas" prefHeight="400.0" prefWidth="850.0">
         <columns>
           <TableColumn fx:id="colBebida" prefWidth="535.0" text="Bebida" />
           <TableColumn fx:id="colPrecio" minWidth="0.0" prefWidth="158.0" text="Precio" />
             <TableColumn fx:id="colStock" prefWidth="156.0" text="Stock" />
         </columns>
       </TableView>
-      <TextField fx:id="tfBuscar" layoutX="577.0" layoutY="21.0" promptText="Buscar bebida" />
+      <TextField fx:id="tfBuscar" layoutX="550.0" layoutY="22.0" minHeight="-Infinity" prefHeight="50.0" prefWidth="310.0" promptText="🔍 Buscar bebida">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
       <Label layoutX="25.0" layoutY="12.0" text="Bebidas" textFill="#005cd1">
          <font>
             <Font size="48.0" />
