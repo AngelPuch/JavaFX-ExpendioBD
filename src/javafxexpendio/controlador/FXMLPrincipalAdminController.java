@@ -62,6 +62,8 @@ public class FXMLPrincipalAdminController implements Initializable {
 
     @FXML
     private void btnClicVentas(ActionEvent event) {
+        cargarEscenas("vista/FXMLAdminVenta.fxml", false);
+        lbNombreVentana.setText("Ventas | Gestión de inventario");
     }
 
     @FXML

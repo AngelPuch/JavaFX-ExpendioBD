@@ -5,14 +5,14 @@
 package javafxexpendio.modelo.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 import javafxexpendio.modelo.pojo.Venta;
 
 /**
  *
  * @author Dell
  */
-public interface VentanaDAO {
-    boolean crear (Venta venta) throws SQLException;
-    
+public interface VentaDAO {
+    boolean crear (Venta venta) throws SQLException;    
     
 }
