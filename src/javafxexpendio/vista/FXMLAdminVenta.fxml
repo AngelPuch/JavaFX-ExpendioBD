@@ -62,11 +62,6 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="btnExportarExcel" onAction="#btnExportarExcelClic" prefWidth="180.0" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Exportar a Excel">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
                </children>
             </HBox>
          </children>

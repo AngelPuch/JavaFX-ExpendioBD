@@ -14,23 +14,17 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafxexpendio.modelo.dao.ReporteDAO;
+import javafxexpendio.modelo.dao.ClienteDAOImpl;
+import javafxexpendio.modelo.dao.ReporteDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.Cliente;
 import javafxexpendio.modelo.pojo.ReporteProducto;
@@ -74,28 +68,18 @@ public class FXMLAdminReporteController implements Initializable {
     private Button btnExportar;
     @FXML
     private TableView tvReporte;
-    @FXML
-    private StackPane spGrafico;
     
-    private ReporteDAO reporteDAO;
     private ObservableList<Cliente> listaClientes;
     private String reporteActual;
-    @FXML
-    private VBox vbFiltros;
-    @FXML
-    private TabPane tpVisualizacion;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        reporteDAO = new ReporteDAO();
         configurarToggleGroup();
         cargarClientes();
         
-        // Configurar fechas por defecto
         dpFechaInicio.setValue(LocalDate.now().minusDays(7));
         dpFechaFin.setValue(LocalDate.now());
-        
-        // Deshabilitar botón exportar hasta que haya datos
+
         btnExportar.setDisable(true);
     }
     
@@ -126,53 +110,13 @@ public class FXMLAdminReporteController implements Initializable {
                     reporteActual = "productoMasVendidoCliente";
                 }
                 
-                // Limpiar tabla y gráfico
                 tvReporte.getItems().clear();
                 tvReporte.getColumns().clear();
-                spGrafico.getChildren().clear();
                 btnExportar.setDisable(true);
             }
         });
         
-        // Seleccionar el primer radio button por defecto
         rbVentasPeriodo.setSelected(true);
-    }
-    
-    private void cargarClientes() {
-        try {
-            listaClientes = FXCollections.observableArrayList(reporteDAO.obtenerClientes());
-            cbCliente.setItems(listaClientes);
-            
-            // Configurar cómo se muestran los clientes en el ComboBox
-            cbCliente.setCellFactory(param -> new javafx.scene.control.ListCell<Cliente>() {
-                @Override
-                protected void updateItem(Cliente cliente, boolean empty) {
-                    super.updateItem(cliente, empty);
-                    if (empty || cliente == null) {
-                        setText(null);
-                    } else {
-                        setText(cliente.getNombre());
-                    }
-                }
-            });
-            
-            cbCliente.setButtonCell(new javafx.scene.control.ListCell<Cliente>() {
-                @Override
-                protected void updateItem(Cliente cliente, boolean empty) {
-                    super.updateItem(cliente, empty);
-                    if (empty || cliente == null) {
-                        setText(null);
-                    } else {
-                        setText(cliente.getNombre());
-                    }
-                }
-            });
-            
-        } catch (SQLException ex) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, 
-                    "Error", 
-                    "Error al cargar la lista de clientes: " + ex.getMessage());
-        }
     }
     
     @FXML
@@ -210,34 +154,154 @@ public class FXMLAdminReporteController implements Initializable {
         }
     }
     
+    private void cargarClientes() {
+        try {
+            ClienteDAOImpl clienteDAOImpl = new ClienteDAOImpl();
+            listaClientes = FXCollections.observableArrayList();
+            listaClientes.setAll(clienteDAOImpl.leerTodo());
+            cbCliente.setItems(listaClientes);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
     private void generarReporteVentasPeriodo() throws SQLException {
-        // Validar fechas
-        if (dpFechaInicio.getValue() == null || dpFechaFin.getValue() == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, 
-                    "Datos incompletos", 
-                    "Debe seleccionar las fechas de inicio y fin");
+        if (isFechaValida()) {
+            ReporteDAOImpl reporteDAO = new ReporteDAOImpl();
+            List<ReporteVenta> ventas = reporteDAO.obtenerVentasPorPeriodo(
+                    dpFechaInicio.getValue(), dpFechaFin.getValue());
+            
+            if (ventas.isEmpty()) {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Sin datos", 
+                        "No hay ventas registradas en el periodo seleccionado");
+                return;
+            }
+            configurarTablaReporteVentasPeriodo(ventas);
+        }
+    }
+            
+    private void generarReporteVentasProducto() throws SQLException {
+        ReporteDAOImpl reporteDAO = new ReporteDAOImpl();
+        List<ReporteProducto> productos = reporteDAO.obtenerVentasPorProducto();
+        
+        if (productos.isEmpty()) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
+                    "Sin datos", 
+                    "No hay ventas registradas");
             return;
+        }
+        configurarTablaMasMenosVendido(productos);
+    }
+   
+    private void generarReporteProductoMasVendido() throws SQLException {
+        ReporteDAOImpl reporteDAO = new ReporteDAOImpl();
+        ReporteProducto producto = reporteDAO.obtenerProductoMasVendido();
+        
+        if (producto == null) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Sin datos", "No hay ventas registradas");
+            return;
+        }
+  
+        List<ReporteProducto> listaProducto = new ArrayList<>();
+        listaProducto.add(producto);
+        configurarTablaMasMenosVendido(listaProducto);
+    }
+    
+    private void generarReporteProductoMenosVendido() throws SQLException {
+        ReporteDAOImpl reporteDAO = new ReporteDAOImpl();
+        ReporteProducto producto = reporteDAO.obtenerProductoMenosVendido();
+        
+        if (producto == null) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Sin datos", "No hay ventas registradas");
+            return;
+        }
+
+        List<ReporteProducto> listaProducto = new ArrayList<>();
+        listaProducto.add(producto);        
+        configurarTablaMasMenosVendido(listaProducto);
+    }
+    
+    private void generarReporteProductoMasVendidoCliente() throws SQLException {
+        Cliente clienteSeleccionado = getClienteSeleccionado();
+        if (clienteSeleccionado != null) {
+            ReporteDAOImpl reporteDAO = new ReporteDAOImpl();
+            ReporteProducto producto = reporteDAO.obtenerProductoMasVendidoACliente(clienteSeleccionado.getIdCliente());
+        
+            if (producto == null) {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
+                        "Sin datos", 
+                        "No hay ventas registradas para este cliente");
+                return;
+            }
+
+            List<ReporteProducto> listaProducto = new ArrayList<>();
+            listaProducto.add(producto);
+            configurarTablaMasMenosVendido(listaProducto);
+        }   
+    }
+      
+    private void generarReporteStockMinimo() throws SQLException {
+        ReporteDAOImpl reporteDAO = new ReporteDAOImpl();
+        List<ReporteStockMinimo> productos = reporteDAO.obtenerProductosStockMinimo();
+        
+        if (productos.isEmpty()) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
+                    "Sin datos", 
+                    "No hay productos con stock mínimo");
+            return;
+        }
+        configurarTablaReporteStockMinimo(productos);
+    }
+        
+    private void generarReporteProductoNoVendido() throws SQLException {
+        Cliente clienteSeleccionado = getClienteSeleccionado();
+        if (clienteSeleccionado != null) {
+            ReporteDAOImpl reporteDAO = new ReporteDAOImpl();
+            List<Bebida> productos = reporteDAO.obtenerProductosNoVendidosACliente(clienteSeleccionado.getIdCliente());
+        
+            if (productos.isEmpty()) {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Sin datos", 
+                        "No hay productos que no se hayan vendido a este cliente");
+                return;
+            }
+            configurarTablaProductoNoVendido(productos);
+        }       
+    }
+        
+    @FXML
+    private void btnExportarReporte(ActionEvent event) {
+        // Este método se implementará más adelante si se decide incluir la funcionalidad
+        Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
+                "Exportar a PDF", 
+                "Funcionalidad en desarrollo");
+    }
+    
+    private boolean isFechaValida() {
+        if (dpFechaInicio.getValue() == null || dpFechaFin.getValue() == null) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Datos incompletos", 
+                    "Debe seleccionar las fechas de inicio y fin");
+            return false;
         }
         
         if (dpFechaInicio.getValue().isAfter(dpFechaFin.getValue())) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, 
-                    "Fechas inválidas", 
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Fechas inválidas", 
                     "La fecha de inicio debe ser anterior a la fecha de fin");
-            return;
+            return false;
         }
-        
-        // Obtener datos
-        List<ReporteVenta> ventas = reporteDAO.obtenerVentasPorPeriodo(
-                dpFechaInicio.getValue(), dpFechaFin.getValue());
-        
-        if (ventas.isEmpty()) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                    "Sin datos", 
-                    "No hay ventas registradas en el periodo seleccionado");
-            return;
+        return true;
+    }
+    
+    private Cliente getClienteSeleccionado() {
+        Cliente cliente = cbCliente.getSelectionModel().getSelectedItem();
+        if (cliente == null) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Datos incompletos", 
+                    "Debe seleccionar un cliente");
+            return null;
         }
-        
-        // Configurar tabla
+        return cliente;
+    }
+    
+    private void configurarTablaReporteVentasPeriodo(List<ReporteVenta> ventas) {
         tvReporte.getColumns().clear();
         
         TableColumn<ReporteVenta, Integer> colIdVenta = new TableColumn<>("ID");
@@ -258,45 +322,9 @@ public class FXMLAdminReporteController implements Initializable {
         
         tvReporte.getColumns().addAll(colIdVenta, colFecha, colFolio, colCliente, colTotal);
         tvReporte.setItems(FXCollections.observableArrayList(ventas));
-        
-        // Generar gráfico
-        generarGraficoVentasPeriodo(ventas);
     }
     
-    private void generarGraficoVentasPeriodo(List<ReporteVenta> ventas) {
-        spGrafico.getChildren().clear();
-        
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        
-        xAxis.setLabel("Fecha");
-        yAxis.setLabel("Total ($)");
-        barChart.setTitle("Ventas por periodo");
-        
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Total de ventas");
-        
-        for (ReporteVenta venta : ventas) {
-            series.getData().add(new XYChart.Data<>(venta.getFecha().toString(), venta.getTotalVenta()));
-        }
-        
-        barChart.getData().add(series);
-        spGrafico.getChildren().add(barChart);
-    }
-    
-    private void generarReporteVentasProducto() throws SQLException {
-        // Obtener datos
-        List<ReporteProducto> productos = reporteDAO.obtenerVentasPorProducto();
-        
-        if (productos.isEmpty()) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                    "Sin datos", 
-                    "No hay ventas registradas");
-            return;
-        }
-        
-        // Configurar tabla
+    private void configurarTablaMasMenosVendido(List<ReporteProducto> listaProducto) {
         tvReporte.getColumns().clear();
         
         TableColumn<ReporteProducto, Integer> colIdBebida = new TableColumn<>("ID");
@@ -314,39 +342,10 @@ public class FXMLAdminReporteController implements Initializable {
         colTotal.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         tvReporte.getColumns().addAll(colIdBebida, colNombre, colCantidad, colTotal);
-        tvReporte.setItems(FXCollections.observableArrayList(productos));
-        
-        // Generar gráfico
-        generarGraficoVentasProducto(productos);
+        tvReporte.setItems(FXCollections.observableArrayList(listaProducto));
     }
     
-    private void generarGraficoVentasProducto(List<ReporteProducto> productos) {
-        spGrafico.getChildren().clear();
-        
-        PieChart pieChart = new PieChart();
-        pieChart.setTitle("Ventas por producto");
-        
-        for (ReporteProducto producto : productos) {
-            pieChart.getData().add(new PieChart.Data(
-                    producto.getNombreBebida() + " (" + producto.getCantidadVendida() + ")", 
-                    producto.getCantidadVendida()));
-        }
-        
-        spGrafico.getChildren().add(pieChart);
-    }
-    
-    private void generarReporteStockMinimo() throws SQLException {
-        // Obtener datos
-        List<ReporteStockMinimo> productos = reporteDAO.obtenerProductosStockMinimo();
-        
-        if (productos.isEmpty()) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                    "Sin datos", 
-                    "No hay productos con stock mínimo");
-            return;
-        }
-        
-        // Configurar tabla
+    private void configurarTablaReporteStockMinimo(List<ReporteStockMinimo> productos) {
         tvReporte.getColumns().clear();
         
         TableColumn<ReporteStockMinimo, Integer> colIdBebida = new TableColumn<>("ID");
@@ -373,162 +372,9 @@ public class FXMLAdminReporteController implements Initializable {
         
         tvReporte.getColumns().addAll(colIdBebida, colNombre, colStock, colStockMin, colDiferencia, colPrecio);
         tvReporte.setItems(FXCollections.observableArrayList(productos));
-        
-        // Generar gráfico
-        generarGraficoStockMinimo(productos);
     }
     
-    private void generarGraficoStockMinimo(List<ReporteStockMinimo> productos) {
-        spGrafico.getChildren().clear();
-        
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        
-        xAxis.setLabel("Producto");
-        yAxis.setLabel("Cantidad");
-        barChart.setTitle("Productos con stock mínimo");
-        
-        XYChart.Series<String, Number> seriesStock = new XYChart.Series<>();
-        seriesStock.setName("Stock actual");
-        
-        XYChart.Series<String, Number> seriesMinimo = new XYChart.Series<>();
-        seriesMinimo.setName("Stock mínimo");
-        
-        for (ReporteStockMinimo producto : productos) {
-            seriesStock.getData().add(new XYChart.Data<>(producto.getNombreBebida(), producto.getStock()));
-            seriesMinimo.getData().add(new XYChart.Data<>(producto.getNombreBebida(), producto.getStockMinimo()));
-        }
-        
-        barChart.getData().addAll(seriesStock, seriesMinimo);
-        spGrafico.getChildren().add(barChart);
-    }
-    
-    private void generarReporteProductoMasVendido() throws SQLException {
-        // Obtener datos
-        ReporteProducto producto = reporteDAO.obtenerProductoMasVendido();
-        
-        if (producto == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                    "Sin datos", 
-                    "No hay ventas registradas");
-            return;
-        }
-        
-        // Crear lista con un solo elemento para la tabla
-        List<ReporteProducto> listaProducto = new ArrayList<>();
-        listaProducto.add(producto);
-        
-        // Configurar tabla
-        tvReporte.getColumns().clear();
-        
-        TableColumn<ReporteProducto, Integer> colIdBebida = new TableColumn<>("ID");
-        colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
-        
-        TableColumn<ReporteProducto, String> colNombre = new TableColumn<>("Producto");
-        colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombreBebida()));
-        
-        TableColumn<ReporteProducto, Integer> colCantidad = new TableColumn<>("Cantidad vendida");
-        colCantidad.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getCantidadVendida()).asObject());
-        colCantidad.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        TableColumn<ReporteProducto, Double> colTotal = new TableColumn<>("Total recaudado");
-        colTotal.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalRecaudado()).asObject());
-        colTotal.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        tvReporte.getColumns().addAll(colIdBebida, colNombre, colCantidad, colTotal);
-        tvReporte.setItems(FXCollections.observableArrayList(listaProducto));
-        
-        // Generar gráfico
-        generarGraficoProductoMasVendido(producto);
-    }
-    
-    private void generarGraficoProductoMasVendido(ReporteProducto producto) {
-        spGrafico.getChildren().clear();
-        
-        PieChart pieChart = new PieChart();
-        pieChart.setTitle("Producto más vendido");
-        
-        pieChart.getData().add(new PieChart.Data(
-                producto.getNombreBebida() + " (" + producto.getCantidadVendida() + ")", 
-                producto.getCantidadVendida()));
-        
-        spGrafico.getChildren().add(pieChart);
-    }
-    
-    private void generarReporteProductoMenosVendido() throws SQLException {
-        // Obtener datos
-        ReporteProducto producto = reporteDAO.obtenerProductoMenosVendido();
-        
-        if (producto == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                    "Sin datos", 
-                    "No hay ventas registradas");
-            return;
-        }
-        
-        // Crear lista con un solo elemento para la tabla
-        List<ReporteProducto> listaProducto = new ArrayList<>();
-        listaProducto.add(producto);
-        
-        // Configurar tabla
-        tvReporte.getColumns().clear();
-        
-        TableColumn<ReporteProducto, Integer> colIdBebida = new TableColumn<>("ID");
-        colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
-        
-        TableColumn<ReporteProducto, String> colNombre = new TableColumn<>("Producto");
-        colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombreBebida()));
-        
-        TableColumn<ReporteProducto, Integer> colCantidad = new TableColumn<>("Cantidad vendida");
-        colCantidad.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getCantidadVendida()).asObject());
-        colCantidad.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        TableColumn<ReporteProducto, Double> colTotal = new TableColumn<>("Total recaudado");
-        colTotal.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalRecaudado()).asObject());
-        colTotal.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        tvReporte.getColumns().addAll(colIdBebida, colNombre, colCantidad, colTotal);
-        tvReporte.setItems(FXCollections.observableArrayList(listaProducto));
-        
-        // Generar gráfico
-        generarGraficoProductoMenosVendido(producto);
-    }
-    
-    private void generarGraficoProductoMenosVendido(ReporteProducto producto) {
-        spGrafico.getChildren().clear();
-        
-        PieChart pieChart = new PieChart();
-        pieChart.setTitle("Producto menos vendido");
-        
-        pieChart.getData().add(new PieChart.Data(
-                producto.getNombreBebida() + " (" + producto.getCantidadVendida() + ")", 
-                producto.getCantidadVendida()));
-        
-        spGrafico.getChildren().add(pieChart);
-    }
-    
-    private void generarReporteProductoNoVendido() throws SQLException {
-        // Validar cliente seleccionado
-        if (cbCliente.getSelectionModel().getSelectedItem() == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, 
-                    "Datos incompletos", 
-                    "Debe seleccionar un cliente");
-            return;
-        }
-        
-        // Obtener datos
-        Cliente clienteSeleccionado = cbCliente.getSelectionModel().getSelectedItem();
-        List<Bebida> productos = reporteDAO.obtenerProductosNoVendidosACliente(clienteSeleccionado.getIdCliente());
-        
-        if (productos.isEmpty()) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                    "Sin datos", 
-                    "No hay productos que no se hayan vendido a este cliente");
-            return;
-        }
-        
-        // Configurar tabla
+    private void configurarTablaProductoNoVendido(List<Bebida> productos) {
         tvReporte.getColumns().clear();
         
         TableColumn<Bebida, Integer> colIdBebida = new TableColumn<>("ID");
@@ -547,99 +393,6 @@ public class FXMLAdminReporteController implements Initializable {
         
         tvReporte.getColumns().addAll(colIdBebida, colNombre, colStock, colPrecio);
         tvReporte.setItems(FXCollections.observableArrayList(productos));
-        
-        // Generar gráfico
-        generarGraficoProductoNoVendido(productos, clienteSeleccionado.getNombre());
     }
     
-    private void generarGraficoProductoNoVendido(List<Bebida> productos, String nombreCliente) {
-        spGrafico.getChildren().clear();
-        
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        
-        xAxis.setLabel("Producto");
-        yAxis.setLabel("Precio ($)");
-        barChart.setTitle("Productos no vendidos a " + nombreCliente);
-        
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Precio");
-        
-        for (Bebida producto : productos) {
-            series.getData().add(new XYChart.Data<>(producto.getBebida(), producto.getPrecio()));
-        }
-        
-        barChart.getData().add(series);
-        spGrafico.getChildren().add(barChart);
-    }
-    
-    private void generarReporteProductoMasVendidoCliente() throws SQLException {
-        // Validar cliente seleccionado
-        if (cbCliente.getSelectionModel().getSelectedItem() == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, 
-                    "Datos incompletos", 
-                    "Debe seleccionar un cliente");
-            return;
-        }
-        
-        // Obtener datos
-        Cliente clienteSeleccionado = cbCliente.getSelectionModel().getSelectedItem();
-        ReporteProducto producto = reporteDAO.obtenerProductoMasVendidoACliente(clienteSeleccionado.getIdCliente());
-        
-        if (producto == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                    "Sin datos", 
-                    "No hay ventas registradas para este cliente");
-            return;
-        }
-        
-        // Crear lista con un solo elemento para la tabla
-        List<ReporteProducto> listaProducto = new ArrayList<>();
-        listaProducto.add(producto);
-        
-        // Configurar tabla
-        tvReporte.getColumns().clear();
-        
-        TableColumn<ReporteProducto, Integer> colIdBebida = new TableColumn<>("ID");
-        colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
-        
-        TableColumn<ReporteProducto, String> colNombre = new TableColumn<>("Producto");
-        colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombreBebida()));
-        
-        TableColumn<ReporteProducto, Integer> colCantidad = new TableColumn<>("Cantidad vendida");
-        colCantidad.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getCantidadVendida()).asObject());
-        colCantidad.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        TableColumn<ReporteProducto, Double> colTotal = new TableColumn<>("Total recaudado");
-        colTotal.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalRecaudado()).asObject());
-        colTotal.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        tvReporte.getColumns().addAll(colIdBebida, colNombre, colCantidad, colTotal);
-        tvReporte.setItems(FXCollections.observableArrayList(listaProducto));
-        
-        // Generar gráfico
-        generarGraficoProductoMasVendidoCliente(producto, clienteSeleccionado.getNombre());
-    }
-    
-    private void generarGraficoProductoMasVendidoCliente(ReporteProducto producto, String nombreCliente) {
-        spGrafico.getChildren().clear();
-        
-        PieChart pieChart = new PieChart();
-        pieChart.setTitle("Producto más vendido a " + nombreCliente);
-        
-        pieChart.getData().add(new PieChart.Data(
-                producto.getNombreBebida() + " (" + producto.getCantidadVendida() + ")", 
-                producto.getCantidadVendida()));
-        
-        spGrafico.getChildren().add(pieChart);
-    }
-    
-    @FXML
-    private void btnExportarReporte(ActionEvent event) {
-        // Este método se implementará más adelante si se decide incluir la funcionalidad
-        Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                "Exportar a PDF", 
-                "Funcionalidad en desarrollo");
-    }
 }

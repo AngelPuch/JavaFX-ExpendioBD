@@ -41,7 +41,7 @@
             </Separator>
             
             <!-- Opciones para filtros -->
-            <VBox fx:id="vbFiltros" spacing="8.0">
+            <VBox spacing="8.0">
                <children>
                   <!-- Filtros para ventas por periodo -->
                   <VBox fx:id="vbFiltroPeriodo" spacing="4.0" visible="false">
@@ -94,28 +94,7 @@
       <!-- Panel de visualización de reportes -->
       <AnchorPane layoutX="236.0" layoutY="10.0" prefHeight="480.0" prefWidth="624.0" style="-fx-background-color: white; -fx-background-radius: 5;">
          <children>
-            <TabPane fx:id="tpVisualizacion" prefHeight="480.0" prefWidth="624.0" tabClosingPolicy="UNAVAILABLE">
-               <tabs>
-                  <Tab text="Tabla">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <TableView fx:id="tvReporte" layoutX="15.0" layoutY="15.0" prefHeight="370.0" prefWidth="584.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-                  <Tab text="Gráfico">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <StackPane fx:id="spGrafico" layoutX="15.0" layoutY="15.0" prefHeight="370.0" prefWidth="584.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </Tab>
-               </tabs>
-            </TabPane>
+            <TableView fx:id="tvReporte" prefHeight="370.0" prefWidth="584.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0" />
          </children>
       </AnchorPane>
    </children>

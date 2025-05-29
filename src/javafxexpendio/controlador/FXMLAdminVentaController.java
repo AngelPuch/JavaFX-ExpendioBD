@@ -27,6 +27,7 @@ import javafxexpendio.modelo.dao.VentaDAO;
 import javafxexpendio.modelo.dao.VentaTablaDAOImpl;
 import javafxexpendio.modelo.pojo.Venta;
 import javafxexpendio.modelo.pojo.VentaTabla;
+import javafxexpendio.utilidades.Utilidad;
 
 public class FXMLAdminVentaController implements Initializable {
 
@@ -57,8 +58,6 @@ public class FXMLAdminVentaController implements Initializable {
     @FXML
     private Button btnGenerarReporte;
     @FXML
-    private Button btnExportarExcel;
-    @FXML
     private Label lbTotalVentas;
     @FXML
     private Label lbIngresosTotales;
@@ -67,94 +66,37 @@ public class FXMLAdminVentaController implements Initializable {
     
     private ObservableList<VentaTabla> listaVentas;
 
-    /**
-     * Inicializa el controlador.
-     */
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarTabla();
         cargarVentas();
         cargarEstadisticas();
-        
-        // Configurar botones inicialmente deshabilitados hasta seleccionar una venta
+
         btnVerDetalle.setDisable(true);
         btnGenerarReporte.setDisable(true);
         
-        // Listener para habilitar botones cuando se selecciona una venta
         tvVentas.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             boolean haySeleccion = newSelection != null;
             btnVerDetalle.setDisable(!haySeleccion);
             btnGenerarReporte.setDisable(!haySeleccion);
         });
-        
-        // Establecer el texto del label de ingresos (para evitar problemas con el símbolo $)
-        lbIngresosTotales.setText("$0.00");
     }
     
-    /**
-     * Configura las columnas de la tabla de ventas.
-     */
-    private void configurarTabla() {
-        colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-        colCliente.setCellValueFactory(new PropertyValueFactory<>("nombreCliente"));
-        colFolioFactura.setCellValueFactory(new PropertyValueFactory<>("folioFactura"));
-        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-        colNumProductos.setCellValueFactory(new PropertyValueFactory<>("numProductos"));
-    }
-    
-    /**
-     * Carga todas las ventas desde la base de datos.
-     */
-    private void cargarVentas() {
-        try {
-            VentaTablaDAOImpl ventaTablaDAOImpl = new VentaTablaDAOImpl();
-            ArrayList<VentaTabla> ventas = ventaTablaDAOImpl.obtenerTodasLasVentasTabla();
-            listaVentas = FXCollections.observableArrayList(ventas);
-            tvVentas.setItems(listaVentas);
-            
-            // Actualizar contador de ventas
-            lbTotalVentas.setText(String.valueOf(listaVentas.size()));
-            
-            // Calcular ingresos totales
-            double ingresosTotales = 0.0;
-            for (VentaTabla venta : listaVentas) {
-                ingresosTotales += venta.getTotal();
-            }
-            lbIngresosTotales.setText("$" + String.format("%.2f", ingresosTotales));
-            
-        } catch (Exception e) {
-            mostrarAlerta("Error al cargar ventas", e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-    
-    /**
-     * Carga las estadísticas de ventas.
-     */
-    private void cargarEstadisticas() {
-        try {
-            VentaTablaDAOImpl ventaTablaDAOImpl = new VentaTablaDAOImpl();
-            String productoMasVendido = ventaTablaDAOImpl.obtenerProductoMasVendido();
-            lbProductoMasVendido.setText(productoMasVendido);
-        } catch (Exception e) {
-            mostrarAlerta("Error al cargar estadísticas", e.getMessage(), Alert.AlertType.ERROR);
-        }
-    }
-    
-    /**
-     * Maneja el evento de clic en el botón Filtrar.
-     */
     @FXML
     private void btnFiltrarClic(ActionEvent event) {
         LocalDate fechaInicio = dpFechaInicio.getValue();
         LocalDate fechaFin = dpFechaFin.getValue();
         
         if (fechaInicio == null || fechaFin == null) {
-            mostrarAlerta("Datos incompletos", "Debe seleccionar ambas fechas para filtrar", Alert.AlertType.WARNING);
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Datos incompletos", 
+                    "Debe seleccionar ambas fechas para filtrar");
             return;
         }
         
         if (fechaInicio.isAfter(fechaFin)) {
-            mostrarAlerta("Fechas inválidas", "La fecha de inicio debe ser anterior a la fecha fin", Alert.AlertType.WARNING);
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Fechas inválidas", 
+                    "La fecha de inicio debe ser anterior a la fecha fin");
             return;
         }
         
@@ -167,24 +109,13 @@ public class FXMLAdminVentaController implements Initializable {
             listaVentas = FXCollections.observableArrayList(ventasFiltradas);
             tvVentas.setItems(listaVentas);
             
-            // Actualizar contador de ventas filtradas
-            lbTotalVentas.setText(String.valueOf(listaVentas.size()));
-            
-            // Calcular ingresos totales filtrados
-            double ingresosTotales = 0.0;
-            for (VentaTabla venta : listaVentas) {
-                ingresosTotales += venta.getTotal();
-            }
-            lbIngresosTotales.setText("$" + String.format("%.2f", ingresosTotales));
+            mostrarEstadisticasVenta();
             
         } catch (Exception e) {
-            mostrarAlerta("Error al filtrar ventas", e.getMessage(), Alert.AlertType.ERROR);
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al filtrar ventas", e.getMessage());
         }
     }
     
-    /**
-     * Maneja el evento de clic en el botón Limpiar Filtro.
-     */
     @FXML
     private void btnLimpiarFiltroClic(ActionEvent event) {
         dpFechaInicio.setValue(null);
@@ -192,15 +123,11 @@ public class FXMLAdminVentaController implements Initializable {
         cargarVentas();
     }
     
-    /**
-     * Maneja el evento de clic en el botón Ver Detalle.
-     */
     @FXML
     private void btnVerDetalleClic(ActionEvent event) {
         VentaTabla ventaSeleccionada = tvVentas.getSelectionModel().getSelectedItem();
         if (ventaSeleccionada != null) {
             try {
-                // Obtener la venta completa con sus detalles
                 VentaTablaDAOImpl ventaTablaDAOImpl = new VentaTablaDAOImpl();
                 Venta venta = ventaTablaDAOImpl.obtenerVentaPorId(ventaSeleccionada.getIdVenta());
                 
@@ -217,20 +144,20 @@ public class FXMLAdminVentaController implements Initializable {
                     stage.initModality(Modality.APPLICATION_MODAL);
                     stage.showAndWait();
                 } else {
-                    mostrarAlerta("Error", "No se encontró la venta seleccionada", Alert.AlertType.ERROR);
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
+                            "No se encontró la venta seleccionada");
                 }
                 
             } catch (Exception e) {
-                mostrarAlerta("Error", "No se pudo abrir la ventana de detalles: " + e.getMessage(), Alert.AlertType.ERROR);
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
+                        "No se pudo abrir la ventana de detalles: " + e.getMessage());
             }
         } else {
-            mostrarAlerta("Selección requerida", "Debe seleccionar una venta para ver sus detalles", Alert.AlertType.WARNING);
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Selección requerida", 
+                    "Debe seleccionar una venta para ver sus detalles");
         }
     }
-    
-    /**
-     * Maneja el evento de clic en el botón Generar Reporte.
-     */
+
     @FXML
     private void btnGenerarReporteClic(ActionEvent event) {
         VentaTabla ventaSeleccionada = tvVentas.getSelectionModel().getSelectedItem();
@@ -239,50 +166,62 @@ public class FXMLAdminVentaController implements Initializable {
                 // Aquí iría el código para generar el reporte PDF
                 // Puedes usar librerías como iText, JasperReports, etc.
                 
-                mostrarAlerta("Reporte generado", 
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Reporte generado", 
                         "El reporte de la venta #" + ventaSeleccionada.getIdVenta() + 
-                        " ha sido generado correctamente.", 
-                        Alert.AlertType.INFORMATION);
+                        " ha sido generado correctamente.");
                 
             } catch (Exception e) {
-                mostrarAlerta("Error", "No se pudo generar el reporte: " + e.getMessage(), Alert.AlertType.ERROR);
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
+                        "No se pudo generar el reporte: " + e.getMessage());
             }
         } else {
-            mostrarAlerta("Selección requerida", "Debe seleccionar una venta para generar su reporte", Alert.AlertType.WARNING);
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Selección requerida", 
+                    "Debe seleccionar una venta para generar su reporte");
         }
     }
     
-    /**
-     * Maneja el evento de clic en el botón Exportar a Excel.
-     */
-    @FXML
-    private void btnExportarExcelClic(ActionEvent event) {
-        if (listaVentas == null || listaVentas.isEmpty()) {
-            mostrarAlerta("Sin datos", "No hay ventas para exportar", Alert.AlertType.WARNING);
-            return;
-        }
-        
+    private void configurarTabla() {
+        colFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
+        colCliente.setCellValueFactory(new PropertyValueFactory("nombreCliente"));
+        colFolioFactura.setCellValueFactory(new PropertyValueFactory("folioFactura"));
+        colTotal.setCellValueFactory(new PropertyValueFactory("total"));
+        colNumProductos.setCellValueFactory(new PropertyValueFactory("numProductos"));
+    }
+    
+    private void cargarVentas() {
         try {
-            // Aquí iría el código para exportar a Excel
-            // Puedes usar librerías como Apache POI
+            VentaTablaDAOImpl ventaTablaDAOImpl = new VentaTablaDAOImpl();
+            ArrayList<VentaTabla> ventas = ventaTablaDAOImpl.obtenerTodasLasVentasTabla();
+            listaVentas = FXCollections.observableArrayList(ventas);
+            tvVentas.setItems(listaVentas);
             
-            mostrarAlerta("Excel generado", 
-                    "El archivo Excel con las ventas ha sido generado correctamente.", 
-                    Alert.AlertType.INFORMATION);
+            mostrarEstadisticasVenta();
             
         } catch (Exception e) {
-            mostrarAlerta("Error", "No se pudo exportar a Excel: " + e.getMessage(), Alert.AlertType.ERROR);
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar ventas", e.getMessage());
         }
     }
     
-    /**
-     * Muestra una alerta con el mensaje y tipo especificados.
-     */
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
+    private void cargarEstadisticas() {
+        try {
+            VentaTablaDAOImpl ventaTablaDAOImpl = new VentaTablaDAOImpl();
+            String productoMasVendido = ventaTablaDAOImpl.obtenerProductoMasVendido();
+            lbProductoMasVendido.setText(productoMasVendido);
+        } catch (Exception e) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar estadísticas", e.getMessage());
+        }
     }
+    
+    private void mostrarEstadisticasVenta() {
+        // Actualizar contador de ventas
+        lbTotalVentas.setText(String.valueOf(listaVentas.size()));
+
+        // Calcular ingresos totales
+        double ingresosTotales = 0.0;
+        for (VentaTabla venta : listaVentas) {
+            ingresosTotales += venta.getTotal();
+        }
+        lbIngresosTotales.setText("$" + String.format("%.2f", ingresosTotales));
+    }
+
 }

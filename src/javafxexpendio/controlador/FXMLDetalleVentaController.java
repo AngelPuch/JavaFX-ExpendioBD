@@ -21,6 +21,7 @@ import javafxexpendio.modelo.dao.VentaDAO;
 import javafxexpendio.modelo.dao.VentaTablaDAOImpl;
 import javafxexpendio.modelo.pojo.DetalleVenta;
 import javafxexpendio.modelo.pojo.Venta;
+import javafxexpendio.utilidades.Utilidad;
 
 public class FXMLDetalleVentaController implements Initializable {
 
@@ -54,9 +55,6 @@ public class FXMLDetalleVentaController implements Initializable {
         configurarTabla();
     }
     
-    /**
-     * Inicializa la ventana con los datos de la venta seleccionada.
-     */
     public void inicializarVenta(Venta venta, double totalVenta, int numProductos) {
         this.venta = venta;
         this.totalVenta = totalVenta;
@@ -65,9 +63,6 @@ public class FXMLDetalleVentaController implements Initializable {
         cargarDetallesVenta();
     }
     
-    /**
-     * Configura las columnas de la tabla de detalles.
-     */
     private void configurarTabla() {
         colBebida.setCellValueFactory(cellData -> 
             new javafx.beans.property.SimpleStringProperty(
@@ -77,9 +72,6 @@ public class FXMLDetalleVentaController implements Initializable {
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
     }
     
-    /**
-     * Muestra los datos básicos de la venta.
-     */
     private void mostrarDatosVenta() {
         lbIdVenta.setText(String.valueOf(venta.getIdVenta()));
         
@@ -91,10 +83,7 @@ public class FXMLDetalleVentaController implements Initializable {
         
         lbTotal.setText("$" + String.format("%.2f", totalVenta));
     }
-    
-    /**
-     * Carga los detalles de la venta desde la base de datos.
-     */
+
     private void cargarDetallesVenta() {
         try {
             VentaTablaDAOImpl ventaTablaDAOImpl = new VentaTablaDAOImpl();
@@ -104,27 +93,13 @@ public class FXMLDetalleVentaController implements Initializable {
             tvDetalles.setItems(listaDetalles);
             
         } catch (Exception e) {
-            mostrarAlerta("Error", "No se pudieron cargar los detalles de la venta: " + e.getMessage(), Alert.AlertType.ERROR);
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
+                    "No se pudieron cargar los detalles de la venta: " + e.getMessage());
         }
     }
-    
-    /**
-     * Maneja el evento de clic en el botón Cerrar.
-     */
+
     @FXML
     private void btnCerrarClic(ActionEvent event) {
-        Stage stage = (Stage) btnCerrar.getScene().getWindow();
-        stage.close();
-    }
-    
-    /**
-     * Muestra una alerta con el mensaje y tipo especificados.
-     */
-    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
+        Utilidad.getEscenarioComponente(lbCliente).close();
     }
 }
