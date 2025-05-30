@@ -74,6 +74,8 @@ public class FXMLPrincipalAdminController implements Initializable {
 
     @FXML
     private void btnClicPedidos(ActionEvent event) {
+        cargarEscenas("vista/FXMLAdminPedido.fxml", false);
+        lbNombreVentana.setText("Pedidos | Gestión de pedidos proveedor");
     }
     
     @FXML

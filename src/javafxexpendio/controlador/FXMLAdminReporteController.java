@@ -28,7 +28,7 @@ import javafxexpendio.modelo.dao.ReporteDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.Cliente;
 import javafxexpendio.modelo.pojo.ReporteProducto;
-import javafxexpendio.modelo.pojo.ReporteStockMinimo;
+import javafxexpendio.modelo.pojo.ProductoStockMinimo;
 import javafxexpendio.modelo.pojo.ReporteVenta;
 import javafxexpendio.utilidades.Utilidad;
 
@@ -242,7 +242,7 @@ public class FXMLAdminReporteController implements Initializable {
       
     private void generarReporteStockMinimo() throws SQLException {
         ReporteDAOImpl reporteDAO = new ReporteDAOImpl();
-        List<ReporteStockMinimo> productos = reporteDAO.obtenerProductosStockMinimo();
+        List<ProductoStockMinimo> productos = reporteDAO.obtenerProductosStockMinimo();
         
         if (productos.isEmpty()) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
@@ -345,28 +345,28 @@ public class FXMLAdminReporteController implements Initializable {
         tvReporte.setItems(FXCollections.observableArrayList(listaProducto));
     }
     
-    private void configurarTablaReporteStockMinimo(List<ReporteStockMinimo> productos) {
+    private void configurarTablaReporteStockMinimo(List<ProductoStockMinimo> productos) {
         tvReporte.getColumns().clear();
         
-        TableColumn<ReporteStockMinimo, Integer> colIdBebida = new TableColumn<>("ID");
+        TableColumn<ProductoStockMinimo, Integer> colIdBebida = new TableColumn<>("ID");
         colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
         
-        TableColumn<ReporteStockMinimo, String> colNombre = new TableColumn<>("Producto");
+        TableColumn<ProductoStockMinimo, String> colNombre = new TableColumn<>("Producto");
         colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombreBebida()));
         
-        TableColumn<ReporteStockMinimo, Integer> colStock = new TableColumn<>("Stock actual");
+        TableColumn<ProductoStockMinimo, Integer> colStock = new TableColumn<>("Stock actual");
         colStock.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
         colStock.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        TableColumn<ReporteStockMinimo, Integer> colStockMin = new TableColumn<>("Stock mínimo");
+        TableColumn<ProductoStockMinimo, Integer> colStockMin = new TableColumn<>("Stock mínimo");
         colStockMin.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStockMinimo()).asObject());
         colStockMin.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        TableColumn<ReporteStockMinimo, Integer> colDiferencia = new TableColumn<>("Diferencia");
+        TableColumn<ProductoStockMinimo, Integer> colDiferencia = new TableColumn<>("Diferencia");
         colDiferencia.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getDiferencia()).asObject());
         colDiferencia.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        TableColumn<ReporteStockMinimo, Double> colPrecio = new TableColumn<>("Precio");
+        TableColumn<ProductoStockMinimo, Double> colPrecio = new TableColumn<>("Precio");
         colPrecio.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrecio()).asObject());
         colPrecio.setStyle("-fx-alignment: CENTER-RIGHT;");
         

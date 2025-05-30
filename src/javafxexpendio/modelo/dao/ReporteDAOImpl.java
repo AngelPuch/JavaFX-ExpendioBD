@@ -15,7 +15,7 @@ import java.util.List;
 import javafxexpendio.modelo.ConexionBD;
 import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.ReporteProducto;
-import javafxexpendio.modelo.pojo.ReporteStockMinimo;
+import javafxexpendio.modelo.pojo.ProductoStockMinimo;
 import javafxexpendio.modelo.pojo.ReporteVenta;
 
 /**
@@ -80,8 +80,8 @@ public class ReporteDAOImpl {
         }
     }
     
-    public List<ReporteStockMinimo> obtenerProductosStockMinimo() throws SQLException {
-        List<ReporteStockMinimo> listaProductos = new ArrayList<>();
+    public List<ProductoStockMinimo> obtenerProductosStockMinimo() throws SQLException {
+        List<ProductoStockMinimo> listaProductos = new ArrayList<>();
         String consulta = "SELECT * FROM vista_productos_stock_minimo ORDER BY diferencia DESC";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
@@ -89,7 +89,7 @@ public class ReporteDAOImpl {
              ResultSet rs = ps.executeQuery()) {
             
             while (rs.next()) {
-                ReporteStockMinimo producto = new ReporteStockMinimo();
+                ProductoStockMinimo producto = new ProductoStockMinimo();
                 producto.setIdBebida(rs.getInt("idBebida"));
                 producto.setNombreBebida(rs.getString("bebida"));
                 producto.setStock(rs.getInt("stock"));

@@ -8,7 +8,7 @@ package javafxexpendio.modelo.pojo;
  *
  * @author Dell
  */
-public class ReporteStockMinimo {
+public class ProductoStockMinimo {
     private int idBebida;
     private String nombreBebida;
     private int stock;
