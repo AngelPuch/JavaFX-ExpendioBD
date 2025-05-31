@@ -69,6 +69,7 @@
                         </TableView>
                         <HBox alignment="CENTER" spacing="10">
                            <children>
+                              <Button mnemonicParsing="false" onAction="#btnClicAddBebida" style="-fx-background-color: #5A4FCF; -fx-text-fill: white; -fx-background-radius: 6;" text="Agregar bebida" />
                               <Button fx:id="btnEliminar" onAction="#btnClicEliminar" style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-background-radius: 6;" text="Eliminar" />
                               <Button fx:id="btnGuardar" onAction="#btnClicGuardar" style="-fx-background-color: #43A047; -fx-text-fill: white; -fx-background-radius: 6;" text="Guardar Pedido" />
                               <Button fx:id="btnCancelar" onAction="#btnClicCancelar" style="-fx-background-color: #BDBDBD; -fx-text-fill: white; -fx-background-radius: 6;" text="Cancelar" />

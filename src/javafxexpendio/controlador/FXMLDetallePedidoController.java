@@ -18,7 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import javafxexpendio.modelo.dao.PedidoProveedorDAO;
+import javafxexpendio.modelo.dao.interfaz.PedidoProveedorDAO;
 import javafxexpendio.modelo.dao.PedidoProveedorDAOImpl;
 import javafxexpendio.utilidades.Utilidad;
 

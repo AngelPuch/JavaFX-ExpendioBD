@@ -1,5 +1,6 @@
 package javafxexpendio.modelo.dao;
 
+import javafxexpendio.modelo.dao.interfaz.CrudDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +11,7 @@ import javafxexpendio.modelo.ConexionBD;
 import javafxexpendio.modelo.pojo.TipoUsuario;
 import javafxexpendio.modelo.pojo.Usuario;
 
-public class UsuarioDAOImpl implements DAO<Usuario> {
+public class UsuarioDAOImpl implements CrudDAO<Usuario> {
 
     @Override
     public boolean crear(Usuario usuario) throws SQLException {

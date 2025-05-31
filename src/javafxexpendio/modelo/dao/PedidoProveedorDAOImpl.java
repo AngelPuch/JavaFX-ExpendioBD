@@ -5,6 +5,7 @@
 
 package javafxexpendio.modelo.dao;
 
+import javafxexpendio.modelo.dao.interfaz.PedidoProveedorDAO;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -150,7 +151,7 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
             while (rs.next()) {
                 Map<String, Object> producto = new HashMap<>();
                 producto.put("idBebida", rs.getInt("idBebida"));
-                producto.put("bebida", rs.getString("bebida"));
+                producto.put("nombreBebida", rs.getString("bebida"));
                 producto.put("stock", rs.getInt("stock"));
                 producto.put("stockMinimo", rs.getInt("stock_minimo"));
                 producto.put("precio", rs.getDouble("precio"));

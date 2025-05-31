@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
 import javafxexpendio.modelo.ConexionBD;
+import javafxexpendio.modelo.dao.interfaz.VentaTablaDAO;
 import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.Cliente;
 import javafxexpendio.modelo.pojo.DetalleVenta;
@@ -21,7 +22,9 @@ import javafxexpendio.modelo.pojo.VentaTabla;
  *
  * @author Dell
  */
-public class VentaTablaDAOImpl {
+public class VentaTablaDAOImpl implements VentaTablaDAO{
+    
+    @Override
     public ArrayList<VentaTabla> obtenerTodasLasVentasTabla() throws SQLException {
         ArrayList<VentaTabla> ventasTabla = new ArrayList<>();
         String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, c.nombre as nombreCliente, " +
@@ -46,23 +49,7 @@ public class VentaTablaDAOImpl {
         return ventasTabla;
     }
     
-    /**
-     * Convierte un registro de ResultSet a un objeto VentaTabla.
-     */
-    private VentaTabla convertirRegistroVentaTabla(ResultSet rs) throws SQLException {
-        VentaTabla ventaTabla = new VentaTabla();
-        ventaTabla.setIdVenta(rs.getInt("idVenta"));
-        ventaTabla.setFecha(rs.getDate("fecha"));
-        ventaTabla.setNombreCliente(rs.getString("nombreCliente"));
-        ventaTabla.setFolioFactura(rs.getString("folio_factura"));
-        ventaTabla.setTotal(rs.getDouble("total"));
-        ventaTabla.setNumProductos(rs.getInt("numProductos"));
-        return ventaTabla;
-    }
-    
-    /**
-     * Obtiene una venta específica con todos sus detalles.
-     */
+    @Override
     public Venta obtenerVentaPorId(Integer idVenta) throws SQLException {
         Venta venta = null;
         String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, v.folio_factura, " +
@@ -87,33 +74,7 @@ public class VentaTablaDAOImpl {
         return venta;
     }
     
-    /**
-     * Convierte un registro de ResultSet a un objeto Venta.
-     */
-    private Venta convertirRegistroVenta(ResultSet rs) throws SQLException {
-        Venta venta = new Venta();
-        venta.setIdVenta(rs.getInt("idVenta"));
-        venta.setFecha(rs.getDate("fecha"));
-        venta.setFolioFactura(rs.getString("folio_factura"));
-        
-        // Si hay un cliente asociado, crearlo
-        int idCliente = rs.getInt("idCliente");
-        if (idCliente > 0) {
-            Cliente cliente = new Cliente();
-            cliente.setIdCliente(idCliente);
-            cliente.setNombre(rs.getString("nombre"));
-            cliente.setTelefono(rs.getString("telefono"));
-            cliente.setCorreo(rs.getString("correo"));
-            cliente.setDireccion(rs.getString("direccion"));
-            venta.setCliente(cliente);
-        }
-        
-        return venta;
-    }
-    
-    /**
-     * Obtiene las ventas dentro de un rango de fechas con información adicional para mostrar en la tabla.
-     */
+    @Override
     public ArrayList<VentaTabla> obtenerVentasPorRangoFechasTabla(Date fechaInicio, Date fechaFin) throws SQLException {
         ArrayList<VentaTabla> ventasTabla = new ArrayList<>();
         String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, c.nombre as nombreCliente, " +
@@ -142,9 +103,7 @@ public class VentaTablaDAOImpl {
         return ventasTabla;
     }
     
-    /**
-     * Obtiene el producto más vendido.
-     */
+    @Override
     public String obtenerProductoMasVendido() throws SQLException {
         String producto = "N/A";
         String consulta = "SELECT b.bebida, SUM(dv.cantidad) as cantidad " +
@@ -167,10 +126,8 @@ public class VentaTablaDAOImpl {
         
         return producto;
     }
-    
-    /**
-     * Obtiene los detalles de una venta específica.
-     */
+
+    @Override
     public ArrayList<DetalleVenta> obtenerDetallesVenta(Integer idVenta) throws SQLException {
         ArrayList<DetalleVenta> detalles = new ArrayList<>();
         String consulta = "SELECT dv.idVenta, dv.idBebida, b.bebida, dv.cantidad, dv.precio_bebida, dv.total " +
@@ -194,12 +151,6 @@ public class VentaTablaDAOImpl {
         return detalles;
     }
     
-    /**
-     * Convierte un registro de ResultSet a un objeto DetalleVenta.
-     */
-    /**
- * Convierte un registro de ResultSet a un objeto DetalleVenta.
- */
     private DetalleVenta convertirRegistroDetalleVenta(ResultSet rs) throws SQLException {
         DetalleVenta detalle = new DetalleVenta();
         detalle.setIdVenta(rs.getInt("idVenta"));
@@ -217,5 +168,37 @@ public class VentaTablaDAOImpl {
         detalle.setBebida(bebida);
 
         return detalle;
+    }
+    
+    private VentaTabla convertirRegistroVentaTabla(ResultSet rs) throws SQLException {
+        VentaTabla ventaTabla = new VentaTabla();
+        ventaTabla.setIdVenta(rs.getInt("idVenta"));
+        ventaTabla.setFecha(rs.getDate("fecha"));
+        ventaTabla.setNombreCliente(rs.getString("nombreCliente"));
+        ventaTabla.setFolioFactura(rs.getString("folio_factura"));
+        ventaTabla.setTotal(rs.getDouble("total"));
+        ventaTabla.setNumProductos(rs.getInt("numProductos"));
+        return ventaTabla;
+    }
+    
+    private Venta convertirRegistroVenta(ResultSet rs) throws SQLException {
+        Venta venta = new Venta();
+        venta.setIdVenta(rs.getInt("idVenta"));
+        venta.setFecha(rs.getDate("fecha"));
+        venta.setFolioFactura(rs.getString("folio_factura"));
+        
+        // Si hay un cliente asociado, crearlo
+        int idCliente = rs.getInt("idCliente");
+        if (idCliente > 0) {
+            Cliente cliente = new Cliente();
+            cliente.setIdCliente(idCliente);
+            cliente.setNombre(rs.getString("nombre"));
+            cliente.setTelefono(rs.getString("telefono"));
+            cliente.setCorreo(rs.getString("correo"));
+            cliente.setDireccion(rs.getString("direccion"));
+            venta.setCliente(cliente);
+        }
+        
+        return venta;
     }
 }

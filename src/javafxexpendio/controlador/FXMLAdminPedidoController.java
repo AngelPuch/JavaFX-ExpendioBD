@@ -27,7 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafxexpendio.modelo.dao.PedidoProveedorDAO;
+import javafxexpendio.modelo.dao.interfaz.PedidoProveedorDAO;
 import javafxexpendio.modelo.dao.PedidoProveedorDAOImpl;
 import javafxexpendio.modelo.dao.ProveedorDAOImpl;
 import javafxexpendio.modelo.pojo.DetallePedidoProveedor;
@@ -112,36 +112,8 @@ public class FXMLAdminPedidoController implements Initializable {
     
     private void cargarProveedores() {
         try {
-            proveedores.clear();
-            List<Proveedor> listaProveedores = proveedorDAO.leerTodo();
-            proveedores.addAll(listaProveedores);
+            proveedores.setAll(proveedorDAO.leerTodo());
             cbProveedor.setItems(proveedores);
-            
-            // Configurar cómo se muestra el proveedor en el ComboBox
-            cbProveedor.setCellFactory(param -> new javafx.scene.control.ListCell<Proveedor>() {
-                @Override
-                protected void updateItem(Proveedor item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getRazonSocial());
-                    }
-                }
-            });
-            
-            cbProveedor.setButtonCell(new javafx.scene.control.ListCell<Proveedor>() {
-                @Override
-                protected void updateItem(Proveedor item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getRazonSocial());
-                    }
-                }
-            });
-            
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
                     "Error al cargar los proveedores: " + ex.getMessage());
@@ -339,5 +311,9 @@ public class FXMLAdminPedidoController implements Initializable {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
                     "Error al abrir la ventana de pedidos: " + ex.getMessage());
         }
+    }
+
+    @FXML
+    private void btnClicAddBebida(ActionEvent event) {
     }
 }

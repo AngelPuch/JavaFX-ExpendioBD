@@ -4,7 +4,9 @@
  */
 package javafxexpendio.modelo.pojo;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -12,18 +14,12 @@ import java.util.Date;
  */
 public class Compra {
     private int idCompra;
-    private Date fecha;
+    private LocalDate fecha;
     private String folioFactura;
-    private Proveedor proveedor;
-
+    private int idProveedor;
+    private String proveedor;
+    
     public Compra() {
-    }
-
-    public Compra(int idCompra, Date fecha, String folioFactura, Proveedor proveedor) {
-        this.idCompra = idCompra;
-        this.fecha = fecha;
-        this.folioFactura = folioFactura;
-        this.proveedor = proveedor;
     }
 
     public int getIdCompra() {
@@ -34,11 +30,11 @@ public class Compra {
         this.idCompra = idCompra;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
@@ -50,13 +46,19 @@ public class Compra {
         this.folioFactura = folioFactura;
     }
 
-    public Proveedor getProveedor() {
+    public int getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
+    }
+
+    public String getProveedor() {
         return proveedor;
     }
 
-    public void setProveedor(Proveedor proveedor) {
+    public void setProveedor(String proveedor) {
         this.proveedor = proveedor;
     }
-    
-    
 }

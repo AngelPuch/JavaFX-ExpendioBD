@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javafxexpendio.modelo.ConexionBD;
+import javafxexpendio.modelo.dao.interfaz.ReporteDAO;
 import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.ReporteProducto;
 import javafxexpendio.modelo.pojo.ProductoStockMinimo;
@@ -22,8 +23,9 @@ import javafxexpendio.modelo.pojo.ReporteVenta;
  *
  * @author Dell
  */
-public class ReporteDAOImpl {
+public class ReporteDAOImpl implements ReporteDAO{
  
+    @Override
     public List<ReporteVenta> obtenerVentasPorPeriodo(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
         List<ReporteVenta> listaVentas = new ArrayList<>();
         String consulta = "SELECT v.idVenta, v.fecha, v.folio_factura, c.nombre as cliente, " +
@@ -58,6 +60,7 @@ public class ReporteDAOImpl {
         }
     }
 
+    @Override
     public List<ReporteProducto> obtenerVentasPorProducto() throws SQLException {
         List<ReporteProducto> listaProductos = new ArrayList<>();
         String consulta = "SELECT * FROM vista_ventas_por_producto ORDER BY cantidad_vendida DESC";
@@ -80,6 +83,7 @@ public class ReporteDAOImpl {
         }
     }
     
+    @Override
     public List<ProductoStockMinimo> obtenerProductosStockMinimo() throws SQLException {
         List<ProductoStockMinimo> listaProductos = new ArrayList<>();
         String consulta = "SELECT * FROM vista_productos_stock_minimo ORDER BY diferencia DESC";
@@ -104,6 +108,7 @@ public class ReporteDAOImpl {
         }
     }
     
+    @Override
     public ReporteProducto obtenerProductoMasVendido() throws SQLException {
         ReporteProducto producto = null;
         String consulta = "SELECT * FROM vista_producto_mas_vendido";
@@ -125,6 +130,7 @@ public class ReporteDAOImpl {
         }
     }
     
+    @Override
     public ReporteProducto obtenerProductoMenosVendido() throws SQLException {
         ReporteProducto producto = null;
         String consulta = "SELECT * FROM vista_producto_menos_vendido";
@@ -146,6 +152,7 @@ public class ReporteDAOImpl {
         }
     }
     
+    @Override
     public List<Bebida> obtenerProductosNoVendidosACliente(int idCliente) throws SQLException {
         List<Bebida> listaProductos = new ArrayList<>();
         String consulta = "SELECT b.idBebida, b.bebida, b.stock, b.stock_minimo, b.precio " +
@@ -178,6 +185,7 @@ public class ReporteDAOImpl {
         }
     }
     
+    @Override
     public ReporteProducto obtenerProductoMasVendidoACliente(int idCliente) throws SQLException {
         ReporteProducto producto = null;
         String consulta = "SELECT b.idBebida, b.bebida, SUM(dv.cantidad) AS cantidad_vendida, " +

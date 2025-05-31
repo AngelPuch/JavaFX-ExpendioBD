@@ -80,6 +80,8 @@ public class FXMLPrincipalAdminController implements Initializable {
     
     @FXML
     private void btnClicCompras(ActionEvent event) {
+        cargarEscenas("vista/FXMLAdminCompra.fxml", false);
+        lbNombreVentana.setText("Compras | Gestión de compras proveedor");
     }
 
     @FXML

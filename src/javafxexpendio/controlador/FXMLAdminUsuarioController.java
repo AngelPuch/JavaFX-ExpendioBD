@@ -156,17 +156,7 @@ public class FXMLAdminUsuarioController implements Initializable, Notificacion {
                 "Por favor, selecciona un usuario para eliminar.");
             return null;
         }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    }  
     
     private void configurarFiltroBusqueda() {
         Utilidad.activarFiltroBusqueda(tfBuscarUsuario, tblUsuario, usuarios, usuario ->

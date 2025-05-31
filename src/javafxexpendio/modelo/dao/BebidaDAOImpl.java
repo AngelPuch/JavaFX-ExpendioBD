@@ -4,6 +4,7 @@
  */
 package javafxexpendio.modelo.dao;
 
+import javafxexpendio.modelo.dao.interfaz.CrudDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +18,7 @@ import javafxexpendio.modelo.pojo.Bebida;
  *
  * @author Dell
  */
-public class BebidaDAOImpl implements DAO<Bebida> {
+public class BebidaDAOImpl implements CrudDAO<Bebida> {
     
     @Override
     public boolean crear(Bebida bebida) throws SQLException {
@@ -78,7 +79,11 @@ public class BebidaDAOImpl implements DAO<Bebida> {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new SQLException("Error: Sin conexión a la base de datos"); 
+            if (ex.getSQLState().equals("23000")) { // Código de estado SQL para violación de restricción
+            throw new SQLException("No se puede eliminar la bebida porque está relacionada con otros registros.");
+            } else {
+            throw new SQLException("Error en la base de datos: " + ex.getMessage());
+            }
         }
     }
 

@@ -9,36 +9,45 @@ package javafxexpendio.modelo.pojo;
  * @author zenbook i5
  */
 public class DetalleCompra {
-    private Compra compra;
-    private Bebida bebida;
+    private int idCompra;
+    private int idBebida;
+    private String bebida;
     private int cantidad;
-    private int total;
     private double precioBebida;
-
+    private double total;
+    
     public DetalleCompra() {
     }
-
-    public DetalleCompra(Compra compra, Bebida bebida, int cantidad, int total, double precioBebida) {
-        this.compra = compra;
+    
+    public DetalleCompra(int idBebida, String bebida, int cantidad, double precioBebida) {
+        this.idBebida = idBebida;
         this.bebida = bebida;
         this.cantidad = cantidad;
-        this.total = total;
         this.precioBebida = precioBebida;
+        this.total = cantidad * precioBebida;
     }
 
-    public Compra getCompra() {
-        return compra;
+    public int getIdCompra() {
+        return idCompra;
     }
 
-    public void setCompra(Compra compra) {
-        this.compra = compra;
+    public void setIdCompra(int idCompra) {
+        this.idCompra = idCompra;
     }
 
-    public Bebida getBebida() {
+    public int getIdBebida() {
+        return idBebida;
+    }
+
+    public void setIdBebida(int idBebida) {
+        this.idBebida = idBebida;
+    }
+
+    public String getBebida() {
         return bebida;
     }
 
-    public void setBebida(Bebida bebida) {
+    public void setBebida(String bebida) {
         this.bebida = bebida;
     }
 
@@ -48,14 +57,7 @@ public class DetalleCompra {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
+        this.total = cantidad * precioBebida;
     }
 
     public double getPrecioBebida() {
@@ -64,6 +66,14 @@ public class DetalleCompra {
 
     public void setPrecioBebida(double precioBebida) {
         this.precioBebida = precioBebida;
+        this.total = cantidad * precioBebida;
     }
-    
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 }

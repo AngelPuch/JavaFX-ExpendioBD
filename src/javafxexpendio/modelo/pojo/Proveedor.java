@@ -55,6 +55,12 @@ public class Proveedor {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
+
+    @Override
+    public String toString() {
+        return razonSocial;
+    }
+    
     
     
     
