@@ -25,8 +25,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxexpendio.modelo.dao.VentaDAO;
 import javafxexpendio.modelo.dao.VentaTablaDAOImpl;
+import javafxexpendio.modelo.pojo.DetalleVenta;
 import javafxexpendio.modelo.pojo.Venta;
 import javafxexpendio.modelo.pojo.VentaTabla;
+import javafxexpendio.utilidades.GeneradorReportesPDF;
 import javafxexpendio.utilidades.Utilidad;
 
 public class FXMLAdminVentaController implements Initializable {
@@ -163,16 +165,25 @@ public class FXMLAdminVentaController implements Initializable {
         VentaTabla ventaSeleccionada = tvVentas.getSelectionModel().getSelectedItem();
         if (ventaSeleccionada != null) {
             try {
-                // Aquí iría el código para generar el reporte PDF
-                // Puedes usar librerías como iText, JasperReports, etc.
-                
-                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Reporte generado", 
-                        "El reporte de la venta #" + ventaSeleccionada.getIdVenta() + 
-                        " ha sido generado correctamente.");
-                
+                VentaTablaDAOImpl ventaTablaDAOImpl = new VentaTablaDAOImpl();
+                Venta venta = ventaTablaDAOImpl.obtenerVentaPorId(ventaSeleccionada.getIdVenta());
+                ArrayList<DetalleVenta> detalles = ventaTablaDAOImpl.obtenerDetallesVenta(ventaSeleccionada.getIdVenta());
+
+                if (venta != null && detalles != null) {
+                    String rutaArchivo = GeneradorReportesPDF.generarReporteVenta(venta, detalles, ventaSeleccionada);
+                    GeneradorReportesPDF.abrirArchivoPDF(rutaArchivo);
+
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Reporte generado", 
+                            "El reporte de la venta #" + ventaSeleccionada.getIdVenta() + 
+                            " ha sido generado correctamente.");
+                } else {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
+                            "No se encontraron datos completos para la venta seleccionada");
+                }
             } catch (Exception e) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
                         "No se pudo generar el reporte: " + e.getMessage());
+                e.printStackTrace();
             }
         } else {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Selección requerida", 

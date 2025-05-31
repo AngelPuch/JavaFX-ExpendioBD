@@ -30,6 +30,7 @@ import javafxexpendio.modelo.pojo.Cliente;
 import javafxexpendio.modelo.pojo.ReporteProducto;
 import javafxexpendio.modelo.pojo.ProductoStockMinimo;
 import javafxexpendio.modelo.pojo.ReporteVenta;
+import javafxexpendio.utilidades.GeneradorReportesPDF;
 import javafxexpendio.utilidades.Utilidad;
 
 public class FXMLAdminReporteController implements Initializable {
@@ -270,10 +271,85 @@ public class FXMLAdminReporteController implements Initializable {
         
     @FXML
     private void btnExportarReporte(ActionEvent event) {
-        // Este método se implementará más adelante si se decide incluir la funcionalidad
-        Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
-                "Exportar a PDF", 
-                "Funcionalidad en desarrollo");
+        try {
+            String rutaArchivo = "";
+
+            switch (reporteActual) {
+                case "ventasPeriodo":
+                    if (isFechaValida()) {
+                        @SuppressWarnings("unchecked")
+                        List<ReporteVenta> ventas = (List<ReporteVenta>) tvReporte.getItems();
+                        if (!ventas.isEmpty()) {
+                            rutaArchivo = GeneradorReportesPDF.generarReporteVentasPorPeriodo(
+                                    ventas, dpFechaInicio.getValue(), dpFechaFin.getValue());
+                        }
+                    }
+                    break;
+
+                case "ventasProducto":
+                case "productoMasVendido":
+                case "productoMenosVendido":
+                case "productoMasVendidoCliente":
+                    @SuppressWarnings("unchecked")
+                    List<ReporteProducto> productos = (List<ReporteProducto>) tvReporte.getItems();
+                    if (!productos.isEmpty()) {
+                        String titulo = obtenerTituloReporte();
+                        rutaArchivo = GeneradorReportesPDF.generarReporteVentasProducto(productos, titulo);
+                    }
+                    break;
+
+                case "stockMinimo":
+                    @SuppressWarnings("unchecked")
+                    List<ProductoStockMinimo> productosStock = (List<ProductoStockMinimo>) tvReporte.getItems();
+                    if (!productosStock.isEmpty()) {
+                        rutaArchivo = GeneradorReportesPDF.generarReporteStockMinimo(productosStock);
+                    }
+                    break;
+
+                case "productoNoVendido":
+                    Cliente clienteSeleccionado = cbCliente.getSelectionModel().getSelectedItem();
+                    if (clienteSeleccionado != null) {
+                        @SuppressWarnings("unchecked")
+                        List<Bebida> productosNoVendidos = (List<Bebida>) tvReporte.getItems();
+                        if (!productosNoVendidos.isEmpty()) {
+                            rutaArchivo = GeneradorReportesPDF.generarReporteProductosNoVendidos(
+                                    productosNoVendidos, clienteSeleccionado.getNombre());
+                        }
+                    }
+                    break;
+            }
+
+            if (!rutaArchivo.isEmpty()) {
+                GeneradorReportesPDF.abrirArchivoPDF(rutaArchivo);
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, 
+                        "Reporte exportado", 
+                        "El reporte ha sido generado correctamente.");
+            } else {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, 
+                        "Sin datos", 
+                        "No hay datos para generar el reporte.");
+            }
+
+        } catch (Exception ex) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, 
+                    "Error", 
+                    "Error al exportar el reporte: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private String obtenerTituloReporte() {
+        if (reporteActual.equals("ventasProducto")) {
+            return "Ventas por Producto";
+        } else if (reporteActual.equals("productoMasVendido")) {
+            return "Producto Más Vendido";
+        } else if (reporteActual.equals("productoMenosVendido")) {
+            return "Producto Menos Vendido";
+        } else if (reporteActual.equals("productoMasVendidoCliente")) {
+            Cliente cliente = cbCliente.getSelectionModel().getSelectedItem();
+            return "Producto Más Vendido a " + cliente.getNombre();
+        }
+        return "Reporte";
     }
     
     private boolean isFechaValida() {
