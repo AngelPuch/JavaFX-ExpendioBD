@@ -24,12 +24,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxexpendio.modelo.dao.interfaz.PedidoProveedorDAO;
 import javafxexpendio.modelo.dao.PedidoProveedorDAOImpl;
 import javafxexpendio.modelo.dao.ProveedorDAOImpl;
+import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.DetallePedidoProveedor;
 import javafxexpendio.modelo.pojo.ProductoStockMinimo;
 import javafxexpendio.modelo.pojo.Proveedor;
@@ -315,5 +317,72 @@ public class FXMLAdminPedidoController implements Initializable {
 
     @FXML
     private void btnClicAddBebida(ActionEvent event) {
+        try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/javafxexpendio/vista/FXMLAgregarBebida.fxml"));
+        Parent root = loader.load();
+        
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Agregar Bebida");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+        
+        if (stage.getUserData() != null) {
+            Bebida bebidaSeleccionada = (Bebida) stage.getUserData();
+            
+            // Verificar si la bebida ya está en el pedido
+            boolean bebidaExistente = false;
+            for (DetallePedidoProveedor detalle : detallesPedido) {
+                if (detalle.getIdBebida() == bebidaSeleccionada.getIdBebida()) {
+                    bebidaExistente = true;
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, 
+                            "Bebida duplicada", 
+                            "La bebida seleccionada ya está en la lista del pedido");
+                    break;
+                }
+            }
+            
+            if (!bebidaExistente) {
+                // Solicitar cantidad
+                TextInputDialog dialog = new TextInputDialog("1");
+                dialog.setTitle("Cantidad");
+                dialog.setHeaderText("Ingrese la cantidad a pedir");
+                dialog.setContentText("Cantidad:");
+                
+                Optional<String> result = dialog.showAndWait();
+                if (result.isPresent()) {
+                    try {
+                        int cantidad = Integer.parseInt(result.get());
+                        
+                        if (cantidad <= 0) {
+                            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, 
+                                    "Cantidad inválida", 
+                                    "La cantidad debe ser mayor a cero");
+                            return;
+                        }
+                        
+                        DetallePedidoProveedor detalle = new DetallePedidoProveedor(
+                                bebidaSeleccionada.getIdBebida(),
+                                bebidaSeleccionada.getBebida(),
+                                cantidad,
+                                bebidaSeleccionada.getPrecio()
+                        );
+                        detallesPedido.add(detalle);
+                        tvPedidoActual.refresh();
+                        
+                    } catch (NumberFormatException ex) {
+                        Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, 
+                                "Formato inválido", 
+                                "La cantidad debe ser un número entero");
+                    }
+                }
+            }
+        }
+    } catch (Exception ex) {
+        Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, 
+                "Error", 
+                "Error al abrir la ventana de agregar bebida: " + ex.getMessage());
+    }
     }
 }
