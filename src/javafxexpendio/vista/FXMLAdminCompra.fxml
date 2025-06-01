@@ -43,18 +43,17 @@
                   <Label style="-fx-font-weight: bold;" text="Pedidos Pendientes del Proveedor:" />
                   <TableView fx:id="tvPedidosPendientes" prefHeight="100.0">
                      <columns>
-                        <TableColumn fx:id="colIdPedido" prefWidth="60.0" text="ID" />
                         <TableColumn fx:id="colFechaPedido" prefWidth="90.0" text="Fecha" />
                         <TableColumn fx:id="colEstadoPedido" prefWidth="90.0" text="Estado" />
                         <TableColumn fx:id="colTotalProductos" prefWidth="90.0" text="Productos" />
                         <TableColumn fx:id="colTotalUnidades" prefWidth="90.0" text="Unidades" />
-                        <TableColumn fx:id="colTotalEstimado" prefWidth="90.0" text="Total Est." />
+                        <TableColumn fx:id="colTotalEstimado" prefWidth="90.0" text="Total Estimado" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <Button fx:id="btnContinuar" onAction="#btnClicContinuar" style="-fx-background-color: #5A4FCF; -fx-text-fill: white; -fx-background-radius: 6;" text="Continuar con la Compra" />
+                  <Button onAction="#btnClicContinuar" style="-fx-background-color: #5A4FCF; -fx-text-fill: white; -fx-background-radius: 6;" text="Continuar con la Compra" />
                </children>
             </VBox>
 

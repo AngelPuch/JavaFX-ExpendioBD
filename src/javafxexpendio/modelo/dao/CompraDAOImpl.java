@@ -1,11 +1,13 @@
 package javafxexpendio.modelo.dao;
 
+import java.sql.CallableStatement;
 import javafxexpendio.modelo.dao.interfaz.CompraDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +15,9 @@ import java.util.Map;
 import javafxexpendio.modelo.ConexionBD;
 import javafxexpendio.modelo.pojo.Compra;
 import javafxexpendio.modelo.pojo.DetalleCompra;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 
 public class CompraDAOImpl implements CompraDAO {
 
@@ -90,113 +95,55 @@ public class CompraDAOImpl implements CompraDAO {
         return compras;
     }
 
-    @Override
-    public Map<String, Object> registrarCompra(Compra compra, List<DetalleCompra> detalles, int idPedidoProveedor) throws SQLException {
-        Map<String, Object> resultado = new HashMap<>();
-        resultado.put("exito", false);
-        
-        Connection conexion = null;
-        
-        try {
-            conexion = ConexionBD.abrirConexion();
-            conexion.setAutoCommit(false);
-            
-            // Insertar compra
-            String consulta = "INSERT INTO compra (fecha, idProveedor, folio_factura) VALUES (?, ?, ?)";
-            try (PreparedStatement ps = conexion.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setObject(1, compra.getFecha());
-                ps.setInt(2, compra.getIdProveedor());
-                ps.setString(3, compra.getFolioFactura());
-                
-                int filasAfectadas = ps.executeUpdate();
-                if (filasAfectadas == 0) {
-                    throw new SQLException("No se pudo registrar la compra, no se insertó ninguna fila.");
-                }
-                
-                try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        compra.setIdCompra(rs.getInt(1));
-                    } else {
-                        throw new SQLException("No se pudo obtener el ID de la compra.");
-                    }
-                }
+  @Override
+    public boolean registrarCompra(Compra compra, List<DetalleCompra> detalles, int idPedidoProveedor) throws SQLException {
+        try (Connection conexion = ConexionBD.abrirConexion()) {
+
+            // Convertir detalles a JSON
+            JSONArray detallesJson = new JSONArray();
+            for (DetalleCompra detalle : detalles) {
+                JSONObject detalleJson = new JSONObject();
+                detalleJson.put("idBebida", detalle.getIdBebida());
+                detalleJson.put("cantidad", detalle.getCantidad());
+                detalleJson.put("precio_bebida", detalle.getPrecioBebida());
+                detallesJson.add(detalleJson); // Correcto para json-simple
             }
-            
-            // Insertar detalles de compra
-            consulta = "INSERT INTO detalle_compra (idCompra, idBebida, cantidad, precio_bebida, total) VALUES (?, ?, ?, ?, ?)";
-            try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
-                for (DetalleCompra detalle : detalles) {
-                    ps.setInt(1, compra.getIdCompra());
-                    ps.setInt(2, detalle.getIdBebida());
-                    ps.setInt(3, detalle.getCantidad());
-                    ps.setDouble(4, detalle.getPrecioBebida());
-                    ps.setDouble(5, detalle.getTotal());
-                    
-                    ps.addBatch();
-                }
-                
-                ps.executeBatch();
-            }
-            
-            // Actualizar stock de bebidas
-            consulta = "UPDATE bebida SET stock = stock + ? WHERE idBebida = ?";
-            try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
-                for (DetalleCompra detalle : detalles) {
-                    ps.setInt(1, detalle.getCantidad());
-                    ps.setInt(2, detalle.getIdBebida());
-                    
-                    ps.addBatch();
-                }
-                
-                ps.executeBatch();
-            }
-            
-            // Relacionar compra con pedido
+
+            // Convertir pedidos relacionados a JSON
+            JSONArray pedidosJson = new JSONArray();
             if (idPedidoProveedor > 0) {
-                consulta = "INSERT INTO compra_has_pedido (idCompra, idPedidoProveedor) VALUES (?, ?)";
-                try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
-                    ps.setInt(1, compra.getIdCompra());
-                    ps.setInt(2, idPedidoProveedor);
-                    
-                    ps.executeUpdate();
-                }
-                
-                // Actualizar estado de pedido a "Realizado"
-                consulta = "UPDATE pedido_proveedor SET idEstadoPedido = 2 WHERE idPedidoProveedor = ?";
-                try (PreparedStatement ps = conexion.prepareStatement(consulta)) {
-                    ps.setInt(1, idPedidoProveedor);
-                    ps.executeUpdate();
+                pedidosJson.add(idPedidoProveedor); // Correcto para json-simple
+            }
+
+            // Llamar al procedimiento almacenado
+            String sql = "{CALL sp_registrar_compra_completa(?, ?, ?, ?, ?, ?, ?)}";
+            try (CallableStatement cs = conexion.prepareCall(sql)) {
+                cs.setObject(1, compra.getFecha());
+                cs.setInt(2, compra.getIdProveedor());
+                cs.setString(3, compra.getFolioFactura());
+                cs.setString(4, detallesJson.toString());
+                cs.setString(5, pedidosJson.toString());
+                cs.registerOutParameter(6, Types.INTEGER);
+                cs.registerOutParameter(7, Types.VARCHAR);
+
+                cs.execute();
+
+                Integer idCompra = cs.getInt(6);
+                String mensaje = cs.getString(7);
+
+                if (idCompra != null && idCompra > 0) {
+                    compra.setIdCompra(idCompra);
+                    return true;
+                } else {
+                    // Si llegamos aquí, el procedimiento no generó un ID válido
+                    // pero tampoco lanzó una excepción
+                    throw new SQLException("No se pudo registrar la compra: " + mensaje);
                 }
             }
-            
-            conexion.commit();
-            
-            resultado.put("exito", true);
-            resultado.put("idCompra", compra.getIdCompra());
-            resultado.put("mensaje", "Compra registrada correctamente.");
-            
-        } catch (SQLException ex) {
-            if (conexion != null) {
-                try {
-                    conexion.rollback();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            resultado.put("mensaje", ex.getMessage());
-            throw new SQLException("Error al registrar la compra: " + ex.getMessage());
-        } finally {
-            if (conexion != null) {
-                try {
-                    conexion.setAutoCommit(true);
-                    conexion.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
+
+        } catch (Exception ex) {
+            throw new SQLException("Error al registrar la compra: " + ex.getMessage(), ex);
         }
-        
-        return resultado;
     }
 
     @Override

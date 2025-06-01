@@ -33,6 +33,7 @@ import javafxexpendio.modelo.dao.PedidoProveedorDAOImpl;
 import javafxexpendio.modelo.dao.ProveedorDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.DetallePedidoProveedor;
+import javafxexpendio.modelo.pojo.PedidoProveedor;
 import javafxexpendio.modelo.pojo.ProductoStockMinimo;
 import javafxexpendio.modelo.pojo.Proveedor;
 import javafxexpendio.utilidades.Utilidad;
@@ -42,13 +43,13 @@ public class FXMLAdminPedidoController implements Initializable {
     @FXML
     private TableView<ProductoStockMinimo> tvProductosStockMinimo;
     @FXML
-    private TableColumn<ProductoStockMinimo, String> colBebidaMin;
+    private TableColumn colBebidaMin;
     @FXML
-    private TableColumn<ProductoStockMinimo, Integer> colStockActual;
+    private TableColumn colStockActual;
     @FXML
-    private TableColumn<ProductoStockMinimo, Integer> colStockMinimo;
+    private TableColumn colStockMinimo;
     @FXML
-    private TableColumn<ProductoStockMinimo, Double> colPrecio;
+    private TableColumn colPrecio;
     @FXML
     private TextField tfCantidad;
     @FXML
@@ -58,13 +59,13 @@ public class FXMLAdminPedidoController implements Initializable {
     @FXML
     private TableView<DetallePedidoProveedor> tvPedidoActual;
     @FXML
-    private TableColumn<DetallePedidoProveedor, String> colBebidaPedido;
+    private TableColumn colBebidaPedido;
     @FXML
-    private TableColumn<DetallePedidoProveedor, Integer> colCantidadPedido;
+    private TableColumn colCantidadPedido;
     @FXML
-    private TableColumn<DetallePedidoProveedor, Double> colPrecioPedido;
+    private TableColumn colPrecioPedido;
     @FXML
-    private TableColumn<DetallePedidoProveedor, Double> colTotalPedido;
+    private TableColumn colTotalPedido;
     @FXML
     private Button btnEliminar;
     @FXML
@@ -80,6 +81,7 @@ public class FXMLAdminPedidoController implements Initializable {
     
     private PedidoProveedorDAO pedidoProveedorDAO;
     private ProveedorDAOImpl proveedorDAO;
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -97,16 +99,16 @@ public class FXMLAdminPedidoController implements Initializable {
     
     private void configurarTablas() {
         // Configurar tabla de productos con stock mínimo
-        colBebidaMin.setCellValueFactory(new PropertyValueFactory<>("nombreBebida"));
-        colStockActual.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        colStockMinimo.setCellValueFactory(new PropertyValueFactory<>("stockMinimo"));
-        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        colBebidaMin.setCellValueFactory(new PropertyValueFactory("nombreBebida"));
+        colStockActual.setCellValueFactory(new PropertyValueFactory("stock"));
+        colStockMinimo.setCellValueFactory(new PropertyValueFactory("stockMinimo"));
+        colPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
         
         // Configurar tabla de pedido actual
-        colBebidaPedido.setCellValueFactory(new PropertyValueFactory<>("bebida"));
-        colCantidadPedido.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        colPrecioPedido.setCellValueFactory(new PropertyValueFactory<>("precioEstimado"));
-        colTotalPedido.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+        colBebidaPedido.setCellValueFactory(new PropertyValueFactory("bebida"));
+        colCantidadPedido.setCellValueFactory(new PropertyValueFactory("cantidad"));
+        colPrecioPedido.setCellValueFactory(new PropertyValueFactory("precioEstimado"));
+        colTotalPedido.setCellValueFactory(new PropertyValueFactory("subtotal"));
         
         tvProductosStockMinimo.setItems(productosStockMinimo);
         tvPedidoActual.setItems(detallesPedido);
@@ -125,20 +127,8 @@ public class FXMLAdminPedidoController implements Initializable {
     private void cargarProductosStockMinimo() {
         try {
             productosStockMinimo.clear();
-            ObservableList<Map<String, Object>> productos = pedidoProveedorDAO.obtenerProductosStockMinimo();
-            
-            for (Map<String, Object> producto : productos) {
-                ProductoStockMinimo productoStockMinimo = new ProductoStockMinimo();
-                productoStockMinimo.setIdBebida((int) producto.get("idBebida"));
-                productoStockMinimo.setNombreBebida((String) producto.get("nombreBebida"));
-                productoStockMinimo.setStock((int) producto.get("stock"));
-                productoStockMinimo.setStockMinimo((int) producto.get("stockMinimo"));
-                productoStockMinimo.setPrecio((double) producto.get("precio"));
-                productoStockMinimo.setDiferencia((int) producto.get("diferencia"));
-                
-                productosStockMinimo.add(productoStockMinimo);
-            }
-            
+            List<ProductoStockMinimo> productos = pedidoProveedorDAO.obtenerProductosStockMinimo();
+            productosStockMinimo.addAll(productos);
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
                     "Error al cargar los productos con stock mínimo: " + ex.getMessage());
@@ -223,14 +213,14 @@ public class FXMLAdminPedidoController implements Initializable {
                     "No hay productos en el pedido");
             return;
         }
-        
+
         Proveedor proveedorSeleccionado = cbProveedor.getValue();
         if (proveedorSeleccionado == null) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Proveedor no seleccionado", 
                     "Debe seleccionar un proveedor para el pedido");
             return;
         }
-        
+
         try {
             // Convertir detalles a formato para el DAO
             List<Map<String, Object>> detallesMap = new ArrayList<>();
@@ -241,29 +231,30 @@ public class FXMLAdminPedidoController implements Initializable {
                 detalleMap.put("precioEstimado", detalle.getPrecioEstimado());
                 detallesMap.add(detalleMap);
             }
-            
+
+            // Objeto para recibir el ID del pedido
+            PedidoProveedor nuevoPedido = new PedidoProveedor();
+
             // Registrar pedido
-            Map<String, Object> resultado = pedidoProveedorDAO.registrarPedidoProveedor(
+            boolean exito = pedidoProveedorDAO.registrarPedidoProveedor(
                     LocalDate.now(), 
                     proveedorSeleccionado.getIdProveedor(), 
                     "Pedido generado desde sistema", 
-                    detallesMap
+                    detallesMap,
+                    nuevoPedido
             );
-            
-            if ((boolean) resultado.get("exito")) {
+
+            if (exito) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Pedido registrado", 
-                        "El pedido ha sido registrado correctamente con ID: " + resultado.get("idPedidoProveedor"));
-                
+                        "El pedido #" + nuevoPedido.getIdPedidoProveedor() + " ha sido registrado correctamente");
+
                 // Limpiar formulario
                 limpiarFormulario();
-                
+
                 // Recargar productos con stock mínimo
                 cargarProductosStockMinimo();
-            } else {
-                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
-                        "No se pudo registrar el pedido: " + resultado.get("mensaje"));
             }
-            
+
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
                     "Error al registrar el pedido: " + ex.getMessage());
@@ -272,14 +263,10 @@ public class FXMLAdminPedidoController implements Initializable {
 
     @FXML
     private void btnClicCancelar(ActionEvent event) {
-        if (!detallesPedido.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmar cancelación");
-            alert.setHeaderText("¿Está seguro de cancelar el pedido?");
-            alert.setContentText("Se perderán todos los productos agregados al pedido.");
-            
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
+        if (!detallesPedido.isEmpty()) {           
+            boolean confirmado = Utilidad.mostrarAlertaConfirmacion("Confirmar cancelación", "¿Está seguro de cancelar el pedido?", 
+                    "Se perderán todos los productos agregados al pedido.");
+            if (confirmado) {
                 limpiarFormulario();
             }
         } else {
@@ -344,13 +331,8 @@ public class FXMLAdminPedidoController implements Initializable {
             }
             
             if (!bebidaExistente) {
-                // Solicitar cantidad
-                TextInputDialog dialog = new TextInputDialog("1");
-                dialog.setTitle("Cantidad");
-                dialog.setHeaderText("Ingrese la cantidad a pedir");
-                dialog.setContentText("Cantidad:");
-                
-                Optional<String> result = dialog.showAndWait();
+                Optional<String> result = Utilidad.mostrarDialogoEntrada("1", "Cantidad", "Ingrese la cantidad a pedir", 
+                        "Cantidad:");
                 if (result.isPresent()) {
                     try {
                         int cantidad = Integer.parseInt(result.get());

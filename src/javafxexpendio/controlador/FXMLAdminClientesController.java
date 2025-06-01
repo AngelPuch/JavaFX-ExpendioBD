@@ -102,8 +102,9 @@ public class FXMLAdminClientesController implements Initializable, Notificacion 
     private void btnClicEliminar(ActionEvent event) {
         Cliente clienteSeleccionado = getClienteSeleccionado("Por favor, selecciona un cliente para eliminar.");
         if (clienteSeleccionado != null) {
-            boolean confirmado = Utilidad.mostrarAlertaConfirmacion( "Confirmar eliminación", 
-            "¿Seguro que desea eliminar a " + clienteSeleccionado.getNombre()+ " de la lista de clientes?");
+            boolean confirmado = Utilidad.mostrarAlertaConfirmacion( "Confirmar eliminación",
+                    "¿Estás seguro de eliminar al cliente?",
+            "Se eliminara al cliente " + clienteSeleccionado.getNombre()+ " de la lista de clientes");
             if (confirmado) {
                 try {
                     ClienteDAOImpl clienteDAOImpl = new ClienteDAOImpl();

@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import javafx.collections.ObservableList;
+import javafxexpendio.modelo.pojo.DetallePedidoProveedor;
+import javafxexpendio.modelo.pojo.PedidoProveedor;
+import javafxexpendio.modelo.pojo.ProductoStockMinimo;
 
 /**
  *
@@ -16,15 +19,15 @@ import javafx.collections.ObservableList;
  */
 public interface PedidoProveedorDAO {
    
-    Map<String, Object> registrarPedidoProveedor(LocalDate fecha, int idProveedor, 
-            String observaciones, List<Map<String, Object>> detallesPedido) throws SQLException;
+    boolean registrarPedidoProveedor(LocalDate fecha, int idProveedor, 
+            String observaciones, List<Map<String, Object>> detallesPedido, PedidoProveedor pedidoResultado) throws SQLException;
     
-    ObservableList<Map<String, Object>> obtenerPedidosPendientes() throws SQLException;
+    ObservableList<PedidoProveedor> obtenerPedidosPendientes() throws SQLException;
 
-    ObservableList<Map<String, Object>> obtenerDetallePedidoProveedor(int idPedidoProveedor) throws SQLException;
+    ObservableList<DetallePedidoProveedor> obtenerDetallePedidoProveedor(int idPedidoProveedor) throws SQLException;
     
 
-    ObservableList<Map<String, Object>> obtenerProductosStockMinimo() throws SQLException;
+    List<ProductoStockMinimo> obtenerProductosStockMinimo() throws SQLException;
     
     boolean cancelarPedidoProveedor(int idPedidoProveedor) throws SQLException;
 }

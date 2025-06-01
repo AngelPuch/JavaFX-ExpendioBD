@@ -81,7 +81,8 @@ public class FXMLAdminUsuarioController implements Initializable, Notificacion {
         
         if (usuarioSeleccionado != null) {
             boolean confirmado = Utilidad.mostrarAlertaConfirmacion("Confirmar eliminación",
-                    "¿Seguro que desea eliminar al usuario: " + usuarioSeleccionado.getNombre()+ "?"); 
+                    "¿Estás seguro de eliminar al usuario?",
+                    "Se eliminará al usuario: " + usuarioSeleccionado.getNombre()+ " de la lista de usuarios"); 
             if (confirmado) {
                 try {
                     UsuarioDAOImpl usuarioDAOImpl = new UsuarioDAOImpl();

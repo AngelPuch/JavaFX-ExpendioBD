@@ -13,7 +13,6 @@
             
             <TableView fx:id="tvPedidos" prefHeight="300.0" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 6;">
                <columns>
-                  <TableColumn fx:id="colIdPedido" prefWidth="75.0" text="ID" />
                   <TableColumn fx:id="colFecha" prefWidth="100.0" text="Fecha" />
                   <TableColumn fx:id="colProveedor" prefWidth="150.0" text="Proveedor" />
                   <TableColumn fx:id="colEstado" prefWidth="100.0" text="Estado" />

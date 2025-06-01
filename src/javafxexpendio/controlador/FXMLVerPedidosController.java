@@ -2,14 +2,8 @@ package javafxexpendio.controlador;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,30 +17,30 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafxexpendio.modelo.dao.interfaz.PedidoProveedorDAO;
 import javafxexpendio.modelo.dao.PedidoProveedorDAOImpl;
+import javafxexpendio.modelo.pojo.PedidoProveedor;
 import javafxexpendio.utilidades.Utilidad;
 
 public class FXMLVerPedidosController implements Initializable {
 
     @FXML
-    private TableView<Map<String, Object>> tvPedidos;
+    private TableView<PedidoProveedor> tvPedidos;
     @FXML
-    private TableColumn<Map<String, Object>, Integer> colIdPedido;
+    private TableColumn colFecha;
     @FXML
-    private TableColumn<Map<String, Object>, LocalDate> colFecha;
+    private TableColumn colProveedor;
     @FXML
-    private TableColumn<Map<String, Object>, String> colProveedor;
+    private TableColumn colEstado;
     @FXML
-    private TableColumn<Map<String, Object>, String> colEstado;
+    private TableColumn colTotalProductos;
     @FXML
-    private TableColumn<Map<String, Object>, Integer> colTotalProductos;
+    private TableColumn colTotalUnidades;
     @FXML
-    private TableColumn<Map<String, Object>, Integer> colTotalUnidades;
-    @FXML
-    private TableColumn<Map<String, Object>, Double> colTotalEstimado;
+    private TableColumn colTotalEstimado;
     @FXML
     private Button btnVerDetalle;
     @FXML
@@ -54,7 +48,7 @@ public class FXMLVerPedidosController implements Initializable {
     @FXML
     private Button btnCerrar;
     
-    private ObservableList<Map<String, Object>> pedidos;
+    private ObservableList<PedidoProveedor> pedidos;
     private PedidoProveedorDAO pedidoProveedorDAO;
 
     @Override
@@ -67,13 +61,12 @@ public class FXMLVerPedidosController implements Initializable {
     }
     
     private void configurarTabla() {
-        colIdPedido.setCellValueFactory(data -> new SimpleIntegerProperty((int) data.getValue().get("idPedidoProveedor")).asObject());
-        colFecha.setCellValueFactory(data -> new SimpleObjectProperty<>((LocalDate) data.getValue().get("fecha")));
-        colProveedor.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue().get("proveedor")));
-        colEstado.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue().get("estado")));
-        colTotalProductos.setCellValueFactory(data -> new SimpleIntegerProperty((int) data.getValue().get("totalProductos")).asObject());
-        colTotalUnidades.setCellValueFactory(data -> new SimpleIntegerProperty((int) data.getValue().get("totalUnidades")).asObject());
-        colTotalEstimado.setCellValueFactory(data -> new SimpleDoubleProperty((double) data.getValue().get("totalEstimado")).asObject());
+        colFecha.setCellValueFactory(new PropertyValueFactory("fecha"));
+        colProveedor.setCellValueFactory(new PropertyValueFactory("proveedor"));
+        colEstado.setCellValueFactory(new PropertyValueFactory("estado"));
+        colTotalProductos.setCellValueFactory(new PropertyValueFactory("totalProductos"));
+        colTotalUnidades.setCellValueFactory(new PropertyValueFactory("totalUnidades"));
+        colTotalEstimado.setCellValueFactory(new PropertyValueFactory("totalEstimado"));
         
         tvPedidos.setItems(pedidos);
     }
@@ -81,7 +74,7 @@ public class FXMLVerPedidosController implements Initializable {
     private void cargarPedidos() {
         try {
             pedidos.clear();
-            ObservableList<Map<String, Object>> listaPedidos = pedidoProveedorDAO.obtenerPedidosPendientes();
+            ObservableList<PedidoProveedor> listaPedidos = pedidoProveedorDAO.obtenerPedidosPendientes();
             pedidos.addAll(listaPedidos);
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
@@ -91,7 +84,7 @@ public class FXMLVerPedidosController implements Initializable {
 
     @FXML
     private void btnClicVerDetalle(ActionEvent event) {
-        Map<String, Object> pedidoSeleccionado = tvPedidos.getSelectionModel().getSelectedItem();
+        PedidoProveedor pedidoSeleccionado = tvPedidos.getSelectionModel().getSelectedItem();
         
         if (pedidoSeleccionado == null) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Selección requerida", 
@@ -104,7 +97,7 @@ public class FXMLVerPedidosController implements Initializable {
             Parent root = loader.load();
             
             FXMLDetallePedidoController controller = loader.getController();
-            controller.inicializarDetalle((int) pedidoSeleccionado.get("idPedidoProveedor"));
+            controller.inicializarDetalle(pedidoSeleccionado.getIdPedidoProveedor());
             
             Scene scene = new Scene(root);
             Stage stage = new Stage();
@@ -121,7 +114,7 @@ public class FXMLVerPedidosController implements Initializable {
 
     @FXML
     private void btnClicCancelarPedido(ActionEvent event) {
-        Map<String, Object> pedidoSeleccionado = tvPedidos.getSelectionModel().getSelectedItem();
+        PedidoProveedor pedidoSeleccionado = tvPedidos.getSelectionModel().getSelectedItem();
         
         if (pedidoSeleccionado == null) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Selección requerida", 
@@ -129,7 +122,7 @@ public class FXMLVerPedidosController implements Initializable {
             return;
         }
         
-        String estado = (String) pedidoSeleccionado.get("estado");
+        String estado = pedidoSeleccionado.getEstado();
         if (!"En espera".equals(estado)) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Operación no permitida", 
                     "Solo se pueden cancelar pedidos en estado 'En espera'");
@@ -144,14 +137,12 @@ public class FXMLVerPedidosController implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             try {
-                int idPedido = (int) pedidoSeleccionado.get("idPedidoProveedor");
+                int idPedido = pedidoSeleccionado.getIdPedidoProveedor();
                 boolean cancelado = pedidoProveedorDAO.cancelarPedidoProveedor(idPedido);
                 
                 if (cancelado) {
                     Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Pedido cancelado", 
                             "El pedido ha sido cancelado correctamente");
-                    
-                    // Recargar pedidos
                     cargarPedidos();
                 } else {
                     Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 

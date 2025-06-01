@@ -46,31 +46,27 @@ public class FXMLAdminCompraController implements Initializable {
     @FXML
     private TableView<PedidoProveedor> tvPedidosPendientes;
     @FXML
-    private TableColumn<PedidoProveedor, Integer> colIdPedido;
+    private TableColumn colFechaPedido;
     @FXML
-    private TableColumn<PedidoProveedor, LocalDate> colFechaPedido;
+    private TableColumn colEstadoPedido;
     @FXML
-    private TableColumn<PedidoProveedor, String> colEstadoPedido;
+    private TableColumn colTotalProductos;
     @FXML
-    private TableColumn<PedidoProveedor, Integer> colTotalProductos;
+    private TableColumn colTotalUnidades;
     @FXML
-    private TableColumn<PedidoProveedor, Integer> colTotalUnidades;
-    @FXML
-    private TableColumn<PedidoProveedor, Double> colTotalEstimado;
-    @FXML
-    private Button btnContinuar;
+    private TableColumn colTotalEstimado;
     @FXML
     private TableView<DetalleCompra> tvDetallePedido;
     @FXML
-    private TableColumn<DetalleCompra, String> colBebida;
+    private TableColumn colBebida;
     @FXML
     private TableColumn<DetalleCompra, Integer> colCantidadPedido;
     @FXML
-    private TableColumn<DetalleCompra, Integer> colCantidadCompra;
+    private TableColumn colCantidadCompra;
     @FXML
-    private TableColumn<DetalleCompra, Double> colPrecioCompra;
+    private TableColumn colPrecioCompra;
     @FXML
-    private TableColumn<DetalleCompra, Double> colTotal;
+    private TableColumn colTotal;
     @FXML
     private Button btnActualizar;
     @FXML
@@ -102,12 +98,8 @@ public class FXMLAdminCompraController implements Initializable {
         detallesPedidoOriginal = new ArrayList<>();
         
         configurarTablas();
-        configurarComboBoxes();
         
-        // Inicializar fecha con la fecha actual
         dpFechaCompra.setValue(LocalDate.now());
-        
-        // Cargar proveedores
         cargarProveedores();
         
         // Configurar listener para el combo de proveedores
@@ -125,17 +117,16 @@ public class FXMLAdminCompraController implements Initializable {
     
     private void configurarTablas() {
         // Configurar tabla de pedidos pendientes
-        colIdPedido.setCellValueFactory(new PropertyValueFactory<>("idPedidoProveedor"));
-        colFechaPedido.setCellValueFactory(new PropertyValueFactory<>("fecha"));
-        colEstadoPedido.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        colTotalProductos.setCellValueFactory(new PropertyValueFactory<>("totalProductos"));
-        colTotalUnidades.setCellValueFactory(new PropertyValueFactory<>("totalUnidades"));
-        colTotalEstimado.setCellValueFactory(new PropertyValueFactory<>("totalEstimado"));
+        colFechaPedido.setCellValueFactory(new PropertyValueFactory("fecha"));
+        colEstadoPedido.setCellValueFactory(new PropertyValueFactory("estado"));
+        colTotalProductos.setCellValueFactory(new PropertyValueFactory("totalProductos"));
+        colTotalUnidades.setCellValueFactory(new PropertyValueFactory("totalUnidades"));
+        colTotalEstimado.setCellValueFactory(new PropertyValueFactory("totalEstimado"));
         
         tvPedidosPendientes.setItems(pedidosPendientes);
         
         // Configurar tabla de detalle de pedido
-        colBebida.setCellValueFactory(new PropertyValueFactory<>("bebida"));
+        colBebida.setCellValueFactory(new PropertyValueFactory("bebida"));
         colCantidadPedido.setCellValueFactory(cellData -> {
             int idBebida = cellData.getValue().getIdBebida();
             for (DetallePedidoProveedor detalle : detallesPedidoOriginal) {
@@ -145,39 +136,13 @@ public class FXMLAdminCompraController implements Initializable {
             }
             return new SimpleIntegerProperty(0).asObject();
         });
-        colCantidadCompra.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        colPrecioCompra.setCellValueFactory(new PropertyValueFactory<>("precioBebida"));
-        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+        colCantidadCompra.setCellValueFactory(new PropertyValueFactory("cantidad"));
+        colPrecioCompra.setCellValueFactory(new PropertyValueFactory("precioBebida"));
+        colTotal.setCellValueFactory(new PropertyValueFactory("total"));
         
         tvDetallePedido.setItems(detallesCompra);
     }
     
-    private void configurarComboBoxes() {
-        // Configurar cómo se muestra el proveedor en el ComboBox
-        cbProveedor.setCellFactory(param -> new javafx.scene.control.ListCell<Proveedor>() {
-            @Override
-            protected void updateItem(Proveedor item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getRazonSocial());
-                }
-            }
-        });
-        
-        cbProveedor.setButtonCell(new javafx.scene.control.ListCell<Proveedor>() {
-            @Override
-            protected void updateItem(Proveedor item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getRazonSocial());
-                }
-            }
-        });
-    }
     
     private void cargarProveedores() {
         try {
@@ -261,13 +226,8 @@ public class FXMLAdminCompraController implements Initializable {
             return;
         }
         
-        // Diálogo para actualizar cantidad
-        TextInputDialog dialogCantidad = new TextInputDialog(String.valueOf(detalleSeleccionado.getCantidad()));
-        dialogCantidad.setTitle("Actualizar Cantidad");
-        dialogCantidad.setHeaderText("Actualizar cantidad de " + detalleSeleccionado.getBebida());
-        dialogCantidad.setContentText("Cantidad:");
-        
-        Optional<String> resultCantidad = dialogCantidad.showAndWait();
+        Optional<String> resultCantidad = Utilidad.mostrarDialogoEntrada(String.valueOf(detalleSeleccionado.getCantidad()), 
+                "Actualizar cantidad", "Actualizar cantidad de " + detalleSeleccionado.getBebida(), "Cantidad:");
         if (resultCantidad.isPresent()) {
             try {
                 int nuevaCantidad = Integer.parseInt(resultCantidad.get());
@@ -277,14 +237,9 @@ public class FXMLAdminCompraController implements Initializable {
                             "La cantidad debe ser mayor a cero");
                     return;
                 }
-                
-                // Diálogo para actualizar precio
-                TextInputDialog dialogPrecio = new TextInputDialog(String.format("%.2f", detalleSeleccionado.getPrecioBebida()));
-                dialogPrecio.setTitle("Actualizar Precio");
-                dialogPrecio.setHeaderText("Actualizar precio de " + detalleSeleccionado.getBebida());
-                dialogPrecio.setContentText("Precio:");
-                
-                Optional<String> resultPrecio = dialogPrecio.showAndWait();
+
+                Optional<String> resultPrecio = Utilidad.mostrarDialogoEntrada(String.format("%.2f", detalleSeleccionado.getPrecioBebida()),
+                        "Actualizar Precio", "Actualizar precio de " + detalleSeleccionado.getBebida(), "Precio");
                 if (resultPrecio.isPresent()) {
                     try {
                         double nuevoPrecio = Double.parseDouble(resultPrecio.get());
@@ -325,13 +280,9 @@ public class FXMLAdminCompraController implements Initializable {
             return;
         }
         
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmar eliminación");
-        alert.setHeaderText("¿Está seguro de eliminar este producto del pedido?");
-        alert.setContentText("Esta acción no se puede deshacer.");
-        
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
+        boolean confirmado = Utilidad.mostrarAlertaConfirmacion("Confirmar eliminación", "¿Está seguro de eliminar este producto del pedido?", 
+                "Esta acción no se puede deshacer.");
+        if (confirmado) {
             detallesCompra.remove(detalleSeleccionado);
         }
     }
@@ -344,44 +295,23 @@ public class FXMLAdminCompraController implements Initializable {
             return;
         }
         
-        if (dpFechaCompra.getValue() == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Fecha requerida", 
-                    "Debe seleccionar una fecha para la compra");
-            return;
-        }
-        
-        Proveedor proveedorSeleccionado = cbProveedor.getValue();
-        if (proveedorSeleccionado == null) {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Proveedor no seleccionado", 
-                    "Debe seleccionar un proveedor para la compra");
-            return;
-        }
-        
         try {
-            // Crear objeto Compra
+            Proveedor proveedorSeleccionado = cbProveedor.getValue();
             Compra compra = new Compra();
             compra.setFecha(dpFechaCompra.getValue());
             compra.setIdProveedor(proveedorSeleccionado.getIdProveedor());
             compra.setFolioFactura(tfFolioFactura.getText());
+
+            boolean exito = compraDAO.registrarCompra(compra, new ArrayList<>(detallesCompra), 
+                    pedidoSeleccionado.getIdPedidoProveedor());
             
-            // Registrar compra
-            Map<String, Object> resultado = compraDAO.registrarCompra(
-                    compra, 
-                    new ArrayList<>(detallesCompra), 
-                    pedidoSeleccionado.getIdPedidoProveedor()
-            );
-            
-            if ((boolean) resultado.get("exito")) {
+            if (exito) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Compra registrada", 
-                        "La compra ha sido registrada correctamente con ID: " + resultado.get("idCompra"));
-                
-                // Limpiar formulario
+                        "La compra ha sido registrada correctamente");
                 limpiarFormulario();
-                
-                
             } else {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
-                        "No se pudo registrar la compra: " + resultado.get("mensaje"));
+                        "No se pudo registrar la compra: ");
             }
             
         } catch (Exception ex) {
@@ -393,20 +323,13 @@ public class FXMLAdminCompraController implements Initializable {
     @FXML
     private void btnClicCancelar(ActionEvent event) {
         if (!detallesCompra.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmar cancelación");
-            alert.setHeaderText("¿Está seguro de cancelar la compra?");
-            alert.setContentText("Se perderán todos los productos agregados a la compra.");
-            
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
+            boolean confirmado = Utilidad.mostrarAlertaConfirmacion("Confirmar cancelación", 
+                    "¿Está seguro de cancelar la compra?", "Se cancelara la compra que se está haciendo");
+            if (confirmado) {
                 limpiarFormulario();
-                Stage stage = (Stage) btnCancelar.getScene().getWindow();
-                stage.close();
             }
         } else {
-            Stage stage = (Stage) btnCancelar.getScene().getWindow();
-            stage.close();
+            Utilidad.getEscenarioComponente(cbProveedor).close();
         }
     }
     
@@ -420,4 +343,5 @@ public class FXMLAdminCompraController implements Initializable {
         pedidoSeleccionado = null;
         habilitarSeccionDetalle(false);
     }
+
 }

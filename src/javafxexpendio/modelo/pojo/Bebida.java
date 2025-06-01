@@ -14,6 +14,7 @@ public class Bebida {
     private int stock;
     private int stockMinimo;
     private double precio;
+    private String contenidoNeto;
 
     public Bebida() {
     }
@@ -65,6 +66,20 @@ public class Bebida {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+
+    public String getContenidoNeto() {
+        return contenidoNeto;
+    }
+
+    public void setContenidoNeto(String contenidoNeto) {
+        this.contenidoNeto = contenidoNeto;
+    }
+
+    @Override
+    public String toString() {
+        return bebida + " " + contenidoNeto;
+    }
+    
     
     
 }

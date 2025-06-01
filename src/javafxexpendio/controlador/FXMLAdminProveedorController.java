@@ -70,7 +70,8 @@ public class FXMLAdminProveedorController implements Initializable, Notificacion
 
         if (proveedorSeleccionado != null) {
             boolean confirmado = Utilidad.mostrarAlertaConfirmacion("Confirmar eliminación",
-            "¿Seguro que desea eliminar al proveedor: " + proveedorSeleccionado.getRazonSocial() + "?");
+                    "¿Estás seguro de eliminar al proveedor?",
+            "Se eliminará al proveedor: " + proveedorSeleccionado.getRazonSocial() + " de la lista de proveedores");
 
             if (confirmado) {
                 try {

@@ -19,7 +19,6 @@ public interface PedidoCompraDAO {
     PedidoProveedor crear(PedidoProveedor pedido) throws SQLException;
     PedidoProveedor leer(Integer id) throws SQLException;
     List<PedidoProveedor> leerTodo() throws SQLException;
-    Map<String, Object> registrarPedidoProveedor(PedidoProveedor pedido, List<DetallePedidoProveedor> detalles) throws SQLException;
     List<PedidoProveedor> obtenerPedidosPendientesPorProveedor(int idProveedor) throws SQLException;
     List<DetallePedidoProveedor> obtenerDetallePedidoProveedor(int idPedidoProveedor) throws SQLException;
     boolean actualizarEstadoPedido(int idPedidoProveedor, int idEstadoPedido) throws SQLException;

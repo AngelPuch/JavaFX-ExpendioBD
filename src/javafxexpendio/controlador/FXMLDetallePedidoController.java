@@ -2,11 +2,7 @@ package javafxexpendio.controlador;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,9 +13,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafxexpendio.modelo.dao.interfaz.PedidoProveedorDAO;
 import javafxexpendio.modelo.dao.PedidoProveedorDAOImpl;
+import javafxexpendio.modelo.pojo.DetallePedidoProveedor;
 import javafxexpendio.utilidades.Utilidad;
 
 public class FXMLDetallePedidoController implements Initializable {
@@ -27,19 +24,19 @@ public class FXMLDetallePedidoController implements Initializable {
     @FXML
     private Label lblTitulo;
     @FXML
-    private TableView<Map<String, Object>> tvDetallePedido;
+    private TableView<DetallePedidoProveedor> tvDetallePedido;
     @FXML
-    private TableColumn<Map<String, Object>, String> colBebida;
+    private TableColumn colBebida;
     @FXML
-    private TableColumn<Map<String, Object>, Integer> colCantidad;
+    private TableColumn colCantidad;
     @FXML
-    private TableColumn<Map<String, Object>, Double> colPrecioEstimado;
+    private TableColumn colPrecioEstimado;
     @FXML
-    private TableColumn<Map<String, Object>, Double> colSubtotal;
+    private TableColumn colSubtotal;
     @FXML
     private Button btnCerrar;
     
-    private ObservableList<Map<String, Object>> detallesPedido;
+    private ObservableList<DetallePedidoProveedor> detallesPedido;
     private PedidoProveedorDAO pedidoProveedorDAO;
     private int idPedido;
 
@@ -58,10 +55,10 @@ public class FXMLDetallePedidoController implements Initializable {
     }
     
     private void configurarTabla() {
-        colBebida.setCellValueFactory(data -> new SimpleStringProperty((String) data.getValue().get("bebida")));
-        colCantidad.setCellValueFactory(data -> new SimpleIntegerProperty((int) data.getValue().get("cantidad")).asObject());
-        colPrecioEstimado.setCellValueFactory(data -> new SimpleDoubleProperty((double) data.getValue().get("precioEstimado")).asObject());
-        colSubtotal.setCellValueFactory(data -> new SimpleDoubleProperty((double) data.getValue().get("subtotal")).asObject());
+        colBebida.setCellValueFactory(new PropertyValueFactory("bebida"));
+        colCantidad.setCellValueFactory(new PropertyValueFactory("cantidad"));
+        colPrecioEstimado.setCellValueFactory(new PropertyValueFactory("precioEstimado"));
+        colSubtotal.setCellValueFactory(new PropertyValueFactory("subtotal"));
         
         tvDetallePedido.setItems(detallesPedido);
     }
@@ -69,7 +66,7 @@ public class FXMLDetallePedidoController implements Initializable {
     private void cargarDetallePedido() {
         try {
             detallesPedido.clear();
-            ObservableList<Map<String, Object>> listaDetalles = pedidoProveedorDAO.obtenerDetallePedidoProveedor(idPedido);
+            ObservableList<DetallePedidoProveedor> listaDetalles = pedidoProveedorDAO.obtenerDetallePedidoProveedor(idPedido);
             detallesPedido.addAll(listaDetalles);
         } catch (SQLException ex) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
@@ -79,7 +76,6 @@ public class FXMLDetallePedidoController implements Initializable {
 
     @FXML
     private void btnClicCerrar(ActionEvent event) {
-        Stage stage = (Stage) btnCerrar.getScene().getWindow();
-        stage.close();
+        Utilidad.getEscenarioComponente(lblTitulo).close();
     }
 }

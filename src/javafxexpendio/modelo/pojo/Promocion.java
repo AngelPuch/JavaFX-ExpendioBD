@@ -17,19 +17,17 @@ public class Promocion {
     private Date fechaFin;
     private String descripcion;
     private Bebida bebida;
-    private double esAcumulable;
 
     public Promocion() {
     }
 
-    public Promocion(int idPromocion, double descuento, Date fechaInicio, Date fechaFin, String descripcion, Bebida bebida, double esAcumulable) {
+    public Promocion(int idPromocion, double descuento, Date fechaInicio, Date fechaFin, String descripcion, Bebida bebida) {
         this.idPromocion = idPromocion;
         this.descuento = descuento;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.descripcion = descripcion;
         this.bebida = bebida;
-        this.esAcumulable = esAcumulable;
     }
 
     public int getIdPromocion() {
@@ -78,16 +76,7 @@ public class Promocion {
 
     public void setBebida(Bebida bebida) {
         this.bebida = bebida;
-    }
-
-    public double getEsAcumulable() {
-        return esAcumulable;
-    }
-
-    public void setEsAcumulable(double esAcumulable) {
-        this.esAcumulable = esAcumulable;
-    }
-    
+    } 
     
     
     

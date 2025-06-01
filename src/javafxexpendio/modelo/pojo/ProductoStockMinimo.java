@@ -64,4 +64,6 @@ public class ProductoStockMinimo {
     public void setDiferencia(int diferencia) {
         this.diferencia = diferencia;
     }
+
+    
 }

@@ -62,10 +62,11 @@
       </ToolBar>
       <TableView fx:id="tblProducto" layoutX="20.0" layoutY="66.0" prefHeight="420.0" prefWidth="834.0" style="-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-radius: 6; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 0);">
         <columns>
-          <TableColumn fx:id="colNombre" prefWidth="75.0" text="Nombre" />
-          <TableColumn fx:id="colStock" prefWidth="75.0" text="Stock" />
+          <TableColumn fx:id="colNombre" prefWidth="226.0" text="Nombre" />
+          <TableColumn fx:id="colStock" prefWidth="189.0" text="Stock" />
           <TableColumn fx:id="colStockMinimo" prefWidth="75.0" text="Stock mínimo" />
           <TableColumn fx:id="colPrecio" prefWidth="75.0" text="Precio" />
+            <TableColumn fx:id="colContenidoNeto" prefWidth="75.0" text="Contenido neto" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

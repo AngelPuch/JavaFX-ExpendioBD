@@ -24,7 +24,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafxexpendio.JavaFXAppExpendio;
 import javafxexpendio.interfaz.Notificacion;
 import javafxexpendio.modelo.dao.BebidaDAOImpl;
 import javafxexpendio.modelo.pojo.Bebida;
@@ -49,9 +48,12 @@ public class FXMLAdminProductoController implements Initializable, Notificacion 
     @FXML
     private TableColumn colPrecio;
     @FXML
+    private TableColumn colContenidoNeto;
+    @FXML
     private TextField tfBuscarBebida;
     private ObservableList<Bebida> bebidas;
     Usuario usuarioSesion;
+    
     
     /**
      * Initializes the controller class.
@@ -78,8 +80,9 @@ public class FXMLAdminProductoController implements Initializable, Notificacion 
         Bebida bebidaSeleccionada = getBebidaSeleccionado();
         
         if (bebidaSeleccionada != null) {
-            boolean confirmado = Utilidad.mostrarAlertaConfirmacion( "Confirmar eliminación", 
-            "¿Seguro que desea eliminar la bebida: " + bebidaSeleccionada.getBebida() + "?");
+            boolean confirmado = Utilidad.mostrarAlertaConfirmacion( "Confirmar eliminación",
+                    "¿Estás seguro de eliminar la bebida?",
+            "Se eliminará la bebida: " + bebidaSeleccionada.getBebida() + " de la lista de bebidas");
 
             if (confirmado) {
                 try {
@@ -113,6 +116,7 @@ public class FXMLAdminProductoController implements Initializable, Notificacion 
         colStock.setCellValueFactory(new PropertyValueFactory("stock"));
         colStockMinimo.setCellValueFactory(new PropertyValueFactory("stockMinimo"));
         colPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
+        colContenidoNeto.setCellValueFactory(new PropertyValueFactory("contenidoNeto"));
     }
     
     private void cargarInformacionTabla() {

@@ -32,8 +32,6 @@ public class FXMLAgregarBebidaController implements Initializable {
     @FXML
     private TableView<Bebida> tvBebidas;
     @FXML
-    private TableColumn<Bebida, Integer> colIdBebida;
-    @FXML
     private TableColumn<Bebida, String> colBebida;
     @FXML
     private TableColumn<Bebida, Integer> colStock;
@@ -56,7 +54,6 @@ public class FXMLAgregarBebidaController implements Initializable {
     }
     
     private void configurarTabla() {
-        colIdBebida.setCellValueFactory(new PropertyValueFactory<>("idBebida"));
         colBebida.setCellValueFactory(new PropertyValueFactory<>("bebida"));
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         colStockMinimo.setCellValueFactory(new PropertyValueFactory<>("stockMinimo"));

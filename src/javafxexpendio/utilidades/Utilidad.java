@@ -31,10 +31,10 @@ public class Utilidad {
         alerta.showAndWait();
     }
     
-    public static boolean mostrarAlertaConfirmacion(String titulo, String contenido) {
+    public static boolean mostrarAlertaConfirmacion(String titulo,String encabezado,String contenido) {
         Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
         alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
+        alerta.setHeaderText(encabezado);
         alerta.setContentText(contenido);
 
         ButtonType botonAceptar = new ButtonType("Aceptar");
@@ -45,10 +45,10 @@ public class Utilidad {
         return resultado.isPresent() && resultado.get() == botonAceptar;
     }
     
-    public static Optional<String> mostrarDialogoEntrada(String titulo, String contenido) {
-        TextInputDialog dialog = new TextInputDialog();
+    public static Optional<String> mostrarDialogoEntrada(String textoCampo, String titulo, String encabezado, String contenido) {
+        TextInputDialog dialog = new TextInputDialog(textoCampo);
         dialog.setTitle(titulo);
-        dialog.setHeaderText(null);
+        dialog.setHeaderText(encabezado);
         dialog.setContentText(contenido);
 
         return dialog.showAndWait();

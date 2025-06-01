@@ -76,7 +76,7 @@ public class FXMLFormularioPromocionController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        cargarBebidas();
     }    
 
     public void inicializarInformacion(boolean isEdicion, Promocion promocionEdicion, Notificacion observador) {

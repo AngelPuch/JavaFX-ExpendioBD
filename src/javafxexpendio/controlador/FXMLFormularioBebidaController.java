@@ -6,13 +6,20 @@ package javafxexpendio.controlador;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafxexpendio.interfaz.Notificacion;
@@ -48,10 +55,23 @@ public class FXMLFormularioBebidaController implements Initializable {
     @FXML
     private Button btnActualizarStock;
     private  Usuario usuarioSesion;
+    ObservableList<String> contenidoNetoList;
     //Variables necesarias para implementar el patron observable
     private Notificacion observador;
     private Bebida bebidaEdicion;
     private boolean isEdicion;
+    @FXML
+    private Label lblTitulo;
+    @FXML
+    private TextField tfContenidoNeto;
+    @FXML
+    private ComboBox<String> cbUnidadContenido;
+    @FXML
+    private Label lbContenidoError;
+    @FXML
+    private Button btnCancelar;
+    @FXML
+    private Button btnGuardar;
     
     
     /**
@@ -59,7 +79,7 @@ public class FXMLFormularioBebidaController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        cargarContenidoNeto();
     } 
     
     //Función integrada para el observador
@@ -91,14 +111,25 @@ public class FXMLFormularioBebidaController implements Initializable {
 
     @FXML
     private void btnClicActualizarStock(ActionEvent event) {
-        Optional<String> resultado = mostrarDialogoEntrada("Campo seguro", "Ingrese su contraseña:");
-        if (validarPassword(resultado)) {
-            tfStock.setEditable(true);
-        } else {
-            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Contraseña incorrecta", 
-                    "La contraseña ingresada es incorrecta, no puede actualizar el stock.");
+        Optional<String> resultado = mostrarDialogoEntrada("", "Campo seguro", "Actualizar Stock" ,"Ingrese su contraseña:");
+        if (resultado.isPresent()) {
+            if (validarPassword(resultado)) {
+                tfStock.setEditable(true);
+            } else {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Contraseña incorrecta", 
+                        "La contraseña ingresada es incorrecta, no puede actualizar el stock.");
+            }
         }
         
+    }
+    
+    private void cargarContenidoNeto() {
+        contenidoNetoList = FXCollections.observableArrayList();
+        List<String> unidad = new ArrayList<>();
+        unidad.add("ml");
+        unidad.add("L");
+        contenidoNetoList.setAll(unidad);
+        cbUnidadContenido.setItems(contenidoNetoList);
     }
     
     private boolean validarCampos() {
@@ -110,6 +141,23 @@ public class FXMLFormularioBebidaController implements Initializable {
             esValido = false;
         } else {
             lbNombreError.setText("");
+        }
+        
+        //Validar contenido neto
+        String contenidoNeto = tfContenidoNeto.getText().trim();
+        if(contenidoNeto.isEmpty()) {
+            lbContenidoError.setText("*Campo obligatorio");
+            esValido = false;
+        }else {
+            if (!contenidoNeto.matches("((0)|(0\\.\\d+)|([1-9]\\d*(\\.\\d+)?))")) {
+                lbContenidoError.setText("*Número inválido");
+                esValido = false;
+            } else if (cbUnidadContenido.getValue() == null) {
+                lbContenidoError.setText("*Unidad obligatorio");
+                esValido = false;
+            } else {
+                lbContenidoError.setText("");
+            }
         }
 
         // Validar stock
@@ -184,6 +232,7 @@ public class FXMLFormularioBebidaController implements Initializable {
         bebida.setStock(Integer.parseInt(tfStock.getText()));
         bebida.setStockMinimo(Integer.parseInt(tfStockMinimo.getText()));
         bebida.setPrecio(Double.parseDouble(tfPrecio.getText()));
+        bebida.setContenidoNeto(tfContenidoNeto.getText() + " " + cbUnidadContenido.getValue());
         return bebida;
     }
     
@@ -234,6 +283,14 @@ public class FXMLFormularioBebidaController implements Initializable {
     private void cargarInformacionEdicion() {
         if (bebidaEdicion != null) {
             tfNombre.setText(bebidaEdicion.getBebida());
+            
+            Pattern pattern = Pattern.compile("^([\\d.]+)\\s*([a-zA-Z]+)$");
+            Matcher matcher = pattern.matcher(bebidaEdicion.getContenidoNeto());
+            if (matcher.matches()) {
+                tfContenidoNeto.setText(matcher.group(1));
+                cbUnidadContenido.setValue(matcher.group(2));
+            }
+            
             tfStock.setText(String.valueOf(bebidaEdicion.getStock()));
             tfStockMinimo.setText(String.valueOf(bebidaEdicion.getStockMinimo()));
             tfPrecio.setText(String.valueOf(bebidaEdicion.getPrecio()));

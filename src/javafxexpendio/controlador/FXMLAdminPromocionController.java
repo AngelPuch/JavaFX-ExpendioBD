@@ -96,7 +96,8 @@ public class FXMLAdminPromocionController implements Initializable, Notificacion
             Promocion promocion = cellData.getValue();
             String estado = "Vigente";
             if (promocion.getFechaFin() != null) {
-                LocalDate fechaFin = promocion.getFechaFin().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                LocalDate fechaFin = new java.util.Date(promocion.getFechaFin().getTime())
+                        .toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 if (fechaFin.isBefore(LocalDate.now())) {
                     estado = "Finalizado";
                 }

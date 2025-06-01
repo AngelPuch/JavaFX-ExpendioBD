@@ -22,8 +22,8 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
     
     @Override
     public boolean crear(Bebida bebida) throws SQLException {
-        String sentencia = "INSERT INTO bebida (bebida, stock, stock_minimo, precio) "
-                + "VALUES(?, ?, ?, ?)";
+        String sentencia = "INSERT INTO bebida (bebida, stock, stock_minimo, precio, contenido_neto) "
+                + "VALUES(?, ?, ?, ?, ?)";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
@@ -37,7 +37,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
     @Override
     public Bebida leer(Integer id) throws SQLException {
         Bebida bebida = null;
-        String consulta = "SELECT idBebida, bebida, stock, stock_minimo, precio "
+        String consulta = "SELECT idBebida, bebida, stock, stock_minimo, precio, contenido_neto "
                 + "FROM bebida WHERE idBebida = ?";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
@@ -57,13 +57,13 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
 
     @Override
     public boolean actualizar(Bebida bebida) throws SQLException {
-        String sentencia = "UPDATE bebida SET bebida = ?, stock = ?, stock_minimo = ?, precio = ? "
+        String sentencia = "UPDATE bebida SET bebida = ?, stock = ?, stock_minimo = ?, precio = ?, contenido_neto = ? "
                 + "WHERE idBebida = ?";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosBebida(ps, bebida);
-            ps.setInt(5, bebida.getIdBebida());
+            ps.setInt(6, bebida.getIdBebida());
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos"); 
@@ -90,7 +90,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
     @Override
     public List<Bebida> leerTodo() throws SQLException {
         List<Bebida> listaBebidas = new ArrayList<>();
-        String consulta = "SELECT idBebida, bebida, stock, stock_minimo, precio FROM bebida";
+        String consulta = "SELECT idBebida, bebida, stock, stock_minimo, precio, contenido_neto FROM bebida";
         
         try(Connection conexionBD = ConexionBD.abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta);
@@ -110,6 +110,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
         ps.setInt(2, bebida.getStock());
         ps.setInt(3, bebida.getStockMinimo());
         ps.setDouble(4, bebida.getPrecio());
+        ps.setString(5, bebida.getContenidoNeto());
     }
     
     private Bebida convertirRegistroBebida(ResultSet rs) throws SQLException {
@@ -119,6 +120,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
         bebida.setStock(rs.getInt("stock"));
         bebida.setStockMinimo(rs.getInt("stock_minimo"));
         bebida.setPrecio(rs.getDouble("precio"));
+        bebida.setContenidoNeto(rs.getString("contenido_neto"));
         
         return bebida;
     }
