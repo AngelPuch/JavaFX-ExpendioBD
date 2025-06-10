@@ -17,7 +17,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafxexpendio.modelo.dao.VentaDAO;
+import javafxexpendio.modelo.dao.interfaz.VentaDAO;
 import javafxexpendio.modelo.dao.VentaTablaDAOImpl;
 import javafxexpendio.modelo.pojo.DetalleVenta;
 import javafxexpendio.modelo.pojo.Venta;

@@ -73,6 +73,7 @@ public class FXMLPrincipalEmpleadoController implements Initializable {
 
     @FXML
     private void btnClicRegistrarPedido(ActionEvent event) {
+        cargarEscenas("vista/FXMLEmpleadoPedido.fxml", false);
     }
 
     @FXML
@@ -98,6 +99,7 @@ public class FXMLPrincipalEmpleadoController implements Initializable {
             if (clicBebida) {
                 FXMLBebidasController bebidasController = loader.getController();
                 bebidasController.setClicAgregarBebida(false);
+                bebidasController.setClicAgregarBebidaPedido(false);
             }
 
             apCentral.getChildren().setAll(root);

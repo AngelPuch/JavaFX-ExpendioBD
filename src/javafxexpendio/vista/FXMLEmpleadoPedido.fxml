@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="874.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLEmpleadoPedidoController">
+   <children>
+      <TableView fx:id="tvBebidasVenta" layoutX="457.0" layoutY="76.0" prefHeight="357.0" prefWidth="405.0">
+        <columns>
+          <TableColumn fx:id="colBebidas" prefWidth="111.0" text="Bebida" />
+          <TableColumn fx:id="colCantidad" prefWidth="115.0" text="Cantidad" />
+            <TableColumn fx:id="colPrecioUnitario" prefWidth="100.0" text="Precio unitario" />
+            <TableColumn fx:id="colTotal" prefWidth="78.0" text="Total" />
+        </columns>
+      </TableView>
+      <DatePicker fx:id="dpFechaVenta" layoutX="457.0" layoutY="455.0" minHeight="-Infinity" prefHeight="50.0" prefWidth="161.0" />
+      <Label layoutX="789.0" layoutY="447.0" text="Total compra:">
+         <font>
+            <Font size="12.0" />
+         </font></Label>
+      <Label fx:id="lbTotalCompra" alignment="CENTER_RIGHT" layoutX="789.0" layoutY="463.0" prefHeight="35.0" prefWidth="73.0" />
+      <Button fx:id="btnConfirmarCompra" layoutX="660.0" layoutY="456.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#btnClicConfirmarCompra" prefHeight="50.0" prefWidth="89.0" text="Confirmar compra">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <Label layoutX="457.0" layoutY="18.0" text="Confirmar venta" textFill="#005cd1">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Label>
+      <Separator layoutX="437.0" layoutY="18.0" orientation="VERTICAL" prefHeight="484.0" prefWidth="6.0" />
+      <Label layoutX="14.0" layoutY="18.0" text="Pedidos" textFill="#005cd1">
+         <font>
+            <Font size="29.0" />
+         </font>
+      </Label>
+      <Button layoutX="21.0" layoutY="455.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#btnClicAgregarPedido" prefHeight="50.0" prefWidth="89.0" text="Agregar pedido">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnCancelarPedido" layoutX="177.0" layoutY="456.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#btnClicCancelarPedido" prefHeight="50.0" prefWidth="89.0" text="Cancelar pedido">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnVerDetalle" layoutX="335.0" layoutY="456.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#btnClicVerDetalle" prefHeight="50.0" prefWidth="89.0" text="Ver detalle">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Button>
+      <TableView fx:id="tvPedidos" layoutX="19.0" layoutY="76.0" prefHeight="357.0" prefWidth="405.0">
+        <columns>
+          <TableColumn fx:id="colCliente" prefWidth="75.0" text="Cliente" />
+          <TableColumn fx:id="colEstado" prefWidth="62.0" text="Estado" />
+            <TableColumn fx:id="colFechaCreacion" prefWidth="78.0" text="Fecha" />
+            <TableColumn fx:id="colFechaLimite" prefWidth="78.0" text="Fecha Limite" />
+            <TableColumn fx:id="colProductos" prefWidth="56.0" text="Productos" />
+            <TableColumn fx:id="colUnidades" minWidth="0.0" prefWidth="55.0" text="Unidades" />
+            <TableColumn fx:id="colTotalEstimado" prefWidth="75.0" text="Total" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

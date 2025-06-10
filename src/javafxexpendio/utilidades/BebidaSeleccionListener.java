@@ -5,11 +5,12 @@
 package javafxexpendio.utilidades;
 
 import javafxexpendio.modelo.pojo.Bebida;
+import javafxexpendio.modelo.pojo.Promocion;
 
 /**
  *
  * @author zenbook i5
  */
 public interface BebidaSeleccionListener {
-    void onBebidaSeleccionada(Bebida bebida);
+    void onBebidaSeleccionada(Bebida bebida, Promocion promocion);
 }

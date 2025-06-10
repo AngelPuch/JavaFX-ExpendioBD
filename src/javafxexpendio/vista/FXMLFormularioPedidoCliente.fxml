@@ -8,21 +8,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="874.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLRegistrarVentaController">
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="874.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLFormularioPedidoClienteController">
    <children>
-      <TableView fx:id="tvBebidasVenta" layoutX="12.0" layoutY="83.0" prefHeight="350.0" prefWidth="850.0">
+      <TableView fx:id="tvBebidasPedidos" layoutX="12.0" layoutY="83.0" prefHeight="350.0" prefWidth="850.0">
         <columns>
-          <TableColumn fx:id="colBebidas" prefWidth="351.0" text="Bebida" />
-          <TableColumn fx:id="colCantidad" prefWidth="151.0" text="Cantidad" />
-            <TableColumn fx:id="colPrecioUnitario" prefWidth="191.0" text="Precio unitario" />
-            <TableColumn fx:id="colTotal" prefWidth="156.0" text="Total" />
+          <TableColumn fx:id="colBebidas" prefWidth="402.0" text="Bebida" />
+          <TableColumn fx:id="colCantidad" prefWidth="234.0" text="Cantidad" />
+            <TableColumn fx:id="colPrecioUnitario" prefWidth="213.0" text="Precio unitario" />
         </columns>
       </TableView>
-      <DatePicker fx:id="dpFechaVenta" layoutX="13.0" layoutY="455.0" minHeight="-Infinity" prefHeight="50.0" prefWidth="249.0" />
+      <DatePicker fx:id="dpFechaLimitePedido" layoutX="13.0" layoutY="455.0" minHeight="-Infinity" prefHeight="50.0" prefWidth="249.0" promptText="Fecha limite" />
       <ComboBox fx:id="cbCliente" layoutX="364.0" layoutY="23.0" minHeight="-Infinity" prefHeight="50.0" prefWidth="227.0" promptText="Cliente" />
-      <Label layoutX="563.0" layoutY="463.0" text="Total compra:" />
-      <Label fx:id="lbTotalCompra" alignment="CENTER_RIGHT" layoutX="742.0" layoutY="463.0" prefHeight="35.0" prefWidth="120.0" />
-      <Button layoutX="361.0" layoutY="455.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#btnClicConfirmarCompra" prefHeight="50.0" prefWidth="152.0" text="Confirmar compra">
+      <Button layoutX="543.0" layoutY="455.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#btnClicConfirmarPedido" prefHeight="50.0" prefWidth="152.0" text="Confirmar pedido">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -54,10 +51,18 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label layoutX="14.0" layoutY="13.0" text="Venta" textFill="#005cd1">
+      <Label layoutX="14.0" layoutY="13.0" text="Registrar pedido" textFill="#005cd1">
          <font>
-            <Font size="48.0" />
+            <Font size="40.0" />
          </font>
       </Label>
+      <Button layoutX="708.0" layoutY="455.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#btnClicCancelar" prefHeight="50.0" prefWidth="152.0" text="Cancelar">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

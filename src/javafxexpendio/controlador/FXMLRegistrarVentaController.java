@@ -6,11 +6,7 @@ package javafxexpendio.controlador;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +33,17 @@ import javafxexpendio.modelo.pojo.Cliente;
 import javafxexpendio.modelo.pojo.DetalleVenta;
 import javafxexpendio.utilidades.BebidaSeleccionListener;
 import javafxexpendio.utilidades.Utilidad;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javafx.scene.control.DatePicker;
+import javafxexpendio.modelo.dao.VentaDAOImpl;
+import javafxexpendio.modelo.pojo.Promocion;
 
 /**
  * FXML Controller class
@@ -61,6 +68,9 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
     private Label lbTotalCompra;
     ObservableList<Cliente> clientes;
     ObservableList<DetalleVenta> listaDetalleVenta;
+    @FXML
+    private DatePicker dpFechaVenta;
+    private Map<Integer, Promocion> promocionesAplicadas = new HashMap<>();
 
     /**
      * Initializes the controller class.
@@ -71,6 +81,8 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
         listaDetalleVenta = FXCollections.observableArrayList();
         tvBebidasVenta.setItems(listaDetalleVenta);
         configurarTabla();
+        
+        dpFechaVenta.setValue(LocalDate.now());
     }    
     
     private void cargarClientes() {
@@ -109,6 +121,85 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
 
     @FXML
     private void btnClicConfirmarCompra(ActionEvent event) {
+        if (validarDatosVenta()) {
+            try {
+                // Preparar los detalles de la venta
+                List<Map<String, Object>> detallesVenta = new ArrayList<>();
+            
+                for (DetalleVenta detalle : listaDetalleVenta) {
+                    Map<String, Object> detalleMap = new HashMap<>();
+                    detalleMap.put("idBebida", detalle.getBebida().getIdBebida());
+                    detalleMap.put("cantidad", detalle.getCantidad());
+                
+                    // Verificar si hay promoción aplicada para esta bebida
+                    if (promocionesAplicadas.containsKey(detalle.getBebida().getIdBebida())) {
+                        detalleMap.put("idPromocion", promocionesAplicadas.get(detalle.getBebida().getIdBebida()).getIdPromocion());
+                    }
+                
+                    detallesVenta.add(detalleMap);
+                }
+                String folioFactura;
+                boolean requiereFactura = Utilidad.mostrarAlertaConfirmacion("Confirmar factura", "¿El cliente quiere facturar?", "Se generara el folio de la factura automáticamente");
+                if (requiereFactura) {
+                    folioFactura = "F-" + System.currentTimeMillis();
+                } else {
+                    folioFactura = "NULL";
+                }
+                
+                
+                // Convertir LocalDate a Date si es necesario
+                Date fecha = Date.from(dpFechaVenta.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                
+                Integer idClienteParaVenta = null;
+                Cliente clienteSeleccionado = cbCliente.getSelectionModel().getSelectedItem();
+                
+                if (clienteSeleccionado != null) {
+                    idClienteParaVenta = clienteSeleccionado.getIdCliente();
+                }
+                
+                // Registrar la venta
+                VentaDAOImpl ventaDAO = new VentaDAOImpl();
+                Map<String, Object> resultado = ventaDAO.registrarVenta(
+                        idClienteParaVenta,
+                        dpFechaVenta.getValue(),
+                        folioFactura,
+                        detallesVenta
+                );
+            
+                if ((boolean) resultado.get("exito")) {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Venta registrada", 
+                            "La venta ha sido registrada correctamente.");
+                
+                    // Limpiar la tabla y datos
+                    listaDetalleVenta.clear();
+                    promocionesAplicadas.clear();
+                    lbTotalCompra.setText("0.0");
+                } else {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al registrar", 
+                            "No hay suficiente stock en una bebida para poder realizar la compra. Verifica por favor.");
+                }
+            
+            } catch (SQLException ex) {
+                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error de conexión", 
+                        "No se pudo conectar con la base de datos: " + ex.getMessage());
+            }
+        }
+    }
+    
+    private boolean validarDatosVenta() {
+        if (listaDetalleVenta.isEmpty()) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Datos incompletos", 
+                    "Debe agregar al menos una bebida a la venta.");
+            return false;
+        }
+    
+        if (dpFechaVenta == null || dpFechaVenta.getValue() == null) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Datos incompletos", 
+                    "Debe seleccionar una fecha para la venta.");
+            return false;
+        }
+    
+        return true;
     }
 
     @FXML
@@ -128,7 +219,7 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
             stage.showAndWait();
             mostrarTotalCompra();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al cargar la ventana", "No se puedo cargar la seleccion de bebidas.");
         }
     }
 
@@ -148,13 +239,17 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
     }
 
     @Override
-    public void onBebidaSeleccionada(Bebida bebida) {
+    public void onBebidaSeleccionada(Bebida bebida, Promocion promocion) {
+        
         DetalleVenta detalle = new DetalleVenta();
         detalle.setBebida(bebida);
         detalle.setCantidad(1); // Por defecto
         detalle.setPrecioBebida(bebida.getPrecio());
         detalle.setTotal(bebida.getPrecio());
         listaDetalleVenta.add(detalle);
+        if (promocion != null) {
+            promocionesAplicadas.put(bebida.getIdBebida(), promocion);
+        }
     }
     
 }

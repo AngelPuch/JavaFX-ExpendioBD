@@ -16,16 +16,25 @@ public class PedidoCliente {
     private Date fechaLimite;
     private Cliente cliente;
     private Venta venta;
+    private int idEstadoPedido;
 
     public PedidoCliente() {
     }
 
-    public PedidoCliente(int idPedidoCliente, Date fechaCreacion, Date fechaLimite, Cliente cliente, Venta venta) {
+    public PedidoCliente(int idPedidoCliente, Date fechaCreacion, Date fechaLimite, Cliente cliente, Venta venta, int idEstadoPedido) {
         this.idPedidoCliente = idPedidoCliente;
         this.fechaCreacion = fechaCreacion;
         this.fechaLimite = fechaLimite;
         this.cliente = cliente;
         this.venta = venta;
+    }
+
+    public int getIdEstadoPedido() {
+        return idEstadoPedido;
+    }
+
+    public void setIdEstadoPedido(int idEstadoPedido) {
+        this.idEstadoPedido = idEstadoPedido;
     }
 
     public int getIdPedidoCliente() {

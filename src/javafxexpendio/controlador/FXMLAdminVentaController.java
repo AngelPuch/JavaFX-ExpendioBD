@@ -23,7 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafxexpendio.modelo.dao.VentaDAO;
+import javafxexpendio.modelo.dao.interfaz.VentaDAO;
 import javafxexpendio.modelo.dao.VentaTablaDAOImpl;
 import javafxexpendio.modelo.pojo.DetalleVenta;
 import javafxexpendio.modelo.pojo.Venta;
