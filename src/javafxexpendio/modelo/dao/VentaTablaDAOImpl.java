@@ -130,7 +130,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
     @Override
     public ArrayList<DetalleVenta> obtenerDetallesVenta(Integer idVenta) throws SQLException {
         ArrayList<DetalleVenta> detalles = new ArrayList<>();
-        String consulta = "SELECT dv.idVenta, dv.idBebida, b.bebida, dv.cantidad, dv.precio_bebida, dv.total " +
+        String consulta = "SELECT dv.idVenta, dv.idBebida, b.bebida, dv.cantidad, dv.precio_bebida, dv.total, dv.precio_con_descuento " +
                           "FROM detalle_venta dv " +
                           "JOIN bebida b ON dv.idBebida = b.idBebida " +
                           "WHERE dv.idVenta = ?";
@@ -157,6 +157,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
         detalle.setCantidad(rs.getInt("cantidad"));
         detalle.setPrecioBebida(rs.getDouble("precio_bebida"));
         detalle.setTotal(rs.getDouble("total"));
+        detalle.setPrecioConDescuento(rs.getDouble("precio_con_descuento"));
 
         // Crear objeto Bebida
         Bebida bebida = new Bebida();

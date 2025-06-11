@@ -28,7 +28,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label style="-fx-font-weight: bold;" text="ID Venta:" />
+                  <Label style="-fx-font-weight: bold;" text="Número venta:" />
                   <Label fx:id="lbIdVenta" text="0" GridPane.columnIndex="1" />
                   <Label style="-fx-font-weight: bold;" text="Fecha:" GridPane.columnIndex="2" />
                   <Label fx:id="lbFecha" text="01/01/2023" GridPane.columnIndex="3" />
@@ -50,9 +50,13 @@
                <columns>
                   <TableColumn fx:id="colBebida" prefWidth="250.0" text="Bebida" />
                   <TableColumn fx:id="colCantidad" prefWidth="100.0" text="Cantidad" />
-                  <TableColumn fx:id="colPrecio" prefWidth="150.0" text="Precio Unitario" />
-                  <TableColumn fx:id="colTotal" prefWidth="150.0" text="Total" />
+                  <TableColumn fx:id="colPrecioUnitario" prefWidth="150.0" text="Precio Unitario" />
+                  <TableColumn fx:id="colPrecioDescuento" prefWidth="75.0" text="Precio con descuento" />
+                  <TableColumn fx:id="colTotal" prefWidth="75.0" text="Total" />
                </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
             </TableView>
             
             <!-- Botón de cerrar -->

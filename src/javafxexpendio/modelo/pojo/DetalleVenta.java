@@ -14,6 +14,7 @@ public class DetalleVenta {
     private Bebida bebida;
     private double total;
     private double precioBebida;
+    private double precioConDescuento;
 
     public DetalleVenta() {
     }
@@ -65,6 +66,15 @@ public class DetalleVenta {
     public void setPrecioBebida(double precioBebida) {
         this.precioBebida = precioBebida;
     }
+
+    public double getPrecioConDescuento() {
+        return precioConDescuento;
+    }
+
+    public void setPrecioConDescuento(double precioConDescuento) {
+        this.precioConDescuento = precioConDescuento;
+    }
+    
     
     
 }

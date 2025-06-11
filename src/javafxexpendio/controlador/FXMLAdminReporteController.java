@@ -81,6 +81,7 @@ public class FXMLAdminReporteController implements Initializable {
         dpFechaInicio.setValue(LocalDate.now().minusDays(7));
         dpFechaFin.setValue(LocalDate.now());
 
+        tvReporte.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         btnExportar.setDisable(true);
     }
     
@@ -380,7 +381,7 @@ public class FXMLAdminReporteController implements Initializable {
     private void configurarTablaReporteVentasPeriodo(List<ReporteVenta> ventas) {
         tvReporte.getColumns().clear();
         
-        TableColumn<ReporteVenta, Integer> colIdVenta = new TableColumn<>("ID");
+        TableColumn<ReporteVenta, Integer> colIdVenta = new TableColumn<>("Número venta");
         colIdVenta.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdVenta()).asObject());
         
         TableColumn<ReporteVenta, String> colFecha = new TableColumn<>("Fecha");
@@ -403,7 +404,7 @@ public class FXMLAdminReporteController implements Initializable {
     private void configurarTablaMasMenosVendido(List<ReporteProducto> listaProducto) {
         tvReporte.getColumns().clear();
         
-        TableColumn<ReporteProducto, Integer> colIdBebida = new TableColumn<>("ID");
+        TableColumn<ReporteProducto, Integer> colIdBebida = new TableColumn<>("Número venta");
         colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
         
         TableColumn<ReporteProducto, String> colNombre = new TableColumn<>("Producto");
@@ -424,7 +425,7 @@ public class FXMLAdminReporteController implements Initializable {
     private void configurarTablaReporteStockMinimo(List<ProductoStockMinimo> productos) {
         tvReporte.getColumns().clear();
         
-        TableColumn<ProductoStockMinimo, Integer> colIdBebida = new TableColumn<>("ID");
+        TableColumn<ProductoStockMinimo, Integer> colIdBebida = new TableColumn<>("Número venta");
         colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
         
         TableColumn<ProductoStockMinimo, String> colNombre = new TableColumn<>("Producto");
@@ -453,7 +454,7 @@ public class FXMLAdminReporteController implements Initializable {
     private void configurarTablaProductoNoVendido(List<Bebida> productos) {
         tvReporte.getColumns().clear();
         
-        TableColumn<Bebida, Integer> colIdBebida = new TableColumn<>("ID");
+        TableColumn<Bebida, Integer> colIdBebida = new TableColumn<>("Número venta");
         colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
         
         TableColumn<Bebida, String> colNombre = new TableColumn<>("Producto");

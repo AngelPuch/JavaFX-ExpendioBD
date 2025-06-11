@@ -91,7 +91,7 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
     @Override
     public ObservableList<PedidoProveedor> obtenerPedidosPendientes() throws SQLException {
         ObservableList<PedidoProveedor> pedidos = FXCollections.observableArrayList();
-        String consulta = "SELECT * FROM vista_pedidos_pendientes";
+        String consulta = "SELECT * FROM vista_pedidos_pendientes_proveedor";
         
         try (Connection conexionBD = ConexionBD.abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);

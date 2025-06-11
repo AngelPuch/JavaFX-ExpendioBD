@@ -38,11 +38,13 @@ public class FXMLDetalleVentaController implements Initializable {
     @FXML
     private TableColumn<DetalleVenta, String> colBebida;
     @FXML
-    private TableColumn<DetalleVenta, Integer> colCantidad;
+    private TableColumn colCantidad;
     @FXML
-    private TableColumn<DetalleVenta, Double> colPrecio;
+    private TableColumn colTotal;
     @FXML
-    private TableColumn<DetalleVenta, Double> colTotal;
+    private TableColumn colPrecioUnitario;
+    @FXML
+    private TableColumn colPrecioDescuento;
     @FXML
     private Button btnCerrar;
     
@@ -68,8 +70,9 @@ public class FXMLDetalleVentaController implements Initializable {
             new javafx.beans.property.SimpleStringProperty(
                 cellData.getValue().getBebida().getBebida()));
         colCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        colPrecio.setCellValueFactory(new PropertyValueFactory<>("precioBebida"));
+        colPrecioUnitario.setCellValueFactory(new PropertyValueFactory<>("precioBebida"));
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+        colPrecioDescuento.setCellValueFactory(new PropertyValueFactory("precioConDescuento"));
     }
     
     private void mostrarDatosVenta() {
