@@ -211,6 +211,9 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
             FXMLBebidasController bebidasController = loader.getController();
             bebidasController.setBebidaSeleccionListener(this);
             bebidasController.setClicAgregarBebida(true);
+            if (cbCliente.getSelectionModel().getSelectedItem() == null) {
+                bebidasController.setClicAgregarBebidaPedido(true);
+            }
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
