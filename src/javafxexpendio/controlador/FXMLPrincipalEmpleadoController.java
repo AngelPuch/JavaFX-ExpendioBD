@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
 import javafxexpendio.modelo.pojo.Usuario;
+import javafxexpendio.utilidades.SesionUsuario;
 import javafxexpendio.utilidades.Utilidad;
 
 public class FXMLPrincipalEmpleadoController implements Initializable {
@@ -70,6 +71,7 @@ public class FXMLPrincipalEmpleadoController implements Initializable {
     @FXML
     private void btnClicCerrarSesion(ActionEvent event) {
         try {
+            SesionUsuario.getInstancia().cerrarSesion();
             FXMLLoader cargador = new FXMLLoader(JavaFXAppExpendio.class.getResource("vista/FXMLInicioSesion.fxml"));
             Parent vistaInicioSesion = cargador.load();
             Scene escenaInicio = new Scene(vistaInicioSesion);

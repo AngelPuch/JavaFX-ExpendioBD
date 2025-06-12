@@ -31,7 +31,7 @@ public class InicioSesionDAOImpl implements InicioSesionDAO{
                 }
             }
         } catch (SQLException ex) {
-            throw new SQLException("Error: Sin conexión a la base de datos");
+            throw new SQLException("Error: Sin conexión a la base de datos" + ex.getMessage());
         }
         return usuarioSesion;
     }
