@@ -91,15 +91,21 @@ public class GeneradorReportesPDF {
         agregarLogo(documento);
         agregarTitulo(documento, "REPORTE DE VENTAS POR PERIODO");
         
-        PdfPTable tabla = new PdfPTable(4);
+        // TABLA MODIFICADA: ahora tiene 5 columnas
+        PdfPTable tabla = new PdfPTable(5);
         tabla.setWidthPercentage(100);
-        float[] anchos = {2f, 2f, 3f, 2f};
+        // Anchos modificados para la nueva columna de RFC
+        float[] anchos = {1.5f, 2f, 3f, 2.5f, 2f}; 
         tabla.setWidths(anchos);
-        agregarEncabezadoTabla(tabla, new String[]{"Fecha", "Folio", "Cliente", "Total"});
+        // Encabezado modificado
+        agregarEncabezadoTabla(tabla, new String[]{"Fecha", "Folio", "Cliente", "RFC", "Total"});
+        
         for (ReporteVenta venta : ventas) {
             tabla.addCell(venta.getFecha().toString());
             tabla.addCell(venta.getFolioFactura() != null ? venta.getFolioFactura() : "N/A");
-            tabla.addCell(venta.getCliente() != null ? venta.getCliente() : "Sin cliente");
+            tabla.addCell(venta.getCliente() != null ? venta.getCliente() : "Venta General");
+            // Se añade la celda para el RFC
+            tabla.addCell(venta.getRfc() != null ? venta.getRfc() : "Sin RFC");
             tabla.addCell("$" + String.format("%.2f", venta.getTotalVenta()));
         }
         documento.add(tabla);

@@ -5,8 +5,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,11 +40,11 @@ public class FXMLAdminClientesController implements Initializable, Notificacion 
     private TableColumn colDireccion;
     @FXML
     private TextField tfBuscar;
+    @FXML
+    private TableColumn colRfc;
+    
     private ObservableList<Cliente> clientes;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarTabla();
@@ -58,6 +56,7 @@ public class FXMLAdminClientesController implements Initializable, Notificacion 
         colCorreo.setCellValueFactory(new PropertyValueFactory("correo"));
         colTelefono.setCellValueFactory(new PropertyValueFactory("telefono"));
         colDireccion.setCellValueFactory(new PropertyValueFactory("direccion"));
+        colRfc.setCellValueFactory(new PropertyValueFactory("rfc"));
     }
     
     private void cargarInformacionTabla() {
@@ -135,7 +134,8 @@ public class FXMLAdminClientesController implements Initializable, Notificacion 
     
     private void configurarFiltroBusqueda() {
         Utilidad.activarFiltroBusqueda(tfBuscar, tvClientes, clientes, cliente ->
-            cliente.getNombre()+ " " + cliente.getCorreo()+ " " + cliente.getTelefono()+ " " + cliente.getDireccion()
+            cliente.getNombre() + " " + cliente.getCorreo() + " " + cliente.getTelefono() + " " +
+            cliente.getDireccion() + " " + cliente.getRfc()
         );
     }
     
@@ -159,5 +159,4 @@ public class FXMLAdminClientesController implements Initializable, Notificacion 
             return null;
         }
     }
-    
 }

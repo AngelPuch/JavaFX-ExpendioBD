@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLFormularioClienteController">
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxexpendio.controlador.FXMLFormularioClienteController">
    <children>
       <Label layoutX="28.0" layoutY="82.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" text="Registrar un nuevo cliente" textFill="#0852d3" textOverrun="CLIP" />
       <Label layoutX="29.0" layoutY="132.0" text="Nombre:">
@@ -21,7 +21,8 @@
       <TextField fx:id="tfNombre" layoutX="111.0" layoutY="129.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="350.0">
          <font>
             <Font size="13.0" />
-         </font></TextField>
+         </font>
+      </TextField>
       <Label layoutX="27.0" layoutY="182.0" text="Teléfono:">
          <font>
             <Font size="14.0" />
@@ -30,7 +31,8 @@
       <TextField fx:id="tfTelefono" layoutX="111.0" layoutY="180.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="350.0">
          <font>
             <Font size="13.0" />
-         </font></TextField>
+         </font>
+      </TextField>
       <Label layoutX="27.0" layoutY="232.0" text="Correo:">
          <font>
             <Font size="14.0" />
@@ -39,30 +41,44 @@
       <TextField fx:id="tfCorreo" layoutX="111.0" layoutY="230.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="350.0">
          <font>
             <Font size="13.0" />
-         </font></TextField>
-      <Label layoutX="29.0" layoutY="282.0" text="Dirección:">
+         </font>
+      </TextField>
+       <Label layoutX="29.0" layoutY="282.0" text="RFC:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextArea fx:id="tfDireccion" layoutX="111.0" layoutY="282.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0">
+      <TextField fx:id="tfRfc" layoutX="111.0" layoutY="280.0" minHeight="-Infinity" prefHeight="25.0" prefWidth="350.0">
          <font>
             <Font size="13.0" />
-         </font></TextArea>
-      <Button layoutX="118.0" layoutY="356.0" mnemonicParsing="false" onAction="#btnClicGuardar" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #5A4FCF; -fx-background-radius: 6;" text="Guardar" textFill="WHITE">
+         </font>
+      </TextField>
+      <Label layoutX="29.0" layoutY="332.0" text="Dirección:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="tfDireccion" layoutX="111.0" layoutY="332.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </TextArea>
+      <Button layoutX="118.0" layoutY="406.0" mnemonicParsing="false" onAction="#btnClicGuardar" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #5A4FCF; -fx-background-radius: 6;" text="Guardar" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
-         </cursor></Button>
-      <Button layoutX="286.0" layoutY="356.0" mnemonicParsing="false" onAction="#btnClicCancelar" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #E53935; -fx-background-radius: 6;" text="Cancelar" textFill="WHITE">
+         </cursor>
+      </Button>
+      <Button layoutX="286.0" layoutY="406.0" mnemonicParsing="false" onAction="#btnClicCancelar" prefHeight="30.0" prefWidth="97.0" style="-fx-background-color: #E53935; -fx-background-radius: 6;" text="Cancelar" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
          <cursor>
             <Cursor fx:constant="HAND" />
-         </cursor></Button>
+         </cursor>
+      </Button>
       <ImageView fitHeight="228.0" fitWidth="506.0" layoutX="-3.0" layoutY="-82.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../recurso/header_formulario.jpg" />
@@ -83,7 +99,12 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="lbDireccionError" layoutX="111.0" layoutY="332.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="322.0" textFill="RED">
+       <Label fx:id="lbRfcError" layoutX="111.0" layoutY="305.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="322.0" textFill="RED">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbDireccionError" layoutX="111.0" layoutY="382.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="322.0" textFill="RED">
          <font>
             <Font size="14.0" />
          </font>

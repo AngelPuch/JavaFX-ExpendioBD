@@ -391,12 +391,14 @@ public class FXMLAdminReporteController implements Initializable {
         
         TableColumn<ReporteVenta, String> colCliente = new TableColumn<>("Cliente");
         colCliente.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCliente()));
-        
+        TableColumn<ReporteVenta, String> colRfc = new TableColumn<>("RFC");
+        colRfc.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRfc() != null ? data.getValue().getRfc() : "N/A"));
+
         TableColumn<ReporteVenta, Double> colTotal = new TableColumn<>("Total");
         colTotal.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalVenta()).asObject());
         colTotal.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        tvReporte.getColumns().addAll(colIdVenta, colFecha, colFolio, colCliente, colTotal);
+
+        tvReporte.getColumns().addAll(colIdVenta, colFecha, colFolio, colCliente, colRfc, colTotal);
         tvReporte.setItems(FXCollections.observableArrayList(ventas));
     }
     

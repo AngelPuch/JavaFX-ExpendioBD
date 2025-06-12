@@ -6,6 +6,7 @@ public class Cliente {
     private String telefono;
     private String correo;
     private String direccion;
+    private String rfc;
 
     public Cliente() {
     }
@@ -58,6 +59,16 @@ public class Cliente {
         this.direccion = direccion;
     }
 
+    public String getRfc() {
+        return rfc;
+    }
+
+    public void setRfc(String rfc) {
+        this.rfc = rfc;
+    }
+
+    
+    
     @Override
     public String toString() {
         return nombre;

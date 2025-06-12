@@ -14,8 +14,8 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
 
     @Override
     public boolean crear(Cliente cliente) throws SQLException {
-        String sentencia = "INSERT INTO cliente (nombre, telefono, correo, direccion) "
-                + "VALUES(?, ?, ?, ?)";
+        String sentencia = "INSERT INTO cliente (nombre, telefono, correo, direccion, rfc) "
+                + "VALUES(?, ?, ?, ?, ?)";
         
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
@@ -29,7 +29,7 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
     @Override
     public Cliente leer(Integer id) throws SQLException {
         Cliente cliente = null;
-        String consulta = "SELECT idCliente, nombre, telefono, correo, direccion "
+        String consulta = "SELECT idCliente, nombre, telefono, correo, direccion, rfc "
                 + "FROM cliente WHERE idCliente = ?";
         
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
@@ -49,13 +49,15 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
 
     @Override
     public boolean actualizar(Cliente cliente) throws SQLException {
-        String sentencia = "UPDATE cliente SET nombre = ?, telefono = ?, correo = ?, direccion = ? "
+        // CORREGIDO: Se agregó rfc = ? a la sentencia SQL.
+        String sentencia = "UPDATE cliente SET nombre = ?, telefono = ?, correo = ?, direccion = ?, rfc = ? "
                 + "WHERE idCliente = ?";
         
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosCliente(ps, cliente);
-            ps.setInt(5, cliente.getIdCliente());
+            // CORREGIDO: El índice del idCliente ahora es 6.
+            ps.setInt(6, cliente.getIdCliente());
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos"); 
@@ -72,7 +74,7 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
             if (ex.getSQLState().equals("23000")) { // Código de estado SQL para violación de restricción
-            throw new SQLException("No se puede eliminar el cliente porque está relacionada con otros registros.");
+            throw new SQLException("No se puede eliminar el cliente porque está relacionado con otros registros.");
             } else {
             throw new SQLException("Error en la base de datos: " + ex.getMessage());
             }
@@ -82,7 +84,7 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
     @Override
     public List<Cliente> leerTodo() throws SQLException {
         List<Cliente> listaClientes = new ArrayList<>();
-        String consulta = "SELECT idCliente, nombre, telefono, correo, direccion FROM cliente";
+        String consulta = "SELECT idCliente, nombre, telefono, correo, direccion, rfc FROM cliente";
         
         try(Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta);
@@ -102,6 +104,7 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
         ps.setString(2, cliente.getTelefono());
         ps.setString(3, cliente.getCorreo());
         ps.setString(4, cliente.getDireccion());
+        ps.setString(5, cliente.getRfc());
     }
     
     private Cliente convertirRegistroCliente(ResultSet rs) throws SQLException{
@@ -111,8 +114,8 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
         cliente.setTelefono(rs.getString("telefono"));
         cliente.setCorreo(rs.getString("correo"));
         cliente.setDireccion(rs.getString("direccion"));
+        cliente.setRfc(rs.getString("rfc"));
         
         return cliente;
     }
-    
 }

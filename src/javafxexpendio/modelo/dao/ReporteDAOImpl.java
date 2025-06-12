@@ -20,13 +20,14 @@ public class ReporteDAOImpl implements ReporteDAO{
     @Override
     public List<ReporteVenta> obtenerVentasPorPeriodo(LocalDate fechaInicio, LocalDate fechaFin) throws SQLException {
         List<ReporteVenta> listaVentas = new ArrayList<>();
-        String consulta = "SELECT v.idVenta, v.fecha, v.folio_factura, c.nombre as cliente, " +
+        // CONSULTA MODIFICADA: Se agregó c.rfc
+        String consulta = "SELECT v.idVenta, v.fecha, v.folio_factura, c.nombre as cliente, c.rfc, " +
                           "SUM(dv.total) as total_venta " +
                           "FROM venta v " +
                           "LEFT JOIN cliente c ON v.idCliente = c.idCliente " +
                           "JOIN detalle_venta dv ON v.idVenta = dv.idVenta " +
                           "WHERE v.fecha BETWEEN ? AND ? " +
-                          "GROUP BY v.idVenta " +
+                          "GROUP BY v.idVenta, c.rfc " +
                           "ORDER BY v.fecha DESC";
         
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
@@ -42,6 +43,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                     venta.setFecha(rs.getDate("fecha").toLocalDate());
                     venta.setFolioFactura(rs.getString("folio_factura"));
                     venta.setCliente(rs.getString("cliente"));
+                    venta.setRfc(rs.getString("rfc"));
                     venta.setTotalVenta(rs.getDouble("total_venta"));
                     listaVentas.add(venta);
                 }

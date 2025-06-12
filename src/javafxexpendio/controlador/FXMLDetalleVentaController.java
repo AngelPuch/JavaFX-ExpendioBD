@@ -47,7 +47,9 @@ public class FXMLDetalleVentaController implements Initializable {
     private TableColumn colPrecioDescuento;
     @FXML
     private Button btnCerrar;
-    
+    @FXML
+    private Label lbRfc; // VARIABLE AGREGADA
+
     private Venta venta;
     private double totalVenta;
     private int numProductos;
@@ -56,7 +58,7 @@ public class FXMLDetalleVentaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         configurarTabla();
     }
-    
+
     public void inicializarVenta(Venta venta, double totalVenta, int numProductos) {
         this.venta = venta;
         this.totalVenta = totalVenta;
@@ -64,7 +66,7 @@ public class FXMLDetalleVentaController implements Initializable {
         mostrarDatosVenta();
         cargarDetallesVenta();
     }
-    
+
     private void configurarTabla() {
         colBebida.setCellValueFactory(cellData -> 
             new javafx.beans.property.SimpleStringProperty(
@@ -74,15 +76,19 @@ public class FXMLDetalleVentaController implements Initializable {
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
         colPrecioDescuento.setCellValueFactory(new PropertyValueFactory("precioConDescuento"));
     }
-    
+
     private void mostrarDatosVenta() {
         lbIdVenta.setText(String.valueOf(venta.getIdVenta()));
         
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         lbFecha.setText(sdf.format(venta.getFecha()));
         
-        String nombreCliente = venta.getCliente() != null ? venta.getCliente().getNombre() : "Venta directa";
+        // LÓGICA MODIFICADA PARA CLIENTE Y RFC
+        String nombreCliente = (venta.getCliente() != null) ? venta.getCliente().getNombre() : "Venta directa";
+        String rfcCliente = (venta.getCliente() != null) ? venta.getCliente().getRfc() : "Sin RFC";
+        
         lbCliente.setText(nombreCliente);
+        lbRfc.setText(rfcCliente);
         
         lbTotal.setText("$" + String.format("%.2f", totalVenta));
     }

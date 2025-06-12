@@ -14,46 +14,48 @@ import javafxexpendio.modelo.pojo.DetalleVenta;
 import javafxexpendio.modelo.pojo.Venta;
 import javafxexpendio.modelo.pojo.VentaTabla;
 
-public class VentaTablaDAOImpl implements VentaTablaDAO{
-    
+public class VentaTablaDAOImpl implements VentaTablaDAO {
+
     @Override
     public ArrayList<VentaTabla> obtenerTodasLasVentasTabla() throws SQLException {
         ArrayList<VentaTabla> ventasTabla = new ArrayList<>();
-        String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, c.nombre as nombreCliente, " +
-                          "v.folio_factura, SUM(dv.total) as total, COUNT(dv.idBebida) as numProductos " +
-                          "FROM venta v " +
-                          "LEFT JOIN cliente c ON v.idCliente = c.idCliente " +
-                          "LEFT JOIN detalle_venta dv ON v.idVenta = dv.idVenta " +
-                          "GROUP BY v.idVenta " +
-                          "ORDER BY v.fecha DESC";
-        
+        // NOTA: Esta consulta es para la tabla principal, no necesita RFC aquí. Se mantiene igual.
+        String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, c.nombre as nombreCliente, "
+                + "v.folio_factura, SUM(dv.total) as total, COUNT(dv.idBebida) as numProductos "
+                + "FROM venta v "
+                + "LEFT JOIN cliente c ON v.idCliente = c.idCliente "
+                + "LEFT JOIN detalle_venta dv ON v.idVenta = dv.idVenta "
+                + "GROUP BY v.idVenta "
+                + "ORDER BY v.fecha DESC";
+
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
-             PreparedStatement ps = conexionBD.prepareStatement(consulta);
-             ResultSet rs = ps.executeQuery()) {
-            
+                PreparedStatement ps = conexionBD.prepareStatement(consulta);
+                ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 ventasTabla.add(convertirRegistroVentaTabla(rs));
             }
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos");
         }
-        
+
         return ventasTabla;
     }
-    
+
     @Override
     public Venta obtenerVentaPorId(Integer idVenta) throws SQLException {
         Venta venta = null;
-        String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, v.folio_factura, " +
-                          "c.nombre, c.telefono, c.correo, c.direccion " +
-                          "FROM venta v " +
-                          "LEFT JOIN cliente c ON v.idCliente = c.idCliente " +
-                          "WHERE v.idVenta = ?";
-        
+        // CORRECCIÓN 1: Se agregó c.rfc a la consulta SQL
+        String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, v.folio_factura, "
+                + "c.nombre, c.telefono, c.correo, c.direccion, c.rfc "
+                + "FROM venta v "
+                + "LEFT JOIN cliente c ON v.idCliente = c.idCliente "
+                + "WHERE v.idVenta = ?";
+
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
-             PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, idVenta);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     venta = convertirRegistroVenta(rs);
@@ -62,27 +64,27 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos");
         }
-        
+
         return venta;
     }
-    
+
     @Override
     public ArrayList<VentaTabla> obtenerVentasPorRangoFechasTabla(Date fechaInicio, Date fechaFin) throws SQLException {
         ArrayList<VentaTabla> ventasTabla = new ArrayList<>();
-        String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, c.nombre as nombreCliente, " +
-                          "v.folio_factura, SUM(dv.total) as total, COUNT(dv.idBebida) as numProductos " +
-                          "FROM venta v " +
-                          "LEFT JOIN cliente c ON v.idCliente = c.idCliente " +
-                          "LEFT JOIN detalle_venta dv ON v.idVenta = dv.idVenta " +
-                          "WHERE v.fecha BETWEEN ? AND ? " +
-                          "GROUP BY v.idVenta " +
-                          "ORDER BY v.fecha DESC";
-        
+        String consulta = "SELECT v.idVenta, v.fecha, v.idCliente, c.nombre as nombreCliente, "
+                + "v.folio_factura, SUM(dv.total) as total, COUNT(dv.idBebida) as numProductos "
+                + "FROM venta v "
+                + "LEFT JOIN cliente c ON v.idCliente = c.idCliente "
+                + "LEFT JOIN detalle_venta dv ON v.idVenta = dv.idVenta "
+                + "WHERE v.fecha BETWEEN ? AND ? "
+                + "GROUP BY v.idVenta "
+                + "ORDER BY v.fecha DESC";
+
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
-             PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setDate(1, fechaInicio);
             ps.setDate(2, fechaFin);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     ventasTabla.add(convertirRegistroVentaTabla(rs));
@@ -91,44 +93,44 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos");
         }
-        
+
         return ventasTabla;
     }
-    
+
     @Override
     public String obtenerProductoMasVendido() throws SQLException {
         String producto = "N/A";
-        String consulta = "SELECT b.bebida, SUM(dv.cantidad) as cantidad " +
-                          "FROM detalle_venta dv " +
-                          "JOIN bebida b ON dv.idBebida = b.idBebida " +
-                          "GROUP BY b.idBebida " +
-                          "ORDER BY cantidad DESC " +
-                          "LIMIT 1";
-        
+        String consulta = "SELECT b.bebida, SUM(dv.cantidad) as cantidad "
+                + "FROM detalle_venta dv "
+                + "JOIN bebida b ON dv.idBebida = b.idBebida "
+                + "GROUP BY b.idBebida "
+                + "ORDER BY cantidad DESC "
+                + "LIMIT 1";
+
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
-             PreparedStatement ps = conexionBD.prepareStatement(consulta);
-             ResultSet rs = ps.executeQuery()) {
-            
+                PreparedStatement ps = conexionBD.prepareStatement(consulta);
+                ResultSet rs = ps.executeQuery()) {
+
             if (rs.next()) {
                 producto = rs.getString("bebida") + " (" + rs.getInt("cantidad") + " unidades)";
             }
         } catch (SQLException ex) {
             throw new SQLException("Error: Sin conexión a la base de datos");
         }
-        
+
         return producto;
     }
 
     @Override
     public ArrayList<DetalleVenta> obtenerDetallesVenta(Integer idVenta) throws SQLException {
         ArrayList<DetalleVenta> detalles = new ArrayList<>();
-        String consulta = "SELECT dv.idVenta, dv.idBebida, b.bebida, dv.cantidad, dv.precio_bebida, dv.total, dv.precio_con_descuento " +
-                          "FROM detalle_venta dv " +
-                          "JOIN bebida b ON dv.idBebida = b.idBebida " +
-                          "WHERE dv.idVenta = ?";
+        String consulta = "SELECT dv.idVenta, dv.idBebida, b.bebida, dv.cantidad, dv.precio_bebida, dv.total, dv.precio_con_descuento "
+                + "FROM detalle_venta dv "
+                + "JOIN bebida b ON dv.idBebida = b.idBebida "
+                + "WHERE dv.idVenta = ?";
 
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
-             PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, idVenta);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -142,7 +144,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
 
         return detalles;
     }
-    
+
     private DetalleVenta convertirRegistroDetalleVenta(ResultSet rs) throws SQLException {
         DetalleVenta detalle = new DetalleVenta();
         detalle.setIdVenta(rs.getInt("idVenta"));
@@ -159,7 +161,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
 
         return detalle;
     }
-    
+
     private VentaTabla convertirRegistroVentaTabla(ResultSet rs) throws SQLException {
         VentaTabla ventaTabla = new VentaTabla();
         ventaTabla.setIdVenta(rs.getInt("idVenta"));
@@ -170,13 +172,13 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
         ventaTabla.setNumProductos(rs.getInt("numProductos"));
         return ventaTabla;
     }
-    
+
     private Venta convertirRegistroVenta(ResultSet rs) throws SQLException {
         Venta venta = new Venta();
         venta.setIdVenta(rs.getInt("idVenta"));
         venta.setFecha(rs.getDate("fecha"));
         venta.setFolioFactura(rs.getString("folio_factura"));
-        
+
         int idCliente = rs.getInt("idCliente");
         if (idCliente > 0) {
             Cliente cliente = new Cliente();
@@ -185,9 +187,10 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
             cliente.setTelefono(rs.getString("telefono"));
             cliente.setCorreo(rs.getString("correo"));
             cliente.setDireccion(rs.getString("direccion"));
+            cliente.setRfc(rs.getString("rfc"));
             venta.setCliente(cliente);
         }
-        
+
         return venta;
     }
 }

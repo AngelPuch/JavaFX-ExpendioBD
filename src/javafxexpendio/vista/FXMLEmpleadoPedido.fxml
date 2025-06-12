@@ -17,6 +17,9 @@
             <TableColumn fx:id="colPrecioUnitario" prefWidth="100.0" text="Precio unitario" />
             <TableColumn fx:id="colTotal" prefWidth="78.0" text="Total" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <DatePicker fx:id="dpFechaVenta" layoutX="457.0" layoutY="455.0" minHeight="-Infinity" prefHeight="50.0" prefWidth="161.0" />
       <Label layoutX="789.0" layoutY="447.0" text="Total compra:">
@@ -77,6 +80,9 @@
             <TableColumn fx:id="colUnidades" minWidth="0.0" prefWidth="55.0" text="Unidades" />
             <TableColumn fx:id="colTotalEstimado" prefWidth="75.0" text="Total" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </children>
 </AnchorPane>
