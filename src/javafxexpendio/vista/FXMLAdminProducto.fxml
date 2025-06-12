@@ -48,7 +48,7 @@
                         <Image url="@../recurso/delete_img.png" />
                      </image>
                   </ImageView>
-                  <Button mnemonicParsing="false" onAction="#btnClicEliminar" style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-background-radius: 6;" text="Eliminar">
+                  <Button mnemonicParsing="false" onAction="#btnClicEliminar" style="-fx-background-color: #D35400; -fx-text-fill: white; -fx-background-radius: 6;" text="Eliminar">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>

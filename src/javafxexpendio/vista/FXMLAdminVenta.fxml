@@ -24,7 +24,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="btnLimpiarFiltro" onAction="#btnLimpiarFiltroClic" style="-fx-background-color: #E53935; -fx-text-fill: white;" text="Limpiar">
+            <Button fx:id="btnLimpiarFiltro" onAction="#btnLimpiarFiltroClic" style="-fx-background-color: #FFA000; -fx-text-fill: white;" text="Limpiar">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

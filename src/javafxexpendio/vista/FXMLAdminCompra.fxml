@@ -76,7 +76,7 @@
                   <HBox alignment="CENTER_RIGHT" spacing="10.0">
                      <children>
                         <Button fx:id="btnActualizar" onAction="#btnClicActualizar" style="-fx-background-color: #43A047; -fx-text-fill: white; -fx-background-radius: 6;" text="Actualizar Cantidad" />
-                        <Button fx:id="btnEliminar" onAction="#btnClicEliminar" style="-fx-background-color: #E53935; -fx-text-fill: white; -fx-background-radius: 6;" text="Eliminar Bebida" />
+                        <Button fx:id="btnEliminar" onAction="#btnClicEliminar" style="-fx-background-color: #D35400; -fx-text-fill: white; -fx-background-radius: 6;" text="Eliminar Bebida" />
                      </children>
                   </HBox>
                </children>
