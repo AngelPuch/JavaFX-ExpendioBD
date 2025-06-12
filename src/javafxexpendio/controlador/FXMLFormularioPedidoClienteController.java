@@ -169,7 +169,6 @@ public class FXMLFormularioPedidoClienteController implements Initializable, Beb
 
     @Override
     public void onBebidaSeleccionada(Bebida bebida, Promocion promocion) {
-        // Verificar si la bebida ya está en la lista para aumentar cantidad
         boolean encontrada = false;
         for (DetallePedido dp : listaDetallePedido) {
             if (dp.getBebida().getIdBebida() == bebida.getIdBebida()) {

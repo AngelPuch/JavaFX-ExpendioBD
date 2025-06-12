@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxexpendio.modelo.pojo;
 
-/**
- *
- * @author Dell
- */
 public class ProductoStockMinimo {
     private int idBebida;
     private String nombreBebida;
@@ -17,7 +9,6 @@ public class ProductoStockMinimo {
     private double precio;
     private int diferencia;
     
-    // Getters y setters
     public int getIdBebida() {
         return idBebida;
     }

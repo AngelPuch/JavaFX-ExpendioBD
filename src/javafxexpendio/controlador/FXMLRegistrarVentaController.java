@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxexpendio.controlador;
 
 import java.io.IOException;
@@ -45,11 +41,6 @@ import javafx.scene.control.DatePicker;
 import javafxexpendio.modelo.dao.VentaDAOImpl;
 import javafxexpendio.modelo.pojo.Promocion;
 
-/**
- * FXML Controller class
- *
- * @author zenbook i5
- */
 public class FXMLRegistrarVentaController implements Initializable, BebidaSeleccionListener {
 
     @FXML
@@ -123,7 +114,6 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
     private void btnClicConfirmarCompra(ActionEvent event) {
         if (validarDatosVenta()) {
             try {
-                // Preparar los detalles de la venta
                 List<Map<String, Object>> detallesVenta = new ArrayList<>();
             
                 for (DetalleVenta detalle : listaDetalleVenta) {
@@ -131,7 +121,6 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
                     detalleMap.put("idBebida", detalle.getBebida().getIdBebida());
                     detalleMap.put("cantidad", detalle.getCantidad());
                 
-                    // Verificar si hay promoción aplicada para esta bebida
                     if (promocionesAplicadas.containsKey(detalle.getBebida().getIdBebida())) {
                         detalleMap.put("idPromocion", promocionesAplicadas.get(detalle.getBebida().getIdBebida()).getIdPromocion());
                     }
@@ -147,7 +136,6 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
                 }
                 
                 
-                // Convertir LocalDate a Date si es necesario
                 Date fecha = Date.from(dpFechaVenta.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 
                 Integer idClienteParaVenta = null;
@@ -157,7 +145,6 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
                     idClienteParaVenta = clienteSeleccionado.getIdCliente();
                 }
                 
-                // Registrar la venta
                 VentaDAOImpl ventaDAO = new VentaDAOImpl();
                 Map<String, Object> resultado = ventaDAO.registrarVenta(
                         idClienteParaVenta,
@@ -170,7 +157,6 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
                     Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Venta registrada", 
                             "La venta ha sido registrada correctamente.");
                 
-                    // Limpiar la tabla y datos
                     listaDetalleVenta.clear();
                     promocionesAplicadas.clear();
                     lbTotalCompra.setText("0.0");
@@ -252,7 +238,7 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
         
         DetalleVenta detalle = new DetalleVenta();
         detalle.setBebida(bebida);
-        detalle.setCantidad(1); // Por defecto
+        detalle.setCantidad(1); 
         detalle.setPrecioBebida(bebida.getPrecio());
         detalle.setTotal(bebida.getPrecio());
         listaDetalleVenta.add(detalle);

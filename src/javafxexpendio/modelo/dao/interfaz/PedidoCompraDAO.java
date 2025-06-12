@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package javafxexpendio.modelo.dao.interfaz;
 
 import java.sql.SQLException;
@@ -10,10 +6,6 @@ import java.util.Map;
 import javafxexpendio.modelo.pojo.DetallePedidoProveedor;
 import javafxexpendio.modelo.pojo.PedidoProveedor;
 
-/**
- *
- * @author Dell
- */
 public interface PedidoCompraDAO {
     
     PedidoProveedor crear(PedidoProveedor pedido) throws SQLException;

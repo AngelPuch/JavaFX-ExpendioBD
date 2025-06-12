@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxexpendio.modelo.dao;
 
 import java.sql.Connection;
@@ -19,10 +15,6 @@ import javafxexpendio.modelo.pojo.ReporteProducto;
 import javafxexpendio.modelo.pojo.ProductoStockMinimo;
 import javafxexpendio.modelo.pojo.ReporteVenta;
 
-/**
- *
- * @author Dell
- */
 public class ReporteDAOImpl implements ReporteDAO{
  
     @Override

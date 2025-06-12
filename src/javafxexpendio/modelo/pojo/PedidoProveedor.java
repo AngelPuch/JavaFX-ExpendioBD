@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxexpendio.modelo.pojo;
 
 import java.time.LocalDate;
 import java.util.List;
 
-/**
- *
- * @author Dell
- */
 public class PedidoProveedor {
     private int idPedidoProveedor;
     private LocalDate fecha;

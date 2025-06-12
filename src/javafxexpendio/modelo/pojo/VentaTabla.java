@@ -2,10 +2,6 @@ package javafxexpendio.modelo.pojo;
 
 import java.util.Date;
 
-/**
- *
- * @author Dell
- */
 public class VentaTabla {
     private int idVenta;
     private Date fecha;

@@ -99,23 +99,20 @@ public class CompraDAOImpl implements CompraDAO {
     public boolean registrarCompra(Compra compra, List<DetalleCompra> detalles, int idPedidoProveedor) throws SQLException {
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion()) {
 
-            // Convertir detalles a JSON
             JSONArray detallesJson = new JSONArray();
             for (DetalleCompra detalle : detalles) {
                 JSONObject detalleJson = new JSONObject();
                 detalleJson.put("idBebida", detalle.getIdBebida());
                 detalleJson.put("cantidad", detalle.getCantidad());
                 detalleJson.put("precio_bebida", detalle.getPrecioBebida());
-                detallesJson.add(detalleJson); // Correcto para json-simple
+                detallesJson.add(detalleJson); 
             }
 
-            // Convertir pedidos relacionados a JSON
             JSONArray pedidosJson = new JSONArray();
             if (idPedidoProveedor > 0) {
-                pedidosJson.add(idPedidoProveedor); // Correcto para json-simple
+                pedidosJson.add(idPedidoProveedor); 
             }
 
-            // Llamar al procedimiento almacenado
             String sql = "{CALL sp_registrar_compra_completa(?, ?, ?, ?, ?, ?, ?)}";
             try (CallableStatement cs = conexionBD.prepareCall(sql)) {
                 cs.setObject(1, compra.getFecha());
@@ -135,8 +132,6 @@ public class CompraDAOImpl implements CompraDAO {
                     compra.setIdCompra(idCompra);
                     return true;
                 } else {
-                    // Si llegamos aquí, el procedimiento no generó un ID válido
-                    // pero tampoco lanzó una excepción
                     throw new SQLException("No se pudo registrar la compra: " + mensaje);
                 }
             }

@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
-
 package javafxexpendio.modelo.dao;
 
 import javafxexpendio.modelo.dao.interfaz.PedidoProveedorDAO;
@@ -27,17 +22,12 @@ import javafxexpendio.modelo.pojo.ProductoStockMinimo;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-/**
- *
- * @author Dell
- */
 public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
     
     @Override
     public boolean registrarPedidoProveedor(LocalDate fecha, int idProveedor, 
             String observaciones, List<Map<String, Object>> detallesPedido, PedidoProveedor pedidoResultado) throws SQLException {
 
-        // Convertir la lista de detalles a formato JSON
         JSONArray detallesJSON = new JSONArray();
 
         for (Map<String, Object> detalle : detallesPedido) {
@@ -45,7 +35,6 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
             detalleJSON.put("idBebida", detalle.get("idBebida"));
             detalleJSON.put("cantidad", detalle.get("cantidad"));
 
-            // El precio estimado es opcional
             if (detalle.containsKey("precioEstimado")) {
                 detalleJSON.put("precio_estimado", detalle.get("precioEstimado"));
             }
@@ -60,23 +49,20 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
             cs.setInt(2, idProveedor);
             cs.setString(3, observaciones);
             cs.setString(4, detallesJSON.toJSONString());
-            cs.registerOutParameter(5, Types.INTEGER); // idPedidoProveedor
-            cs.registerOutParameter(6, Types.VARCHAR); // mensaje
+            cs.registerOutParameter(5, Types.INTEGER); 
+            cs.registerOutParameter(6, Types.VARCHAR); 
 
             cs.execute();
 
-            // Obtener los resultados
             Integer idPedidoProveedor = cs.getInt(5);
             String mensaje = cs.getString(6);
 
             if (idPedidoProveedor != null && idPedidoProveedor > 0) {
-                // Si se proporcionó un objeto para recibir el resultado, actualizarlo
                 if (pedidoResultado != null) {
                     pedidoResultado.setIdPedidoProveedor(idPedidoProveedor);
                     pedidoResultado.setFecha(fecha);
                     pedidoResultado.setIdProveedor(idProveedor);
                     pedidoResultado.setObservaciones(observaciones);
-                    // Otros campos que necesites establecer
                 }
                 return true;
             } else {

@@ -88,11 +88,10 @@ public class FXMLAdminReporteController implements Initializable {
     private void configurarToggleGroup() {
         tgReportes.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                // Ocultar todos los filtros
+                
                 vbFiltroPeriodo.setVisible(false);
                 vbFiltroCliente.setVisible(false);
                 
-                // Mostrar filtros según el reporte seleccionado
                 if (newValue == rbVentasPeriodo) {
                     vbFiltroPeriodo.setVisible(true);
                     reporteActual = "ventasPeriodo";

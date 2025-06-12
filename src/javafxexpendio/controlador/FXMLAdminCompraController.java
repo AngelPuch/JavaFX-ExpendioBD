@@ -205,10 +205,8 @@ public class FXMLAdminCompraController implements Initializable {
             return;
         }
         
-        // Cargar detalle del pedido seleccionado
         cargarDetallePedido(pedidoSeleccionado.getIdPedidoProveedor());
         
-        // Habilitar sección de detalle
         habilitarSeccionDetalle(true);
     }
 
@@ -246,11 +244,9 @@ public class FXMLAdminCompraController implements Initializable {
                             return;
                         }
                         
-                        // Actualizar detalle
                         detalleSeleccionado.setCantidad(nuevaCantidad);
                         detalleSeleccionado.setPrecioBebida(nuevoPrecio);
                         
-                        // Actualizar tabla
                         tvDetallePedido.refresh();
                         
                     } catch (NumberFormatException ex) {

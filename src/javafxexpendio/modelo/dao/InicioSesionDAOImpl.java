@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxexpendio.modelo.dao;
 
 import javafxexpendio.modelo.dao.interfaz.InicioSesionDAO;
@@ -13,10 +9,6 @@ import javafxexpendio.modelo.ConexionBD;
 import javafxexpendio.modelo.pojo.Usuario;
 import javafxexpendio.utilidades.Utilidad;
 
-/**
- *
- * @author Dell
- */
 public class InicioSesionDAOImpl implements InicioSesionDAO{
 
     @Override
@@ -33,7 +25,6 @@ public class InicioSesionDAOImpl implements InicioSesionDAO{
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String hashGuardado = rs.getString("password");
-                    // Aquí verifica la contraseña
                     if (Utilidad.verificarPassword(password, hashGuardado)) {
                         usuarioSesion = convertirRegistroUsuario(rs);
                     }

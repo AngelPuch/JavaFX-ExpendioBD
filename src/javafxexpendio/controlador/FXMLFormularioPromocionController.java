@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxexpendio.controlador;
 
 import java.net.URL;
@@ -32,11 +28,6 @@ import javafxexpendio.modelo.pojo.Proveedor;
 import javafxexpendio.modelo.pojo.Usuario;
 import javafxexpendio.utilidades.Utilidad;
 
-/**
- * FXML Controller class
- *
- * @author Dell
- */
 public class FXMLFormularioPromocionController implements Initializable {
 
     @FXML
@@ -124,7 +115,6 @@ public class FXMLFormularioPromocionController implements Initializable {
                 dpFechaInicio.setValue(fechaInicio);
             }
 
-            // Convertir la fecha de fin
             if (promocionEdicion.getFechaFin() != null) {
                 LocalDate fechaFin = LocalDate.parse(promocionEdicion.getFechaFin().toString());
                 dpFechaFin.setValue(fechaFin);
@@ -144,7 +134,6 @@ public class FXMLFormularioPromocionController implements Initializable {
 
         // Validar bebida seleccionada
         if (cbBebida.getValue() == null) {
-            // Asegúrate de tener un Label llamado lbBebidaError
             lbBebidaError.setText("*Campo obligatorio");
             esValido = false;
         } else {

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxexpendio.modelo.dao;
 
 import java.sql.Connection;
@@ -18,10 +14,6 @@ import javafxexpendio.modelo.pojo.DetalleVenta;
 import javafxexpendio.modelo.pojo.Venta;
 import javafxexpendio.modelo.pojo.VentaTabla;
 
-/**
- *
- * @author Dell
- */
 public class VentaTablaDAOImpl implements VentaTablaDAO{
     
     @Override
@@ -159,12 +151,9 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
         detalle.setTotal(rs.getDouble("total"));
         detalle.setPrecioConDescuento(rs.getDouble("precio_con_descuento"));
 
-        // Crear objeto Bebida
         Bebida bebida = new Bebida();
         bebida.setIdBebida(rs.getInt("idBebida"));
         bebida.setBebida(rs.getString("bebida"));
-        // Si necesitas más campos de bebida, deberías modificar la consulta SQL
-        // para incluir esos campos adicionales
 
         detalle.setBebida(bebida);
 
@@ -188,7 +177,6 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
         venta.setFecha(rs.getDate("fecha"));
         venta.setFolioFactura(rs.getString("folio_factura"));
         
-        // Si hay un cliente asociado, crearlo
         int idCliente = rs.getInt("idCliente");
         if (idCliente > 0) {
             Cliente cliente = new Cliente();

@@ -26,7 +26,6 @@ public class VentaDAOImpl implements VentaDAO {
             List<Map<String, Object>> detallesVenta) throws SQLException {
         Map<String, Object> resultado = new HashMap<>();
         
-        // Convertir la lista de detalles a formato JSON
         JSONArray detallesJSON = new JSONArray();
         
         for (Map<String, Object> detalle : detallesVenta) {
@@ -34,7 +33,6 @@ public class VentaDAOImpl implements VentaDAO {
             detalleJSON.put("idBebida", detalle.get("idBebida"));
             detalleJSON.put("cantidad", detalle.get("cantidad"));
             
-            // La promoción es opcional
             if (detalle.containsKey("idPromocion")) {
                 detalleJSON.put("idPromocion", detalle.get("idPromocion"));
             }
@@ -52,11 +50,10 @@ public class VentaDAOImpl implements VentaDAO {
             cs.setDate(2, Date.valueOf(fecha));
             cs.setString(3, folioFactura);
             cs.setString(4, detallesJSON.toJSONString());
-            cs.registerOutParameter(5, Types.INTEGER); // idVenta
-            cs.registerOutParameter(6, Types.VARCHAR); // mensaje
+            cs.registerOutParameter(5, Types.INTEGER); 
+            cs.registerOutParameter(6, Types.VARCHAR); 
             cs.execute();
             
-            // Obtener los resultados
             Integer idVenta = cs.getInt(5);
             String mensaje = cs.getString(6);
             
@@ -101,7 +98,6 @@ public class VentaDAOImpl implements VentaDAO {
         return promociones;
     }
     
-    // Método para calcular el precio con descuento (útil para mostrar en la interfaz antes de guardar)
     public double calcularPrecioConDescuento(double precioOriginal, double porcentajeDescuento) {
         return precioOriginal - (precioOriginal * porcentajeDescuento / 100);
     }

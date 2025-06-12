@@ -159,10 +159,8 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
 
         resultado = ventaDAO.registrarVenta(idCliente, fechaVenta, folioFactura, detallesVenta);
         
-        // Obtener el idVenta generado
         Integer idVenta = (Integer) resultado.get("idVenta");
         if (idVenta != null && idVenta > 0) {
-            // Actualizar el pedido con el idVenta
             boolean actualizado = actualizarIdVentaEnPedido(idPedido, idVenta);
             if (!actualizado) {
                 throw new SQLException("No se pudo actualizar el idVenta en el pedido.");

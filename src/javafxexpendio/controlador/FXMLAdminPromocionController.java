@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxexpendio.controlador;
 
 import java.net.URL;
@@ -31,11 +27,6 @@ import javafxexpendio.modelo.dao.PromocionDAOImpl;
 import javafxexpendio.modelo.pojo.Promocion;
 import javafxexpendio.utilidades.Utilidad;
 
-/**
- * FXML Controller class
- *
- * @author Dell
- */
 public class FXMLAdminPromocionController implements Initializable, Notificacion {
 
     @FXML
@@ -91,7 +82,6 @@ public class FXMLAdminPromocionController implements Initializable, Notificacion
         colFechaInicio.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
         colFechaFin.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
 
-        // Columna "estado" calculada dinámicamente
         colEstado.setCellValueFactory(cellData -> {
             Promocion promocion = cellData.getValue();
             String estado = "Vigente";

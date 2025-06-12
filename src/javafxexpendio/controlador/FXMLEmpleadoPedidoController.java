@@ -212,7 +212,6 @@ public class FXMLEmpleadoPedidoController implements Initializable {
             if ((boolean) resultado.get("exito")) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Venta registrada", 
                             "La venta ha sido registrada correctamente.");
-                // Actualizar estado del pedido a "Realizado"
                 boolean actualizado = pedidoClienteDAO.actualizarEstadoPedido(idPedido, 2);
                 if (!actualizado) {
                     Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", "No se pudo actualizar el estado del pedido.");
@@ -255,7 +254,6 @@ public class FXMLEmpleadoPedidoController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
-            // Después de cerrar, recargar pedidos pendientes
             cargarPedidosPendientes();
             tvBebidasVenta.setDisable(true);
             dpFechaVenta.setDisable(true);

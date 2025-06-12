@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxexpendio.controlador;
 
 import java.net.URL;
@@ -37,11 +33,6 @@ import javafx.stage.Stage;
 import javafxexpendio.modelo.dao.VentaDAOImpl;
 import javafxexpendio.modelo.pojo.Promocion;
 
-/**
- * FXML Controller class
- *
- * @author zenbook i5
- */
 public class FXMLBebidasController implements Initializable {
 
     @FXML
@@ -72,8 +63,6 @@ public class FXMLBebidasController implements Initializable {
         this.clicAgregarBebidaPedido = clicAgregarBebidaPedido;
     }
     
-    
-
     /**
      * Initializes the controller class.
      */
@@ -125,12 +114,11 @@ public class FXMLBebidasController implements Initializable {
             List<Map<String, Object>> promocionesDisponibles = ventaDAO.obtenerPromocionesDisponibles(bebida.getIdBebida());
         
             if (!promocionesDisponibles.isEmpty() && !clicAgregarBebidaPedido) {
-                // Hay promociones disponibles, mostrar diálogo
+                
                 Map<String, Object> datosPromocion = promocionesDisponibles.get(0);
                 boolean aplicarPromocion = mostrarDialogoPromocion(bebida, datosPromocion);
             
                 if (aplicarPromocion) {
-                    // Crear objeto Promocion con los datos
                     Promocion promocion = new Promocion();
                     promocion.setIdPromocion((int) datosPromocion.get("idPromocion"));
                     promocion.setDescuento((double) datosPromocion.get("descuento"));
@@ -142,28 +130,24 @@ public class FXMLBebidasController implements Initializable {
                     promocion.setFechaFin(Date.from(localFechaFin.atStartOfDay(ZoneId.systemDefault()).toInstant()));
                     promocion.setBebida(bebida);
                     
-                    // Aplicar descuento al precio de la bebida
+                    
                     double precioConDescuento = ventaDAO.calcularPrecioConDescuento(bebida.getPrecio(), promocion.getDescuento());
                 
-                    // Crear una copia de la bebida con el precio modificado
                     Bebida bebidaConPromocion = new Bebida();
                     bebidaConPromocion.setIdBebida(bebida.getIdBebida());
                     bebidaConPromocion.setBebida(bebida.getBebida() + " (Promoción aplicada)");
                     bebidaConPromocion.setPrecio(precioConDescuento);
                     bebidaConPromocion.setStock(bebida.getStock());
                 
-                    // Pasar la bebida con promoción al listener
                     if (listener != null) {
                         listener.onBebidaSeleccionada(bebidaConPromocion, promocion);
                     }
                 } else {
-                    // Pasar la bebida sin promoción
                     if (listener != null) {
                         listener.onBebidaSeleccionada(bebida, null);
                     }
                 }
             } else {
-                // No hay promociones, pasar la bebida normalmente
                 if (listener != null) {
                     listener.onBebidaSeleccionada(bebida, null);
                 }
@@ -175,7 +159,6 @@ public class FXMLBebidasController implements Initializable {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
                     "No se pudieron verificar las promociones disponibles: " + ex.getMessage());
         
-            // En caso de error, pasar la bebida sin promoción
             if (listener != null) {
                 listener.onBebidaSeleccionada(bebida, null);
             }

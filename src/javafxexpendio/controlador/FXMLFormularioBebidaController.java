@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxexpendio.controlador;
 
 import java.net.URL;
@@ -29,11 +25,6 @@ import javafxexpendio.modelo.pojo.Usuario;
 import javafxexpendio.utilidades.Utilidad;
 import static javafxexpendio.utilidades.Utilidad.mostrarDialogoEntrada;
 
-/**
- * FXML Controller class
- *
- * @author Dell
- */
 public class FXMLFormularioBebidaController implements Initializable {
 
     @FXML
@@ -82,7 +73,6 @@ public class FXMLFormularioBebidaController implements Initializable {
         cargarContenidoNeto();
     } 
     
-    //Función integrada para el observador
     public void inicializarInformacion(boolean isEdicion, Bebida bebidaEdicion, Notificacion observador, Usuario usuarioSesion) {
         this.bebidaEdicion = bebidaEdicion;
         this.isEdicion = isEdicion;
@@ -252,7 +242,6 @@ public class FXMLFormularioBebidaController implements Initializable {
             if (bebidaDAOImpl.crear(bebida)) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Bebida registrada", 
                         "La bebida fue registrada con exito");
-                //Llamada al método de la interfaz para actualizar tabla
                 observador.operacionExitosa();
             } else {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al registrar", 
@@ -269,7 +258,6 @@ public class FXMLFormularioBebidaController implements Initializable {
             if (bebidaDAOImpl.actualizar(bebida)) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Bebida actualizada", 
                         "La bebida fue actualizada con exito");
-                //Llamada al método de la interfaz para actualizar tabla
                 observador.operacionExitosa();
             } else {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al actualizar", 

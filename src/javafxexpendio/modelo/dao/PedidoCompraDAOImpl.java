@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package javafxexpendio.modelo.dao;
  import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,10 +13,6 @@ import javafxexpendio.modelo.dao.interfaz.PedidoCompraDAO;
 import javafxexpendio.modelo.pojo.DetallePedidoProveedor;
 import javafxexpendio.modelo.pojo.PedidoProveedor; 
 
-/**
- *
- * @author Dell
- */
 public class PedidoCompraDAOImpl implements PedidoCompraDAO{
 
     @Override
@@ -113,7 +105,7 @@ public class PedidoCompraDAOImpl implements PedidoCompraDAO{
                 + "JOIN proveedor p ON pp.idProveedor = p.idProveedor "
                 + "JOIN estado_pedido ep ON pp.idEstadoPedido = ep.idEstadoPedido "
                 + "JOIN detalle_pedido_proveedor dpp ON pp.idPedidoProveedor = dpp.idPedidoProveedor "
-                + "WHERE pp.idProveedor = ? AND pp.idEstadoPedido = 1 " // En espera
+                + "WHERE pp.idProveedor = ? AND pp.idEstadoPedido = 1 " 
                 + "GROUP BY pp.idPedidoProveedor";
         
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();

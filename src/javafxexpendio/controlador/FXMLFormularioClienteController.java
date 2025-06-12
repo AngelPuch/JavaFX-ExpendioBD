@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxexpendio.controlador;
 
 import java.net.URL;
@@ -21,11 +17,6 @@ import javafxexpendio.modelo.dao.ClienteDAOImpl;
 import javafxexpendio.modelo.pojo.Cliente;
 import javafxexpendio.utilidades.Utilidad;
 
-/**
- * FXML Controller class
- *
- * @author grill
- */
 public class FXMLFormularioClienteController implements Initializable {
 
     @FXML
@@ -162,7 +153,6 @@ public class FXMLFormularioClienteController implements Initializable {
             if (clienteDAOImpl.crear(cliente)) { 
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Cliente registrado",
                         "El cliente fue registrado con éxito");
-                //Llamada al método de la interfaz para actualizar tabla
                 observador.operacionExitosa();
             } else {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al registrar", 
@@ -179,7 +169,6 @@ public class FXMLFormularioClienteController implements Initializable {
             if (clienteDAOImpl.actualizar(clienteEdicion)) { 
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Cliente actualizado",
                         "El cliente fue actualizado con éxito");
-                //Llamada al método de la interfaz para actualizar tabla
                 observador.operacionExitosa();
             } else {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error al registrar", 

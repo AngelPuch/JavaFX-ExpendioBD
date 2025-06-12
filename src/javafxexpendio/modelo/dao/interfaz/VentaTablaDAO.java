@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package javafxexpendio.modelo.dao.interfaz;
 
 import java.sql.Date;
@@ -11,10 +7,6 @@ import javafxexpendio.modelo.pojo.DetalleVenta;
 import javafxexpendio.modelo.pojo.Venta;
 import javafxexpendio.modelo.pojo.VentaTabla;
 
-/**
- *
- * @author Dell
- */
 public interface VentaTablaDAO {
     
     ArrayList<VentaTabla> obtenerTodasLasVentasTabla() throws SQLException;

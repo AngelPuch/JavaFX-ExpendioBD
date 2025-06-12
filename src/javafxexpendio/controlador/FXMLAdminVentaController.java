@@ -224,10 +224,8 @@ public class FXMLAdminVentaController implements Initializable {
     }
     
     private void mostrarEstadisticasVenta() {
-        // Actualizar contador de ventas
         lbTotalVentas.setText(String.valueOf(listaVentas.size()));
 
-        // Calcular ingresos totales
         double ingresosTotales = 0.0;
         for (VentaTabla venta : listaVentas) {
             ingresosTotales += venta.getTotal();

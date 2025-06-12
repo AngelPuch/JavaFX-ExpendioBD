@@ -124,12 +124,10 @@ public class FXMLFormularioUsuarioController implements Initializable {
         
         // Validar password solo si es nuevo usuario o si se ha ingresado algo en el campo
         if (!isEdicion) {
-            // Para nuevo usuario, siempre validar password
             if (!validarPassword()) {
                 esValido = false;
             }
         } else {
-            // Para edición, validar password solo si se ha ingresado algo
             String password = pfPassword.getText().trim();
             if (!password.isEmpty() && !validarPassword()) {
                 esValido = false;
@@ -204,7 +202,6 @@ public class FXMLFormularioUsuarioController implements Initializable {
         usuario.setApellidoMaterno(tfApellidoMaterno.getText().trim());
         usuario.setUsername(tfUsername.getText().trim());
         
-        // Si el campo de contraseña está vacío, mantener la contraseña actual
         String password = pfPassword.getText().trim();
         if (password.isEmpty()) {
             usuario.setPassword(usuarioEdicion.getPassword());
