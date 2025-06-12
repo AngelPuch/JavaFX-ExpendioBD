@@ -228,7 +228,13 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
 
     @FXML
     private void btnClicEliminarBebida(ActionEvent event) {
-        listaDetalleVenta.remove(tvBebidasVenta.getSelectionModel().getSelectedIndex());
+        if (tvBebidasVenta.getSelectionModel().getSelectedItem() != null) {
+            listaDetalleVenta.remove(tvBebidasVenta.getSelectionModel().getSelectedIndex());
+        } else {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Sin selección",
+                "Por favor, selecciona una bebida primero.");
+        }
+        
         tvBebidasVenta.refresh();
         mostrarTotalCompra();
     }
