@@ -128,7 +128,13 @@ public class FXMLRegistrarVentaController implements Initializable, BebidaSelecc
                     detallesVenta.add(detalleMap);
                 }
                 String folioFactura;
-                boolean requiereFactura = Utilidad.mostrarAlertaConfirmacion("Confirmar factura", "¿El cliente quiere facturar?", "Se generara el folio de la factura automáticamente");
+                boolean requiereFactura;
+                if (cbCliente.getSelectionModel().getSelectedItem() != null) {
+                    requiereFactura = Utilidad.mostrarAlertaConfirmacion("Confirmar factura", "¿El cliente quiere facturar?", "Se generara el folio de la factura automáticamente");
+                } else {
+                    requiereFactura = false;
+                }
+                
                 if (requiereFactura) {
                     folioFactura = "F-" + System.currentTimeMillis();
                 } else {
