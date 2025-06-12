@@ -131,8 +131,7 @@ public class FXMLFormularioPromocionController implements Initializable {
     
     private boolean validarCampos() {
         boolean esValido = true;
-
-        // Validar bebida seleccionada
+        
         if (cbBebida.getValue() == null) {
             lbBebidaError.setText("*Campo obligatorio");
             esValido = false;
@@ -140,7 +139,6 @@ public class FXMLFormularioPromocionController implements Initializable {
             lbBebidaError.setText("");
         }
 
-        // Validar descripción
         if (tfDescripcion.getText().trim().isEmpty()) {
             lbDescripcionError.setText("*Campo obligatorio");
             esValido = false;
@@ -148,7 +146,6 @@ public class FXMLFormularioPromocionController implements Initializable {
             lbDescripcionError.setText("");
         }
 
-        // Validar descuento (obligatorio y debe ser número entre 0 y 100)
         String descuentoTexto = tfDescuento.getText().trim();
         if (descuentoTexto.isEmpty()) {
             lbDescuentoError.setText("*Campo obligatorio");
@@ -167,16 +164,18 @@ public class FXMLFormularioPromocionController implements Initializable {
                 esValido = false;
             }
         }
+        LocalDate fechaActual = LocalDate.now();
 
-        // Validar fecha inicio
         if (dpFechaInicio.getValue() == null) {
             lbFechaInicioError.setText("*Campo obligatorio");
+            esValido = false;
+        } else if (dpFechaInicio.getValue().isBefore(fechaActual) && !isEdicion) {
+            lbFechaInicioError.setText("*La fecha no puede ser pasada");
             esValido = false;
         } else {
             lbFechaInicioError.setText("");
         }
 
-        // Validar fecha fin
         if (dpFechaFin.getValue() == null) {
             lbFechaFinError.setText("*Campo obligatorio");
             esValido = false;

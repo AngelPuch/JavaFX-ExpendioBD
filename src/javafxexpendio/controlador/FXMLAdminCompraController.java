@@ -281,6 +281,13 @@ public class FXMLAdminCompraController implements Initializable {
 
     @FXML
     private void btnClicRegistrar(ActionEvent event) {
+        String folioFactura = tfFolioFactura.getText();
+        if (folioFactura == null || folioFactura.trim().isEmpty()) {
+            Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Campo obligatorio", 
+                    "Debe ingresar el folio de la factura para registrar la compra.");
+            return;
+        }
+        
         if (detallesCompra.isEmpty()) {
             Utilidad.mostrarAlertaSimple(Alert.AlertType.WARNING, "Compra vacía", 
                     "No hay productos en la compra");
