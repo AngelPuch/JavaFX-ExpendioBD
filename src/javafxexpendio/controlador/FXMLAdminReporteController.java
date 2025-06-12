@@ -404,9 +404,6 @@ public class FXMLAdminReporteController implements Initializable {
     private void configurarTablaMasMenosVendido(List<ReporteProducto> listaProducto) {
         tvReporte.getColumns().clear();
         
-        TableColumn<ReporteProducto, Integer> colIdBebida = new TableColumn<>("Número venta");
-        colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
-        
         TableColumn<ReporteProducto, String> colNombre = new TableColumn<>("Producto");
         colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombreBebida()));
         
@@ -418,15 +415,12 @@ public class FXMLAdminReporteController implements Initializable {
         colTotal.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalRecaudado()).asObject());
         colTotal.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        tvReporte.getColumns().addAll(colIdBebida, colNombre, colCantidad, colTotal);
+        tvReporte.getColumns().addAll(colNombre, colCantidad, colTotal);
         tvReporte.setItems(FXCollections.observableArrayList(listaProducto));
     }
     
     private void configurarTablaReporteStockMinimo(List<ProductoStockMinimo> productos) {
         tvReporte.getColumns().clear();
-        
-        TableColumn<ProductoStockMinimo, Integer> colIdBebida = new TableColumn<>("Número venta");
-        colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
         
         TableColumn<ProductoStockMinimo, String> colNombre = new TableColumn<>("Producto");
         colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNombreBebida()));
@@ -447,18 +441,15 @@ public class FXMLAdminReporteController implements Initializable {
         colPrecio.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrecio()).asObject());
         colPrecio.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        tvReporte.getColumns().addAll(colIdBebida, colNombre, colStock, colStockMin, colDiferencia, colPrecio);
+        tvReporte.getColumns().addAll(colNombre, colStock, colStockMin, colDiferencia, colPrecio);
         tvReporte.setItems(FXCollections.observableArrayList(productos));
     }
     
     private void configurarTablaProductoNoVendido(List<Bebida> productos) {
         tvReporte.getColumns().clear();
         
-        TableColumn<Bebida, Integer> colIdBebida = new TableColumn<>("Número venta");
-        colIdBebida.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getIdBebida()).asObject());
-        
         TableColumn<Bebida, String> colNombre = new TableColumn<>("Producto");
-        colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBebida()));
+        colNombre.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().toString()));
         
         TableColumn<Bebida, Integer> colStock = new TableColumn<>("Stock");
         colStock.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getStock()).asObject());
@@ -468,7 +459,7 @@ public class FXMLAdminReporteController implements Initializable {
         colPrecio.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrecio()).asObject());
         colPrecio.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        tvReporte.getColumns().addAll(colIdBebida, colNombre, colStock, colPrecio);
+        tvReporte.getColumns().addAll(colNombre, colStock, colPrecio);
         tvReporte.setItems(FXCollections.observableArrayList(productos));
     }
     

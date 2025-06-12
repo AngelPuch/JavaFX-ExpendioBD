@@ -31,6 +31,7 @@
                 <TableColumn fx:id="colStock" prefWidth="80.0" text="Stock" />
                 <TableColumn fx:id="colStockMinimo" prefWidth="100.0" text="Stock Mínimo" />
                 <TableColumn fx:id="colPrecio" prefWidth="100.0" text="Precio" />
+                  <TableColumn fx:id="colContenidoNeto" prefWidth="75.0" text="Contenido neto" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

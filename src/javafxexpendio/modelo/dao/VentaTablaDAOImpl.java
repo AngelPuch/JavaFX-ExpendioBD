@@ -35,7 +35,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
                           "GROUP BY v.idVenta " +
                           "ORDER BY v.fecha DESC";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             
@@ -58,7 +58,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
                           "LEFT JOIN cliente c ON v.idCliente = c.idCliente " +
                           "WHERE v.idVenta = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, idVenta);
             
@@ -86,7 +86,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
                           "GROUP BY v.idVenta " +
                           "ORDER BY v.fecha DESC";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setDate(1, fechaInicio);
             ps.setDate(2, fechaFin);
@@ -113,7 +113,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
                           "ORDER BY cantidad DESC " +
                           "LIMIT 1";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             
@@ -135,7 +135,7 @@ public class VentaTablaDAOImpl implements VentaTablaDAO{
                           "JOIN bebida b ON dv.idBebida = b.idBebida " +
                           "WHERE dv.idVenta = ?";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, idVenta);
 

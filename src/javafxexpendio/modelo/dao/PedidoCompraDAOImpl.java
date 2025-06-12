@@ -27,8 +27,8 @@ public class PedidoCompraDAOImpl implements PedidoCompraDAO{
     public PedidoProveedor crear(PedidoProveedor pedido) throws SQLException {
         String consulta = "INSERT INTO pedido_proveedor (fecha, idProveedor, idEstadoPedido, observaciones) VALUES (?, ?, ?, ?)";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS)) {
             
             ps.setObject(1, pedido.getFecha());
             ps.setInt(2, pedido.getIdProveedor());
@@ -60,8 +60,8 @@ public class PedidoCompraDAOImpl implements PedidoCompraDAO{
                 + "JOIN estado_pedido ep ON pp.idEstadoPedido = ep.idEstadoPedido "
                 + "WHERE pp.idPedidoProveedor = ?";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -86,8 +86,8 @@ public class PedidoCompraDAOImpl implements PedidoCompraDAO{
                 + "JOIN estado_pedido ep ON pp.idEstadoPedido = ep.idEstadoPedido "
                 + "ORDER BY pp.fecha DESC";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta);
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta);
                 ResultSet rs = ps.executeQuery()) {
             
             while (rs.next()) {
@@ -116,8 +116,8 @@ public class PedidoCompraDAOImpl implements PedidoCompraDAO{
                 + "WHERE pp.idProveedor = ? AND pp.idEstadoPedido = 1 " // En espera
                 + "GROUP BY pp.idPedidoProveedor";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setInt(1, idProveedor);
             try (ResultSet rs = ps.executeQuery()) {
@@ -141,8 +141,8 @@ public class PedidoCompraDAOImpl implements PedidoCompraDAO{
                 + "JOIN bebida b ON dpp.idBebida = b.idBebida "
                 + "WHERE dpp.idPedidoProveedor = ?";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setInt(1, idPedidoProveedor);
             try (ResultSet rs = ps.executeQuery()) {
@@ -162,8 +162,8 @@ public class PedidoCompraDAOImpl implements PedidoCompraDAO{
     public boolean actualizarEstadoPedido(int idPedidoProveedor, int idEstadoPedido) throws SQLException {
         String consulta = "UPDATE pedido_proveedor SET idEstadoPedido = ? WHERE idPedidoProveedor = ?";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setInt(1, idEstadoPedido);
             ps.setInt(2, idPedidoProveedor);

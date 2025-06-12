@@ -42,7 +42,7 @@ public class VentaDAOImpl implements VentaDAO {
             detallesJSON.add(detalleJSON);
         }
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              CallableStatement cs = conexionBD.prepareCall("{CALL sp_registrar_venta_completa(?, ?, ?, ?, ?, ?)}")) {
             if (idCliente != null) {
                 cs.setInt(1, idCliente);
@@ -76,7 +76,7 @@ public class VentaDAOImpl implements VentaDAO {
         List<Map<String, Object>> promociones = new ArrayList<>();
         String consulta = "{CALL sp_obtener_promociones_bebida(?)}";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              CallableStatement cs = conexionBD.prepareCall(consulta)) {
             
             cs.setInt(1, idBebida);

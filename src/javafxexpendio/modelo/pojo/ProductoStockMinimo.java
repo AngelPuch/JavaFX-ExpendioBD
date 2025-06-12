@@ -11,6 +11,7 @@ package javafxexpendio.modelo.pojo;
 public class ProductoStockMinimo {
     private int idBebida;
     private String nombreBebida;
+    private String contenido_neto;
     private int stock;
     private int stockMinimo;
     private double precio;
@@ -26,7 +27,7 @@ public class ProductoStockMinimo {
     }
     
     public String getNombreBebida() {
-        return nombreBebida;
+        return nombreBebida + " " + contenido_neto;
     }
     
     public void setNombreBebida(String nombreBebida) {
@@ -63,6 +64,14 @@ public class ProductoStockMinimo {
     
     public void setDiferencia(int diferencia) {
         this.diferencia = diferencia;
+    }
+
+    public String getContenido_neto() {
+        return contenido_neto;
+    }
+
+    public void setContenido_neto(String contenido_neto) {
+        this.contenido_neto = contenido_neto;
     }
 
     

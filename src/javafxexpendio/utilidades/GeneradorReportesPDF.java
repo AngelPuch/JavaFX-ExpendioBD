@@ -250,7 +250,7 @@ public class GeneradorReportesPDF {
         tabla.setWidths(anchos);
         agregarEncabezadoTabla(tabla, new String[]{"Producto", "Stock", "Precio"});
         for (Bebida producto : productos) {
-            tabla.addCell(producto.getBebida());
+            tabla.addCell(producto.toString());
             tabla.addCell(String.valueOf(producto.getStock()));
             tabla.addCell("$" + String.format("%.2f", producto.getPrecio()));
         }

@@ -118,9 +118,18 @@ public class FXMLFormularioPromocionController implements Initializable {
         if (promocionEdicion != null) {
             tfDescripcion.setText(promocionEdicion.getDescripcion());
             tfDescuento.setText(String.valueOf(promocionEdicion.getDescuento()));
-            dpFechaInicio.setValue(promocionEdicion.getFechaInicio().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-            dpFechaFin.setValue(promocionEdicion.getFechaFin().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            
+            if (promocionEdicion.getFechaInicio() != null) {
+                LocalDate fechaInicio = LocalDate.parse(promocionEdicion.getFechaInicio().toString());
+                dpFechaInicio.setValue(fechaInicio);
+            }
 
+            // Convertir la fecha de fin
+            if (promocionEdicion.getFechaFin() != null) {
+                LocalDate fechaFin = LocalDate.parse(promocionEdicion.getFechaFin().toString());
+                dpFechaFin.setValue(fechaFin);
+            }
+            
             for (Bebida bebida : bebidas) {
                 if (bebida.getIdBebida() == promocionEdicion.getBebida().getIdBebida()) {
                     cbBebida.setValue(bebida);
@@ -245,7 +254,7 @@ public class FXMLFormularioPromocionController implements Initializable {
         promocion.setDescripcion(tfDescripcion.getText().trim());
 
         String descuentoTexto = tfDescuento.getText().trim();
-        promocion.setDescuento(descuentoTexto.isEmpty() ? 0 : Integer.parseInt(descuentoTexto));
+        promocion.setDescuento(descuentoTexto.isEmpty() ? 0 : Double.parseDouble(descuentoTexto));
 
         LocalDate fechaInicio = dpFechaInicio.getValue();
         LocalDate fechaFin = dpFechaFin.getValue();

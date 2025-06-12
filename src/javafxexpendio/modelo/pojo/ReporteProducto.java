@@ -11,6 +11,7 @@ package javafxexpendio.modelo.pojo;
 public class ReporteProducto {
     private int idBebida;
     private String nombreBebida;
+    private String contenido_neto;
     private int cantidadVendida;
     private double totalRecaudado;
     
@@ -24,7 +25,7 @@ public class ReporteProducto {
     }
     
     public String getNombreBebida() {
-        return nombreBebida;
+        return nombreBebida + " " + contenido_neto;
     }
     
     public void setNombreBebida(String nombreBebida) {
@@ -46,4 +47,14 @@ public class ReporteProducto {
     public void setTotalRecaudado(double totalRecaudado) {
         this.totalRecaudado = totalRecaudado;
     }
+
+    public String getContenido_neto() {
+        return contenido_neto;
+    }
+
+    public void setContenido_neto(String contenido_neto) {
+        this.contenido_neto = contenido_neto;
+    }
+    
+    
 }

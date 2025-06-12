@@ -18,7 +18,7 @@ public class UsuarioDAOImpl implements CrudDAO<Usuario> {
         String sentencia = "INSERT INTO usuario (username, nombre, apellidoPaterno, apellidoMaterno, idTipoUsuario, password) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosUsuario(ps, usuario);
             return ps.executeUpdate() > 0;
@@ -36,7 +36,7 @@ public class UsuarioDAOImpl implements CrudDAO<Usuario> {
                 + "JOIN tipoUsuario t ON u.idTipoUsuario = t.idTipoUsuario "
                 + "WHERE u.idUsuario = ?";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -56,7 +56,7 @@ public class UsuarioDAOImpl implements CrudDAO<Usuario> {
         String sentencia = "UPDATE usuario SET username = ?, nombre = ?, apellidoPaterno = ?, apellidoMaterno = ?, idTipoUsuario = ?, password = ? "
                 + "WHERE idUsuario = ?";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosUsuario(ps, usuario);
             ps.setInt(7, usuario.getIdUsuario());
@@ -70,7 +70,7 @@ public class UsuarioDAOImpl implements CrudDAO<Usuario> {
     public boolean eliminar(Integer id) throws SQLException {
         String sentencia = "DELETE FROM usuario WHERE idUsuario = ?";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
@@ -87,7 +87,7 @@ public class UsuarioDAOImpl implements CrudDAO<Usuario> {
                 + "FROM usuario u "
                 + "JOIN tipoUsuario t ON u.idTipoUsuario = t.idTipoUsuario";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -103,7 +103,7 @@ public class UsuarioDAOImpl implements CrudDAO<Usuario> {
         List<TipoUsuario> listaTipoUsuarios = new ArrayList<>();
         String consulta = "SELECT idTipoUsuario, tipo FROM tipoUsuario";
         
-        try(Connection conexionBD = ConexionBD.abrirConexion();
+        try(Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta);
                 ResultSet rs = ps.executeQuery()) {
             while (rs.next()){

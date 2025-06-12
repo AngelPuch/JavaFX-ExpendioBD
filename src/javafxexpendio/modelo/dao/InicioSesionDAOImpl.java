@@ -27,7 +27,7 @@ public class InicioSesionDAOImpl implements InicioSesionDAO{
                 + "JOIN tipoUsuario t ON u.idTipoUsuario = t.idTipoUsuario "
                 + "WHERE username = ?";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {

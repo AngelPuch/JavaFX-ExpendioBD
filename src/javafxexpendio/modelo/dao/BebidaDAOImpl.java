@@ -25,7 +25,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
         String sentencia = "INSERT INTO bebida (bebida, stock, stock_minimo, precio, contenido_neto) "
                 + "VALUES(?, ?, ?, ?, ?)";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosBebida(ps, bebida);
             return ps.executeUpdate() > 0;
@@ -40,7 +40,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
         String consulta = "SELECT idBebida, bebida, stock, stock_minimo, precio, contenido_neto "
                 + "FROM bebida WHERE idBebida = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -60,7 +60,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
         String sentencia = "UPDATE bebida SET bebida = ?, stock = ?, stock_minimo = ?, precio = ?, contenido_neto = ? "
                 + "WHERE idBebida = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosBebida(ps, bebida);
             ps.setInt(6, bebida.getIdBebida());
@@ -74,7 +74,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
     public boolean eliminar(Integer id) throws SQLException {
         String sentencia = "DELETE FROM bebida WHERE idBebida = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
@@ -92,7 +92,7 @@ public class BebidaDAOImpl implements CrudDAO<Bebida> {
         List<Bebida> listaBebidas = new ArrayList<>();
         String consulta = "SELECT idBebida, bebida, stock, stock_minimo, precio, contenido_neto FROM bebida";
         
-        try(Connection conexionBD = ConexionBD.abrirConexion();
+        try(Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta);
                 ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {                

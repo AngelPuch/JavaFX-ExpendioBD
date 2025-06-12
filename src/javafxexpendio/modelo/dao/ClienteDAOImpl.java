@@ -25,12 +25,12 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
         String sentencia = "INSERT INTO cliente (nombre, telefono, correo, direccion) "
                 + "VALUES(?, ?, ?, ?)";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosCliente(ps, cliente);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new SQLException("Error: Sin conexión a la base de datos");
+            throw new SQLException("Error: Sin conexión a la base de datos" + ex.getMessage());
         } 
     }
 
@@ -40,7 +40,7 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
         String consulta = "SELECT idCliente, nombre, telefono, correo, direccion "
                 + "FROM cliente WHERE idCliente = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -60,7 +60,7 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
         String sentencia = "UPDATE cliente SET nombre = ?, telefono = ?, correo = ?, direccion = ? "
                 + "WHERE idCliente = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosCliente(ps, cliente);
             ps.setInt(5, cliente.getIdCliente());
@@ -74,7 +74,7 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
     public boolean eliminar(Integer id) throws SQLException {
         String sentencia = "DELETE FROM cliente WHERE idCliente = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
@@ -92,7 +92,7 @@ public class ClienteDAOImpl implements CrudDAO<Cliente>{
         List<Cliente> listaClientes = new ArrayList<>();
         String consulta = "SELECT idCliente, nombre, telefono, correo, direccion FROM cliente";
         
-        try(Connection conexionBD = ConexionBD.abrirConexion();
+        try(Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(consulta);
                 ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {                

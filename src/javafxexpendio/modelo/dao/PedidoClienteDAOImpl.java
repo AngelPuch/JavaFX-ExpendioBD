@@ -23,8 +23,8 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
             detallesJSON.add(obj);
         }
 
-        try (Connection con = ConexionBD.abrirConexion();
-             CallableStatement cs = con.prepareCall("{CALL sp_registrar_pedido_cliente(?, ?, ?, ?, ?)}")) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+             CallableStatement cs = conexionBD.prepareCall("{CALL sp_registrar_pedido_cliente(?, ?, ?, ?, ?)}")) {
 
             cs.setInt(1, idCliente);
             cs.setDate(2, Date.valueOf(fechaLimite));
@@ -52,8 +52,8 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
     public Map<String, Object> cancelarPedidoCliente(int idPedido) throws SQLException {
         Map<String, Object> resultado = new HashMap<>();
 
-        try (Connection con = ConexionBD.abrirConexion();
-             CallableStatement cs = con.prepareCall("{CALL sp_cancelar_pedido_cliente(?, ?)}")) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+             CallableStatement cs = conexionBD.prepareCall("{CALL sp_cancelar_pedido_cliente(?, ?)}")) {
 
             cs.setInt(1, idPedido);
             cs.registerOutParameter(2, Types.VARCHAR);
@@ -78,8 +78,8 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
 
         String sql = "SELECT * FROM vista_pedidos_pendientes ORDER BY fechaCreacion DESC";
 
-        try (Connection con = ConexionBD.abrirConexion();
-             PreparedStatement ps = con.prepareStatement(sql);
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+             PreparedStatement ps = conexionBD.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -108,8 +108,8 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
 
         String sql = "SELECT * FROM vista_detalle_pedido_cliente WHERE idPedidoCliente = ?";
 
-        try (Connection con = ConexionBD.abrirConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+             PreparedStatement ps = conexionBD.prepareStatement(sql)) {
 
             ps.setInt(1, idPedido);
 
@@ -141,8 +141,8 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
         int idCliente = 0;
         String sqlCliente = "SELECT idCliente FROM pedido_cliente WHERE idPedidoCliente = ?";
 
-        try (Connection con = ConexionBD.abrirConexion();
-             PreparedStatement ps = con.prepareStatement(sqlCliente)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+             PreparedStatement ps = conexionBD.prepareStatement(sqlCliente)) {
 
             ps.setInt(1, idPedido);
 
@@ -185,8 +185,8 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
     
     public boolean actualizarEstadoPedido(int idPedido, int nuevoEstado) throws SQLException {
         String sql = "UPDATE pedido_cliente SET idEstadoPedido = ? WHERE idPedidoCliente = ?";
-        try (Connection con = ConexionBD.abrirConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+             PreparedStatement ps = conexionBD.prepareStatement(sql)) {
             ps.setInt(1, nuevoEstado);
             ps.setInt(2, idPedido);
             int filas = ps.executeUpdate();
@@ -196,8 +196,8 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
     
     public boolean actualizarIdVentaEnPedido(int idPedido, int idVenta) throws SQLException {
         String sql = "UPDATE pedido_cliente SET venta_idVenta = ? WHERE idPedidoCliente = ?";
-        try (Connection con = ConexionBD.abrirConexion();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+             PreparedStatement ps = conexionBD.prepareStatement(sql)) {
             ps.setInt(1, idVenta);
             ps.setInt(2, idPedido);
             int filas = ps.executeUpdate();

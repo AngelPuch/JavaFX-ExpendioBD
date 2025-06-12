@@ -37,7 +37,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                           "GROUP BY v.idVenta " +
                           "ORDER BY v.fecha DESC";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setDate(1, Date.valueOf(fechaInicio));
@@ -65,7 +65,7 @@ public class ReporteDAOImpl implements ReporteDAO{
         List<ReporteProducto> listaProductos = new ArrayList<>();
         String consulta = "SELECT * FROM vista_ventas_por_producto ORDER BY cantidad_vendida DESC";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             
@@ -73,6 +73,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                 ReporteProducto producto = new ReporteProducto();
                 producto.setIdBebida(rs.getInt("idBebida"));
                 producto.setNombreBebida(rs.getString("bebida"));
+                producto.setContenido_neto(rs.getString("contenido_neto"));
                 producto.setCantidadVendida(rs.getInt("cantidad_vendida"));
                 producto.setTotalRecaudado(rs.getDouble("total_recaudado"));
                 listaProductos.add(producto);
@@ -88,7 +89,7 @@ public class ReporteDAOImpl implements ReporteDAO{
         List<ProductoStockMinimo> listaProductos = new ArrayList<>();
         String consulta = "SELECT * FROM vista_productos_stock_minimo ORDER BY diferencia DESC";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             
@@ -96,6 +97,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                 ProductoStockMinimo producto = new ProductoStockMinimo();
                 producto.setIdBebida(rs.getInt("idBebida"));
                 producto.setNombreBebida(rs.getString("bebida"));
+                producto.setContenido_neto(rs.getString("contenido_neto"));
                 producto.setStock(rs.getInt("stock"));
                 producto.setStockMinimo(rs.getInt("stock_minimo"));
                 producto.setPrecio(rs.getDouble("precio"));
@@ -113,7 +115,7 @@ public class ReporteDAOImpl implements ReporteDAO{
         ReporteProducto producto = null;
         String consulta = "SELECT * FROM vista_producto_mas_vendido";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             
@@ -121,6 +123,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                 producto = new ReporteProducto();
                 producto.setIdBebida(rs.getInt("idBebida"));
                 producto.setNombreBebida(rs.getString("bebida"));
+                producto.setContenido_neto(rs.getString("contenido_neto"));
                 producto.setCantidadVendida(rs.getInt("cantidad_vendida"));
                 producto.setTotalRecaudado(rs.getDouble("total_recaudado"));
             }
@@ -135,7 +138,7 @@ public class ReporteDAOImpl implements ReporteDAO{
         ReporteProducto producto = null;
         String consulta = "SELECT * FROM vista_producto_menos_vendido";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             
@@ -143,6 +146,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                 producto = new ReporteProducto();
                 producto.setIdBebida(rs.getInt("idBebida"));
                 producto.setNombreBebida(rs.getString("bebida"));
+                producto.setContenido_neto(rs.getString("contenido_neto"));
                 producto.setCantidadVendida(rs.getInt("cantidad_vendida"));
                 producto.setTotalRecaudado(rs.getDouble("total_recaudado"));
             }
@@ -155,7 +159,7 @@ public class ReporteDAOImpl implements ReporteDAO{
     @Override
     public List<Bebida> obtenerProductosNoVendidosACliente(int idCliente) throws SQLException {
         List<Bebida> listaProductos = new ArrayList<>();
-        String consulta = "SELECT b.idBebida, b.bebida, b.stock, b.stock_minimo, b.precio " +
+        String consulta = "SELECT b.idBebida, b.bebida, b.stock, b.stock_minimo, b.precio, b.contenido_neto " +
                           "FROM bebida b " +
                           "WHERE NOT EXISTS ( " +
                           "    SELECT 1 FROM detalle_venta dv " +
@@ -163,7 +167,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                           "    WHERE dv.idBebida = b.idBebida AND v.idCliente = ? " +
                           ")";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setInt(1, idCliente);
@@ -173,6 +177,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                     Bebida bebida = new Bebida();
                     bebida.setIdBebida(rs.getInt("idBebida"));
                     bebida.setBebida(rs.getString("bebida"));
+                    bebida.setContenidoNeto(rs.getString("contenido_neto"));
                     bebida.setStock(rs.getInt("stock"));
                     bebida.setStockMinimo(rs.getInt("stock_minimo"));
                     bebida.setPrecio(rs.getDouble("precio"));
@@ -188,7 +193,7 @@ public class ReporteDAOImpl implements ReporteDAO{
     @Override
     public ReporteProducto obtenerProductoMasVendidoACliente(int idCliente) throws SQLException {
         ReporteProducto producto = null;
-        String consulta = "SELECT b.idBebida, b.bebida, SUM(dv.cantidad) AS cantidad_vendida, " +
+        String consulta = "SELECT b.idBebida, b.bebida, b.contenido_neto, SUM(dv.cantidad) AS cantidad_vendida, " +
                           "SUM(dv.total) AS total_recaudado " +
                           "FROM detalle_venta dv " +
                           "JOIN venta v ON dv.idVenta = v.idVenta " +
@@ -198,7 +203,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                           "ORDER BY cantidad_vendida DESC " +
                           "LIMIT 1";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setInt(1, idCliente);
@@ -208,6 +213,7 @@ public class ReporteDAOImpl implements ReporteDAO{
                     producto = new ReporteProducto();
                     producto.setIdBebida(rs.getInt("idBebida"));
                     producto.setNombreBebida(rs.getString("bebida"));
+                    producto.setContenido_neto(rs.getString("contenido_neto"));
                     producto.setCantidadVendida(rs.getInt("cantidad_vendida"));
                     producto.setTotalRecaudado(rs.getDouble("total_recaudado"));
                 }

@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import javafxexpendio.JavaFXAppExpendio;
 import javafxexpendio.modelo.dao.InicioSesionDAOImpl;
 import javafxexpendio.modelo.pojo.Usuario;
+import javafxexpendio.utilidades.SesionUsuario;
 import javafxexpendio.utilidades.Utilidad;
 
 /**
@@ -81,6 +82,7 @@ public class FXMLInicioSesionController implements Initializable {
             InicioSesionDAOImpl inicioSesionDAO = new InicioSesionDAOImpl();
             Usuario usuarioSesion = inicioSesionDAO.verificarCredenciales(username, password);
             if (usuarioSesion != null) {
+                SesionUsuario.getInstancia().setUsuarioLogueado(usuarioSesion);
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Credenciales correctas", 
                         "Bienvenido(a) " + usuarioSesion + " al sistema.");
                 irPantallaPrincipal(usuarioSesion);

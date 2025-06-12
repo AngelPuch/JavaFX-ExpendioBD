@@ -53,7 +53,7 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
             detallesJSON.add(detalleJSON);
         }
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              CallableStatement cs = conexionBD.prepareCall("{CALL sp_registrar_pedido_proveedor_completo(?, ?, ?, ?, ?, ?)}")) {
 
             cs.setDate(1, Date.valueOf(fecha));
@@ -93,7 +93,7 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
         ObservableList<PedidoProveedor> pedidos = FXCollections.observableArrayList();
         String consulta = "SELECT * FROM vista_pedidos_pendientes_proveedor";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             
@@ -123,7 +123,7 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
         ObservableList<DetallePedidoProveedor> detalles = FXCollections.observableArrayList();
         String consulta = "SELECT * FROM vista_detalle_pedidos_proveedor WHERE idPedidoProveedor = ?";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
 
             ps.setInt(1, idPedidoProveedor);
@@ -154,14 +154,15 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
         List<ProductoStockMinimo> listaProductos = new ArrayList<>();
         String consulta = "SELECT * FROM vista_productos_stock_minimo";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             
             while (rs.next()) {
                 ProductoStockMinimo producto = new ProductoStockMinimo();
                 producto.setIdBebida(rs.getInt("idBebida"));
-                producto.setNombreBebida(rs.getString("bebida") + " " + rs.getString("contenido_neto"));
+                producto.setNombreBebida(rs.getString("bebida"));
+                producto.setContenido_neto(rs.getString("contenido_neto"));
                 producto.setStock(rs.getInt("stock"));
                 producto.setStockMinimo(rs.getInt("stock_minimo"));
                 producto.setPrecio(rs.getDouble("precio"));
@@ -176,13 +177,13 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
     
     @Override
     public boolean cancelarPedidoProveedor(int idPedidoProveedor) throws SQLException {
-        String consulta = "{CALL sp_cancelar_pedido_proveedor(?)}";
+        String consulta = "UPDATE pedido_proveedor SET idEstadoPedido = 3 WHERE idPedidoProveedor = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
-             CallableStatement cs = conexionBD.prepareCall(consulta)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+             PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
-            cs.setInt(1, idPedidoProveedor);
-            cs.execute();
+            ps.setInt(1, idPedidoProveedor);
+            ps.executeUpdate();
             return true;
             
         } catch (SQLException ex) {

@@ -25,8 +25,8 @@ public class CompraDAOImpl implements CompraDAO {
     public Compra crear(Compra compra) throws SQLException {
         String consulta = "INSERT INTO compra (fecha, idProveedor, folio_factura) VALUES (?, ?, ?)";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta, Statement.RETURN_GENERATED_KEYS)) {
             
             ps.setObject(1, compra.getFecha());
             ps.setInt(2, compra.getIdProveedor());
@@ -55,8 +55,8 @@ public class CompraDAOImpl implements CompraDAO {
                 + "JOIN proveedor p ON c.idProveedor = p.idProveedor "
                 + "WHERE c.idCompra = ?";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -80,8 +80,8 @@ public class CompraDAOImpl implements CompraDAO {
                 + "JOIN proveedor p ON c.idProveedor = p.idProveedor "
                 + "ORDER BY c.fecha DESC";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta);
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta);
                 ResultSet rs = ps.executeQuery()) {
             
             while (rs.next()) {
@@ -97,7 +97,7 @@ public class CompraDAOImpl implements CompraDAO {
 
   @Override
     public boolean registrarCompra(Compra compra, List<DetalleCompra> detalles, int idPedidoProveedor) throws SQLException {
-        try (Connection conexion = ConexionBD.abrirConexion()) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion()) {
 
             // Convertir detalles a JSON
             JSONArray detallesJson = new JSONArray();
@@ -117,7 +117,7 @@ public class CompraDAOImpl implements CompraDAO {
 
             // Llamar al procedimiento almacenado
             String sql = "{CALL sp_registrar_compra_completa(?, ?, ?, ?, ?, ?, ?)}";
-            try (CallableStatement cs = conexion.prepareCall(sql)) {
+            try (CallableStatement cs = conexionBD.prepareCall(sql)) {
                 cs.setObject(1, compra.getFecha());
                 cs.setInt(2, compra.getIdProveedor());
                 cs.setString(3, compra.getFolioFactura());
@@ -154,8 +154,8 @@ public class CompraDAOImpl implements CompraDAO {
                 + "JOIN bebida b ON dc.idBebida = b.idBebida "
                 + "WHERE dc.idCompra = ?";
         
-        try (Connection conexion = ConexionBD.abrirConexion();
-                PreparedStatement ps = conexion.prepareStatement(consulta)) {
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
+                PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             
             ps.setInt(1, idCompra);
             try (ResultSet rs = ps.executeQuery()) {

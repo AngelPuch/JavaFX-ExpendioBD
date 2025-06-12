@@ -28,22 +28,22 @@ public class PromocionDAOImpl implements PromocionDAO{
     public boolean crear(Promocion promocion) throws SQLException {
         String sentencia = "INSERT INTO promocion (descuento, fecha_inicio, fecha_fin, descripcion, idBebida) "
                 + "VALUES(?, ?, ?, ?, ?)";
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
                 PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosPromocion(ps, promocion);
             return ps.executeUpdate() > 0;
         } catch (SQLException ex) {
-            throw new SQLException("Error: Sin conexión a la base de datos");
+            throw new SQLException("Error: Sin conexión a la base de datos" + ex.getMessage());
         }
         
     }
 
     @Override
     public boolean actualizar(Promocion promocion) throws SQLException {
-        String sentencia = "UPDATE promocion SET descuento = ?, fecha_inicio = ?, fecha_fin = ?, descripcion = ?, idBebida = ?"
+        String sentencia = "UPDATE promocion SET descuento = ?, fecha_inicio = ?, fecha_fin = ?, descripcion = ?, idBebida = ? "
                 + "WHERE idPromocion = ?";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
 
             asignarParametrosPromocion(ps, promocion);
@@ -52,7 +52,7 @@ public class PromocionDAOImpl implements PromocionDAO{
             return ps.executeUpdate() > 0;
 
         } catch (SQLException ex) {
-            throw new SQLException("Error: Sin conexión a la base de datos.");
+            throw new SQLException("Error: Sin conexión a la base de datos." + ex.getMessage());
         }
     }
 
@@ -60,11 +60,11 @@ public class PromocionDAOImpl implements PromocionDAO{
     public List<Promocion> leerTodo() throws SQLException {
         List<Promocion> promociones = new ArrayList<>();
         String consulta = "SELECT p.idPromocion, p.descuento, p.fecha_inicio, p.fecha_fin, p.descripcion, " +
-                          "b.idBebida, b.bebida, b.stock, b.stock_minimo, b.precio " +
+                          "b.idBebida, b.bebida, b.stock, b.stock_minimo, b.precio, b.contenido_neto " +
                           "FROM promocion p " +
                           "JOIN bebida b ON p.idBebida = b.idBebida";
 
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
 
@@ -94,6 +94,7 @@ public class PromocionDAOImpl implements PromocionDAO{
         bebida.setStock(rs.getInt("stock"));
         bebida.setStockMinimo(rs.getInt("stock_minimo"));
         bebida.setPrecio(rs.getDouble("precio"));
+        bebida.setContenidoNeto(rs.getString("contenido_neto"));
 
         Promocion promocion = new Promocion();
         promocion.setIdPromocion(rs.getInt("idPromocion"));

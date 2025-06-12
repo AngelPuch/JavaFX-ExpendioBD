@@ -46,6 +46,8 @@ public class FXMLAgregarBebidaController implements Initializable {
     
     private ObservableList<Bebida> bebidas;
     private Bebida bebidaSeleccionada;
+    @FXML
+    private TableColumn colContenidoNeto;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -58,6 +60,7 @@ public class FXMLAgregarBebidaController implements Initializable {
         colStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         colStockMinimo.setCellValueFactory(new PropertyValueFactory<>("stockMinimo"));
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        colContenidoNeto.setCellValueFactory(new PropertyValueFactory("contenidoNeto"));
         
         tvBebidas.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {

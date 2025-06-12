@@ -25,7 +25,7 @@ public class ProveedorDAOImpl implements CrudDAO<Proveedor>{
         String sentencia = "INSERT INTO proveedor (razon_social, telefono, correo) "
                 + "VALUES (?, ?, ?)";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosProveedor(ps, proveedor);
             return ps.executeUpdate() > 0;
@@ -40,7 +40,7 @@ public class ProveedorDAOImpl implements CrudDAO<Proveedor>{
         String consulta = "SELECT idProveedor, razon_social, telefono, correo "
                         + "FROM proveedor WHERE idProveedor = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
@@ -60,7 +60,7 @@ public class ProveedorDAOImpl implements CrudDAO<Proveedor>{
         String sentencia = "UPDATE proveedor SET razon_social = ?, telefono = ?, correo = ? "
                          + "WHERE idProveedor = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             asignarParametrosProveedor(ps, proveedor);
             ps.setInt(4, proveedor.getIdProveedor());
@@ -74,7 +74,7 @@ public class ProveedorDAOImpl implements CrudDAO<Proveedor>{
     public boolean eliminar(Integer id) throws SQLException {
         String sentencia = "DELETE FROM proveedor WHERE idProveedor = ?";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
@@ -92,7 +92,7 @@ public class ProveedorDAOImpl implements CrudDAO<Proveedor>{
         List<Proveedor> listaProveedores = new ArrayList<>();
         String consulta = "SELECT idProveedor, razon_social, telefono, correo FROM proveedor";
         
-        try (Connection conexionBD = ConexionBD.abrirConexion();
+        try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
              PreparedStatement ps = conexionBD.prepareStatement(consulta);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
