@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package javafxexpendio.controlador;
 
 import java.io.IOException;
@@ -30,11 +26,6 @@ import javafxexpendio.modelo.pojo.Bebida;
 import javafxexpendio.modelo.pojo.Usuario;
 import javafxexpendio.utilidades.Utilidad;
 
-/**
- * FXML Controller class
- *
- * @author Dell
- */
 public class FXMLAdminProductoController implements Initializable, Notificacion {
 
     @FXML
@@ -54,10 +45,6 @@ public class FXMLAdminProductoController implements Initializable, Notificacion 
     private ObservableList<Bebida> bebidas;
     Usuario usuarioSesion;
     
-    
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarTabla();

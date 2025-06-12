@@ -9,7 +9,7 @@ public interface PedidoClienteDAO {
 
     Map<String, Object> registrarPedidoCliente(int idCliente, LocalDate fechaLimite, List<Map<String, Object>> detallesPedido) throws SQLException;
 
-    Map<String, Object> cancelarPedidoCliente(int idPedido) throws SQLException;
+    boolean cancelarPedidoCliente(int idPedido) throws SQLException;
 
     List<Map<String, Object>> obtenerPedidosPendientes() throws SQLException;
 

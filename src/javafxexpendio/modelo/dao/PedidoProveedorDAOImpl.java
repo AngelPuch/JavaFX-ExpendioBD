@@ -177,10 +177,10 @@ public class PedidoProveedorDAOImpl implements PedidoProveedorDAO {
     
     @Override
     public boolean cancelarPedidoProveedor(int idPedidoProveedor) throws SQLException {
-        String consulta = "UPDATE pedido_proveedor SET idEstadoPedido = 3 WHERE idPedidoProveedor = ?";
+        String sentencia = "UPDATE pedido_proveedor SET idEstadoPedido = 3 WHERE idPedidoProveedor = ?";
         
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
-             PreparedStatement ps = conexionBD.prepareStatement(consulta)) {
+             PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
             
             ps.setInt(1, idPedidoProveedor);
             ps.executeUpdate();

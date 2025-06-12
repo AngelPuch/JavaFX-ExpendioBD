@@ -165,20 +165,26 @@ public class FXMLEmpleadoPedidoController implements Initializable {
         boolean confirmar = Utilidad.mostrarAlertaConfirmacion("Confirmar cancelar", "¿Estás seguro de cancelar el pedido?", "Se cancelará el pedido seleccionado");
         if (confirmar) {
             try {
-                Map<String, Object> resultado = pedidoClienteDAO.cancelarPedidoCliente(idPedido);
-                Utilidad.mostrarAlertaSimple(
-                        (boolean) resultado.get("exito") ? Alert.AlertType.INFORMATION : Alert.AlertType.ERROR,
-                        "Resultado",
-                        (String) resultado.get("mensaje"));
-                cargarPedidosPendientes();
-                tvBebidasVenta.getItems().clear();
-                lbTotalCompra.setText("0.00");
-                deshabilitarControlesPedido(true);
+                boolean cancelado = pedidoClienteDAO.cancelarPedidoCliente(idPedido);
+                
+                if (cancelado) {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Pedido cancelado", 
+                            "El pedido ha sido cancelado correctamente");
+                    cargarPedidosPendientes();
+                } else {
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", 
+                            "No se pudo cancelar el pedido");
+                }
+                
+                    tvBebidasVenta.getItems().clear();
+                    lbTotalCompra.setText("0.00");
+                    deshabilitarControlesPedido(true);
             } catch (SQLException ex) {
-                Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", "No se pudo cancelar el pedido: " + ex.getMessage());
-            }
+                    Utilidad.mostrarAlertaSimple(Alert.AlertType.ERROR, "Error", "No se pudo cancelar el pedido: " + ex.getMessage());
+                }
         }
     }
+    
 
     @FXML
     private void btnClicConfirmarCompra(ActionEvent event) {

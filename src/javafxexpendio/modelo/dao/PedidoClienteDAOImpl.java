@@ -49,27 +49,18 @@ public class PedidoClienteDAOImpl implements PedidoClienteDAO {
     }
 
     @Override
-    public Map<String, Object> cancelarPedidoCliente(int idPedido) throws SQLException {
-        Map<String, Object> resultado = new HashMap<>();
+    public boolean cancelarPedidoCliente(int idPedido) throws SQLException {
+        String sentencia = "UPDATE pedido_cliente SET idEstadoPedido = 3 WHERE idPedidoCliente = ?";
 
         try (Connection conexionBD = ConexionBD.getInstancia().abrirConexion();
-             CallableStatement cs = conexionBD.prepareCall("{CALL sp_cancelar_pedido_cliente(?, ?)}")) {
+             PreparedStatement ps = conexionBD.prepareStatement(sentencia)) {
 
-            cs.setInt(1, idPedido);
-            cs.registerOutParameter(2, Types.VARCHAR);
-
-            cs.execute();
-
-            String mensaje = cs.getString(2);
-
-            resultado.put("exito", mensaje.toLowerCase().contains("cancelado"));
-            resultado.put("mensaje", mensaje);
-
+            ps.setInt(1, idPedido);
+            ps.executeUpdate();
+            return true;
         } catch (SQLException ex) {
             throw new SQLException("Error al cancelar pedido: " + ex.getMessage());
         }
-
-        return resultado;
     }
 
     @Override

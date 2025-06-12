@@ -102,7 +102,6 @@ public class FXMLAdminCompraController implements Initializable {
         dpFechaCompra.setValue(LocalDate.now());
         cargarProveedores();
         
-        // Configurar listener para el combo de proveedores
         cbProveedor.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 cargarPedidosPendientes(newValue.getIdProveedor());
@@ -111,12 +110,10 @@ public class FXMLAdminCompraController implements Initializable {
             }
         });
         
-        // Inicialmente deshabilitar secciones que dependen de selección previa
         habilitarSeccionDetalle(false);
     }
     
     private void configurarTablas() {
-        // Configurar tabla de pedidos pendientes
         colFechaPedido.setCellValueFactory(new PropertyValueFactory("fecha"));
         colEstadoPedido.setCellValueFactory(new PropertyValueFactory("estado"));
         colTotalProductos.setCellValueFactory(new PropertyValueFactory("totalProductos"));
@@ -125,7 +122,6 @@ public class FXMLAdminCompraController implements Initializable {
         
         tvPedidosPendientes.setItems(pedidosPendientes);
         
-        // Configurar tabla de detalle de pedido
         colBebida.setCellValueFactory(new PropertyValueFactory("bebida"));
         colCantidadPedido.setCellValueFactory(cellData -> {
             int idBebida = cellData.getValue().getIdBebida();

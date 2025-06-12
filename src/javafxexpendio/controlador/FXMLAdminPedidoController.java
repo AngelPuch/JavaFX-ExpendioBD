@@ -98,13 +98,11 @@ public class FXMLAdminPedidoController implements Initializable {
     }
     
     private void configurarTablas() {
-        // Configurar tabla de productos con stock mínimo
         colBebidaMin.setCellValueFactory(new PropertyValueFactory("nombreBebida"));
         colStockActual.setCellValueFactory(new PropertyValueFactory("stock"));
         colStockMinimo.setCellValueFactory(new PropertyValueFactory("stockMinimo"));
         colPrecio.setCellValueFactory(new PropertyValueFactory("precio"));
         
-        // Configurar tabla de pedido actual
         colBebidaPedido.setCellValueFactory(new PropertyValueFactory("bebida"));
         colCantidadPedido.setCellValueFactory(new PropertyValueFactory("cantidad"));
         colPrecioPedido.setCellValueFactory(new PropertyValueFactory("precioEstimado"));
@@ -161,18 +159,14 @@ public class FXMLAdminPedidoController implements Initializable {
                 return;
             }
             
-            // Verificar si el producto ya está en el pedido
             boolean productoExistente = false;
             for (DetallePedidoProveedor detalle : detallesPedido) {
                 if (detalle.getIdBebida() == productoSeleccionado.getIdBebida()) {
-                    // Actualizar cantidad
                     detalle.setCantidad(detalle.getCantidad() + cantidad);
                     productoExistente = true;
                     break;
                 }
             }
-            
-            // Si no existe, agregar nuevo detalle
             if (!productoExistente) {
                 DetallePedidoProveedor detalle = new DetallePedidoProveedor(
                         productoSeleccionado.getIdBebida(),
@@ -182,8 +176,7 @@ public class FXMLAdminPedidoController implements Initializable {
                 );
                 detallesPedido.add(detalle);
             }
-            
-            // Actualizar tabla
+           
             tvPedidoActual.refresh();
             tfCantidad.clear();
             
@@ -222,7 +215,6 @@ public class FXMLAdminPedidoController implements Initializable {
         }
 
         try {
-            // Convertir detalles a formato para el DAO
             List<Map<String, Object>> detallesMap = new ArrayList<>();
             for (DetallePedidoProveedor detalle : detallesPedido) {
                 Map<String, Object> detalleMap = new HashMap<>();
@@ -232,10 +224,8 @@ public class FXMLAdminPedidoController implements Initializable {
                 detallesMap.add(detalleMap);
             }
 
-            // Objeto para recibir el ID del pedido
             PedidoProveedor nuevoPedido = new PedidoProveedor();
 
-            // Registrar pedido
             boolean exito = pedidoProveedorDAO.registrarPedidoProveedor(
                     LocalDate.now(), 
                     proveedorSeleccionado.getIdProveedor(), 
@@ -247,11 +237,8 @@ public class FXMLAdminPedidoController implements Initializable {
             if (exito) {
                 Utilidad.mostrarAlertaSimple(Alert.AlertType.INFORMATION, "Pedido registrado", 
                         "El pedido #" + nuevoPedido.getIdPedidoProveedor() + " ha sido registrado correctamente");
-
-                // Limpiar formulario
                 limpiarFormulario();
 
-                // Recargar productos con stock mínimo
                 cargarProductosStockMinimo();
             }
 
@@ -292,8 +279,6 @@ public class FXMLAdminPedidoController implements Initializable {
             stage.setTitle("Pedidos Registrados");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            
-            // Recargar productos con stock mínimo al cerrar la ventana
             cargarProductosStockMinimo();
             
         } catch (Exception ex) {
@@ -318,7 +303,6 @@ public class FXMLAdminPedidoController implements Initializable {
         if (stage.getUserData() != null) {
             Bebida bebidaSeleccionada = (Bebida) stage.getUserData();
             
-            // Verificar si la bebida ya está en el pedido
             boolean bebidaExistente = false;
             for (DetallePedidoProveedor detalle : detallesPedido) {
                 if (detalle.getIdBebida() == bebidaSeleccionada.getIdBebida()) {
